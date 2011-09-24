@@ -1,6 +1,15 @@
 Simple game for physics simulation.
 Used Box2D engine http://box2d.org/
 
-Make with:
-qmake
-make
+Steps for building Box2D:
+1. cd Box2D
+2. qmake
+3. make
+Static library will be placed in Box2D/lib.
+
+Steps for building game:
+1. qmake
+2. make
+
+Run with:
+./qbox2d
