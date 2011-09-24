@@ -1,0 +1,6 @@
+Simple game for physics simulation.
+Used Box2D engine http://box2d.org/
+
+Make with:
+qmake
+make
