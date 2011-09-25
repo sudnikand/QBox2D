@@ -25,19 +25,19 @@ protected:
 
     void createBody(b2World* const world){
         b2BodyDef bd;
-        bd.position.Set(x(),-y());
+        bd.position.Set(Q2W(x(),-y()));
         bd.type = _bodytype;
         bd.angle = ANG2RAD(-rotation());
         _body = world->CreateBody(&bd);
     }
 
     void advance(int step) {
-        if (step == 1) return;
+        if (!step) return;
         if (!_body->IsAwake()) return;
-        b2Vec2 position = _body->GetPosition();
-        setPos(position.x, -position.y);
-        float32 angle = _body->GetAngle();
-        setRotation(RAD2ANG(-angle));
+        if (_bodytype == b2_staticBody) return;
+        const b2Vec2 &position = _body->GetPosition();
+        setPos(W2Q(position.x, -position.y));
+        setRotation(RAD2ANG(-_body->GetAngle()));
     }
 
 protected:

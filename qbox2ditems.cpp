@@ -3,8 +3,8 @@
 void QBox2DRectItem::create(b2World* const world){
     createBody(world);
     b2PolygonShape shape;
-    shape.SetAsBox(_rect.width() / 2, _rect.height() / 2,
-                      b2Vec2(_rect.center().x(), -_rect.center().y()), 0);
+    shape.SetAsBox(Q2W_(_rect.width())/2, Q2W_(_rect.height())/2,
+                      b2Vec2( Q2W(_rect.center().x(),-_rect.center().y()) ), 0);
     _fd.shape = &shape;
     _body->CreateFixture(&_fd);
 }
@@ -34,7 +34,7 @@ QRectF QBox2DRectItem::boundingRect() const {
 void QBox2DCircleItem::create(b2World* const world){
     createBody(world);
     b2CircleShape shape;
-    shape.m_radius = _rect.width() / 2;
+    shape.m_radius = Q2W_(_rect.width()) / 2;
     _fd.shape = &shape;
     _body->CreateFixture(&_fd);
 }
@@ -69,7 +69,7 @@ void QBox2DPolygonItem::create(b2World* const world) {
     b2Vec2* vertices = new b2Vec2[n];
     for (int i = 0; i < n; ++i) {
         const QPointF &p = _polygon.at(i);
-        vertices[i].Set(p.x(), -p.y());
+        vertices[i].Set( Q2W(p.x(), -p.y()) );
     }
     b2PolygonShape shape;
     shape.Set(vertices, n);
