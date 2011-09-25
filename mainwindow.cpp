@@ -16,9 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
     scene->setBackgroundBrush(Qt::white);
     scene->setStickyFocus(false);
-    scene->setSceneRect(-200, 20, 400, -500);
+    scene->setSceneRect(-200, 30, 400, -500);
     ui->graphicsView->setScene(scene);
-    ui->graphicsView->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
+    ui->graphicsView->setViewport(new QGLWidget());
     ui->graphicsView->setRenderHint(QPainter::Antialiasing, true);
 
     createWorld();
@@ -83,7 +83,7 @@ void MainWindow::createWorld(){
         scene->addItem(staticBox);
         b2RevoluteJointDef jd1;
         jd1.Initialize(staticBox->body(), ground->body(), staticBox->body()->GetPosition());
-        jd1.motorSpeed = (float32)(pow(-1.0f,i) * 1 * b2_pi);
+        jd1.motorSpeed = (float32)(pow(-1.0f,i) * 2 * b2_pi);
         jd1.maxMotorTorque = 50000000.0f;
         jd1.enableMotor = true;
         b2Joint* revJoint = world->CreateJoint(&jd1);
@@ -91,7 +91,7 @@ void MainWindow::createWorld(){
     }
 
     //add falling boxes
-    for (int i = 0; i < 50; ++i) {
+    for (int i = 0; i < 10; ++i) {
         int size = 6 + qrand() % 10;
         QBox2DRectItem *item = new QBox2DRectItem();
         item->setShape(QRectF(0,0,size,size));
@@ -107,7 +107,7 @@ void MainWindow::createWorld(){
     }
 
     // add triangles
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 10; ++i) {
         int size = 4 + qrand() % 7;
         QPolygonF polygonForm;
         polygonForm << QPointF(0, -size*2) << QPointF(-size, 0) << QPointF(size, 0);
@@ -117,7 +117,7 @@ void MainWindow::createWorld(){
         testItem->setRotation(qrand() % 360);
         testItem->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
         testItem->setFriction(1.0f);
-        testItem->setDensity(1.0f);
+        testItem->setDensity(5.0f);
         testItem->setRestitution(0.5f);
         testItem->setBodyType(b2_dynamicBody);
         testItem->create(world);
@@ -125,8 +125,8 @@ void MainWindow::createWorld(){
     }
 
     //Add circles
-    for (int i = 0; i < 5; ++i) {
-        int size = 3 + qrand() % 2;
+    for (int i = 0; i < 600; ++i) {
+        int size = 3;
         QBox2DCircleItem *item = new QBox2DCircleItem();
         item->setShape(QRectF(-size , -size, size*2, size*2));
         item->setPos(0 + qrand() % 60, -100 - qrand() % 150);
@@ -134,7 +134,7 @@ void MainWindow::createWorld(){
         item->setBodyType(b2_dynamicBody);
         item->setFriction(0.1f);
         item->setDensity(1.0f);
-        item->setRestitution(0.5f);
+        item->setRestitution(0.1f);
         item->create(world);
         scene->addItem(item);
     }
