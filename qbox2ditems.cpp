@@ -80,7 +80,6 @@ void QBox2DPolygonItem::create(b2World* const world) {
 }
 
 void QBox2DPolygonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
-    painter->setClipRect(_boundingRect);
     painter->setBrush(_brush);
     painter->setPen(_pen);
     painter->drawPolygon(_polygon);
@@ -89,10 +88,10 @@ void QBox2DPolygonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 QRectF QBox2DPolygonItem::boundingRect() const {
     if (_boundingRect.isNull()) {
         qreal pw = _pen.widthF();
-        //if (pw == 0.0)
-            _boundingRect = _polygon.boundingRect().adjusted(-pw - 2, -pw - 2 , pw + 2, pw + 2);
-        //else
-        //    _boundingRect = shape().controlPointRect();
+        if (pw == 0.0)
+            _boundingRect = _polygon.boundingRect();
+        else
+            _boundingRect = _polygon.boundingRect().adjusted(-pw, -pw, pw, pw);
         }
     return _boundingRect;
 }
