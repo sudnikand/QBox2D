@@ -4,16 +4,7 @@
 #include <QGraphicsItem>
 #include <QPainter>
 #include <Box2D/Box2D.h>
-
-
-static float qttob2d_angle(const qreal& angle){
-    return -(angle * (2 * b2_pi)) / 360.0;
-}
-
-static qreal b2dtoqt_angle(const float& angle){
-    return -(angle * 360.0) / (2 * b2_pi);
-}
-
+#include "def.h"
 
 class QBox2DItem : public QGraphicsItem {
 public:
@@ -36,7 +27,7 @@ protected:
         b2BodyDef bd;
         bd.position.Set(x(),-y());
         bd.type = _bodytype;
-        bd.angle = qttob2d_angle(rotation());
+        bd.angle = ANG2RAD(-rotation());
         _body = world->CreateBody(&bd);
     }
 
@@ -46,7 +37,7 @@ protected:
         b2Vec2 position = _body->GetPosition();
         setPos(position.x, -position.y);
         float32 angle = _body->GetAngle();
-        setRotation(b2dtoqt_angle(angle));
+        setRotation(RAD2ANG(-angle));
     }
 
 protected:

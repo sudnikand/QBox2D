@@ -13,7 +13,8 @@ SOURCES += main.cpp\
            qbox2ditems.cpp
 
 HEADERS += mainwindow.h \
-           qbox2ditems.h
+           qbox2ditems.h \
+           def.h
 
 FORMS   += mainwindow.ui
 
