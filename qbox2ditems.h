@@ -3,7 +3,7 @@
 
 #include <QGraphicsItem>
 #include <QPainter>
-#include <Box2D/Box2D.h>
+#include <Box2D.h>
 #include "def.h"
 
 class QBox2DItem : public QGraphicsItem {

@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QtGui>
-#include <Box2D/Box2D.h>
 #include "world.h"
 
 namespace Ui {
