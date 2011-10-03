@@ -25,6 +25,7 @@ public:
     }
 
     virtual void create(QGraphicsScene* const scene) = 0;
+    virtual void updateKeys(int key, int state) = 0;
 
 private:
     float32             _timeStep;
@@ -36,6 +37,8 @@ private:
 class ExampleWorld : public QBox2DWorld {
 public:
     ExampleWorld() : QBox2DWorld() {}
+
+    void updateKeys(int key, int state){ }
 
     void create(QGraphicsScene* const scene){
         SetGravity(b2Vec2(0, -10));
@@ -147,5 +150,7 @@ public:
         }
     }
 };
+
+
 
 #endif // WORLD_H
