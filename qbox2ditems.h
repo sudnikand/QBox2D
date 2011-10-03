@@ -16,22 +16,10 @@ public:
     void setDensity    (const float32 & d)     { _fd.density = d; }
     void setFriction   (const float32 & f)     { _fd.friction = f; }
     void setBodyType   (const b2BodyType & bt) { _bodytype = bt; }
-    void setBullet     (const bool & bullet)   { _is_bullet = bullet; }
     void setBrush      (const QBrush & brush)  { _brush = brush; update(); }
     void setPen        (const QPen & pen)      { _pen = pen; update(); }
 
     b2Body* body() const { return _body; }
-
-    void applyForce(const float32 px, const float32 py, const bool pmass = true) {
-           const float32 mass = _body->GetMass();
-           const float32 lx = pmass? px * mass : px;
-           const float32 ly = pmass? py * mass : py;
-           _body->ApplyForce(b2Vec2(lx,ly),_body->GetWorldCenter());
-    }
-
-    void applyImpulse(const float32 px, const float32 py) {
-           _body->ApplyLinearImpulse(b2Vec2(px,py),_body->GetWorldCenter());
-    }
 
 
 protected:
@@ -40,7 +28,6 @@ protected:
         b2BodyDef bd;
         bd.position.Set(Q2W(x(),-y()));
         bd.type = _bodytype;
-        if (_is_bullet) bd.bullet = _is_bullet;
         bd.angle = ANG2RAD(-rotation());
         _body = world->CreateBody(&bd);
     }
@@ -57,7 +44,6 @@ protected:
 protected:
             b2Body*      _body;
             b2BodyType   _bodytype;
-            bool         _is_bullet;
             b2FixtureDef _fd;
     mutable QRectF       _boundingRect;
             QBrush       _brush;
