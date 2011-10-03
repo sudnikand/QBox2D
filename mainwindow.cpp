@@ -65,11 +65,11 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
-
+    world->updateKeys(event->key(),1);
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-
+    world->updateKeys(event->key(),0);
 }
 
 MainWindow::~MainWindow()
