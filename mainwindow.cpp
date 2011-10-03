@@ -13,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
     scene->setBackgroundBrush(Qt::white);
     scene->setStickyFocus(false);
-    scene->setSceneRect(-200, 30, 400, -500);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setViewport(new QGLWidget());
     ui->graphicsView->setRenderHint(QPainter::Antialiasing, true);
