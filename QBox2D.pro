@@ -11,7 +11,7 @@ TEMPLATE = app
 SOURCES += main.cpp\
            mainwindow.cpp \
            qbox2ditems.cpp \
-    world.cpp
+           world.cpp
 
 HEADERS += mainwindow.h \
            qbox2ditems.h \
