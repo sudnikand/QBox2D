@@ -5,6 +5,14 @@
 #include <QGraphicsScene>
 #include "qbox2ditems.h"
 
+struct ContactPoint {
+    b2Fixture* fixtureA;
+    b2Fixture* fixtureB;
+    b2Vec2 normal;
+    b2Vec2 position;
+    b2PointState state;
+};
+
 class QBox2DWorld : public b2ContactListener {
 
 public:
@@ -32,7 +40,21 @@ public:
     }
 
     virtual void create(QGraphicsScene* const scene) = 0;
-    virtual void updateKeys(int key, int state) = 0;
+    virtual void updateKeys(int key, int state) {}
+
+    QBox2DRectItem* createBox(QPointF pos) {
+        QBox2DRectItem *box = new QBox2DRectItem();
+        box->setBodyType(b2_dynamicBody);
+        QRectF rect(0, 0, 10, 10);
+        box->setShape(rect);
+        box->setPos(pos.x()-10.0, pos.y()-10.0);
+        box->setFriction(0.9f);
+        box->setDensity(1.0f);
+        box->setRestitution(0.5f);
+        box->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+        box->create(_world);
+        return box;
+    }
 
 public:
     b2World*    _world;
@@ -45,5 +67,21 @@ private:
     uint         _contactsCount;
 
 };
+
+class ExampleWorld : public QBox2DWorld {
+public:
+    ExampleWorld() : QBox2DWorld() {}
+    void create(QGraphicsScene* const scene);
+};
+
+class ArcanoidWorld : public QBox2DWorld {
+public:
+    ArcanoidWorld() : QBox2DWorld() {}
+    void create(QGraphicsScene* const scene);
+    void updateKeys(int key, int state);
+private:
+    QBox2DRectItem* _paddle;
+};
+
 
 #endif // WORLD_H
