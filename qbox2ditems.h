@@ -35,7 +35,7 @@ protected:
     void advance(int step) {
         if (!step) return;
         if (!_body->IsAwake()) return;
-        if (_bodytype == b2_staticBody) return;
+        if (_body->GetType() == b2_staticBody) return;
         const b2Vec2 &position = _body->GetPosition();
         setPos(W2Q(position.x, -position.y));
         setRotation(RAD2ANG(-_body->GetAngle()));
