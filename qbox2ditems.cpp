@@ -16,8 +16,8 @@ void QBox2DRectItem::setShape(const QRectF& rect) {
 }
 
 void QBox2DRectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
-    painter->setBrush(_brush);
-    painter->setPen(_pen);
+    if ( painter->brush() != _brush) painter->setBrush(_brush);
+    if ( painter->pen()   != _pen)   painter->setPen(_pen);
     painter->drawRect(_rect);
 }
 
@@ -40,8 +40,8 @@ void QBox2DCircleItem::create(b2World* const world){
 }
 
 void QBox2DCircleItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
-    painter->setBrush(_brush);
-    painter->setPen(_pen);
+    if ( painter->brush() != _brush) painter->setBrush(_brush);
+    if ( painter->pen()   != _pen)   painter->setPen(_pen);
     painter->drawEllipse(_rect);
 }
 
@@ -80,8 +80,8 @@ void QBox2DPolygonItem::create(b2World* const world) {
 }
 
 void QBox2DPolygonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
-    painter->setBrush(_brush);
-    painter->setPen(_pen);
+    if ( painter->brush() != _brush) painter->setBrush(_brush);
+    if ( painter->pen()   != _pen)   painter->setPen(_pen);
     painter->drawPolygon(_polygon);
 }
 
