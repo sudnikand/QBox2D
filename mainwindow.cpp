@@ -50,17 +50,7 @@ void MainWindow::zoomOut() {
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
     QPointF pos = ui->graphicsView->mapToScene(ui->graphicsView->mapFrom(this,event->pos()));
-    QBox2DRectItem *box = new QBox2DRectItem();
-    box->setBodyType(b2_dynamicBody);
-    QRectF rect(0, 0, 10, 10);
-    box->setShape(rect);
-    box->setPos(pos.x()-10.0, pos.y()-10.0);
-    box->setFriction(0.9f);
-    box->setDensity(1.0f);
-    box->setRestitution(0.5f);
-    box->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
-    box->create(world);
-    scene->addItem(box);
+    scene->addItem(world->createBox(pos));
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
