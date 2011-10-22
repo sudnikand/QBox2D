@@ -1,6 +1,7 @@
 QT       += opengl core gui
 
 CONFIG   += qt release warn_off
+#CONFIG   += qt debug warn_on
 #QMAKE_CXXFLAGS_RELEASE -= -O2
 #QMAKE_CXXFLAGS_RELEASE += -O3 -march=native -mtune=native -fomit-frame-pointer
 
@@ -11,12 +12,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
            mainwindow.cpp \
            qbox2ditems.cpp \
-           world.cpp
+           world.cpp \
+           view.cpp
 
 HEADERS += mainwindow.h \
            qbox2ditems.h \
            def.h \
-           world.h
+           world.h \
+           view.h
 
 FORMS   += mainwindow.ui
 
