@@ -35,7 +35,7 @@ protected:
     void advance(int step) {
         if (!step) return;
         if (!_body->IsAwake()) return;
-        if (_body->GetType() == b2_staticBody) return;
+        if (_bodytype == b2_staticBody) return;
         const b2Vec2 &position = _body->GetPosition();
         setPos(W2Q(position.x, -position.y));
         setRotation(RAD2ANG(-_body->GetAngle()));
@@ -62,9 +62,9 @@ public:
     }
 
     void create(b2World* const world);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
     QRectF boundingRect() const;
-    void setShape(const QRectF& rect);
+    void setShape(const QRectF &rect);
 
 private:
     QRectF _rect;
@@ -78,8 +78,8 @@ public:
     QBox2DPolygonItem(QGraphicsItem* parent = 0) : QBox2DItem(parent) { }
 
     void   create(b2World* const world);
-    void   paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
-    void   setShape(const QPolygonF& polygon);
+    void   paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
+    void   setShape(const QPolygonF &polygon);
     QRectF boundingRect() const;
 
 private:
@@ -94,8 +94,8 @@ public:
     QBox2DCircleItem(QGraphicsItem* parent = 0) : QBox2DItem(parent) { }
 
     void create(b2World* const world);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
-    void setShape(const QRectF& rect);
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
+    void setShape(const QRectF &rect);
     QRectF boundingRect() const;
 
 private:
