@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtGui>
 #include "world.h"
+#include "view.h"
 
 namespace Ui {
     class MainWindow;
@@ -16,21 +17,18 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void mousePressEvent(QMouseEvent *event);
+
+public:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
-
-public slots:
-    void Step();
     void createWorld();
-    void zoomIn();
-    void zoomOut();
 
 private:
     Ui::MainWindow*     ui;
     QGraphicsScene*     scene;
     QTimer*             timer;
     QBox2DWorld*        world;
+    QBox2DView*         view;
 };
 
 #endif // MAINWINDOW_H

@@ -1,6 +1,102 @@
 #include "world.h"
 
+QBox2DWorld::QBox2DWorld(QObject* parent): QObject(parent),
+    _contactsCount(0),
+    _mouseJoint(NULL) {
+    _world = new b2World(b2Vec2(0,0));
+    _world->SetContactListener(this);
+    b2BodyDef bd;
+    _groundBody = _world->CreateBody(&bd);
+}
+
+void QBox2DWorld::step(){
+    _world->Step(_timeStep,_velocityIterations,_positionIterations);
+    _scene->advance();
+}
+
+QBox2DRectItem* QBox2DWorld::createBox(const QPointF& pos) {
+    QBox2DRectItem *box = new QBox2DRectItem();
+    box->setBodyType(b2_dynamicBody);
+    uint l = 10;
+    QRectF rect(0, 0, l, l);
+    box->setShape(rect);
+    box->setPos(pos.x()-l, pos.y()-l);
+    box->setFriction(0.9f);
+    box->setDensity(1.0f);
+    box->setRestitution(0.5f);
+    box->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+    box->create(_world);
+    _scene->addItem(box);
+    return box;
+}
+
+void QBox2DWorld::grabItem(const QPointF &p) {
+
+    if (_mouseJoint != NULL){
+        return;
+    }
+
+    b2Vec2 pos;
+    pos.x =  Q2W_(p.x());
+    pos.y = -Q2W_(p.y());
+
+    // Make a small box.
+    b2AABB aabb;
+    b2Vec2 d;
+    d.Set(0.001f, 0.001f);
+    aabb.lowerBound = pos - d;
+    aabb.upperBound = pos + d;
+
+    // Query the world for overlapping shapes.
+
+    QueryCallback callback(pos);
+    _world->QueryAABB(&callback, aabb);
+
+    if (callback._fixture) {
+        b2Body* body = callback._fixture->GetBody();
+        b2MouseJointDef md;
+        md.bodyA = _groundBody;
+        md.bodyB = body;
+        md.target = pos;
+        md.maxForce = 1000.0f * body->GetMass();
+        _mouseJoint = (b2MouseJoint*) _world->CreateJoint(&md);
+        body->SetAwake(true);
+    }
+}
+
+void QBox2DWorld::dropItem(){
+    if(_mouseJoint){
+        _world->DestroyJoint(_mouseJoint);
+        _mouseJoint = NULL;
+    }
+}
+
+void QBox2DWorld::moveItem(const QPointF &p){
+    if(_mouseJoint){
+        b2Vec2 pos;
+        pos.x =  Q2W_(p.x());
+        pos.y = -Q2W_(p.y());
+        _mouseJoint->SetTarget(pos);
+    }
+}
+
+void TestWorld::create(QGraphicsScene* const scene){
+    _scene = scene;
+    _world->SetGravity(b2Vec2(0, -10));
+    QBox2DRectItem *ground = new QBox2DRectItem();
+    QRectF groundrect(0, 0, 400, 5);
+    QColor groundColor(64, 64, 64);
+    ground->setShape(groundrect);
+    ground->setPos(-200, 0);
+    ground->setBrush(groundColor);
+    ground->setBodyType(b2_staticBody);
+    ground->create(_world);
+    _scene->addItem(ground);
+    _box = createBox(QPointF(0, -10));
+}
+
 void ExampleWorld::create(QGraphicsScene* const scene){
+    _scene = scene;
     _world->SetGravity(b2Vec2(0, -10));
 
     // ground
@@ -56,7 +152,7 @@ void ExampleWorld::create(QGraphicsScene* const scene){
         jd1.motorSpeed = (float32)(pow(-1.0f,i) * 2 * b2_pi);
         jd1.maxMotorTorque = 50000000.0f;
         jd1.enableMotor = true;
-        b2Joint* revJoint = _world->CreateJoint(&jd1);
+        _world->CreateJoint(&jd1);
         //joints.append(revJoint);
     }
 
@@ -111,6 +207,7 @@ void ExampleWorld::create(QGraphicsScene* const scene){
 }
 
 void ArcanoidWorld::create(QGraphicsScene* const scene) {
+        _scene = scene;
         scene->setSceneRect(-200, 0, 400, 400);
         _world->SetGravity(b2Vec2(0, -1));
 
@@ -166,7 +263,7 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
         hor_joint_def.lowerTranslation = -2.96f;
         hor_joint_def.upperTranslation = 2.96f;
         hor_joint_def.enableLimit = true;
-        b2PrismaticJoint* h_joint = (b2PrismaticJoint*) _world->CreateJoint(&hor_joint_def);
+        _world->CreateJoint(&hor_joint_def);
 
         b2PrismaticJointDef vert_joint_def;
         axis = b2Vec2(0.0f, 1.0f);
@@ -176,7 +273,7 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
         vert_joint_def.lowerTranslation = -0.5f;
         vert_joint_def.upperTranslation = 0.0f;
         vert_joint_def.enableLimit = true;
-        b2PrismaticJoint* v_joint = (b2PrismaticJoint*) _world->CreateJoint(&vert_joint_def);
+        _world->CreateJoint(&vert_joint_def);
 
 
         for (int i = 0; i < 1; ++i) {
