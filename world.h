@@ -4,11 +4,12 @@
 #include <Box2D.h>
 #include <QGraphicsScene>
 #include <QObject>
-#include "qbox2ditems.h"
+#include <QDebug>
+#include "items.h"
 
 struct ContactPoint {
-    b2Fixture* fixtureA;
-    b2Fixture* fixtureB;
+    QBox2DItem* itemA;
+    QBox2DItem* itemB;
     b2Vec2 normal;
     b2Vec2 position;
     b2PointState state;
@@ -18,89 +19,54 @@ class QBox2DWorld : public QObject, public b2ContactListener {
 Q_OBJECT
 
 public:
-    explicit QBox2DWorld(QObject* parent = 0);
+    b2World*                _world;
+    QGraphicsScene*         _scene;
 
-    ~QBox2DWorld() {
-        delete _world;
-        _world = NULL;
-    }
-
-    void setSettings(float32 timeStep, int32 velIters, int32 posIters){
-        _timeStep = timeStep;
-        _velocityIterations = velIters;
-        _positionIterations = posIters;
-        _world->SetWarmStarting(true);
-        _world->SetContinuousPhysics(true);
-    }
-
-    virtual void create(QGraphicsScene* const scene) = 0;
-
-    virtual void updateKeys(int key, int state) {
-        Q_UNUSED(key); Q_UNUSED(state);
-    }
-
- public slots:
-    void step();
-    QBox2DRectItem* createBox(const QPointF &pos);
-    void grabItem(const QPointF &p);
-    void dropItem();
-    void moveItem(const QPointF &p);
-
-public:
-    b2World*        _world;
-    QGraphicsScene* _scene;
+protected:
+    QList<ContactPoint>     _contacts;
 
 private:
     float32                 _timeStep;
     int32                   _velocityIterations;
     int32                   _positionIterations;
-    QList<ContactPoint *>   _contacts;
-    uint                    _contactsCount;
     b2MouseJoint*           _mouseJoint;
     b2Body*                 _groundBody;
-};
 
-class TestWorld : public QBox2DWorld {
 public:
-    TestWorld() : QBox2DWorld() {}
-    void create(QGraphicsScene* const scene);
-private:
-    QBox2DRectItem* _box;
-};
+    explicit QBox2DWorld(QObject* parent = 0);
+    ~QBox2DWorld();
 
-class ExampleWorld : public QBox2DWorld {
-public:
-    ExampleWorld() : QBox2DWorld() {}
-    void create(QGraphicsScene* const scene);
-};
+            void setSettings(float32 timeStep, int32 velIters, int32 posIters);
+    virtual void create(QGraphicsScene* const scene) = 0;
+    virtual void updateKeys(int key, int state);
+    virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 
-class ArcanoidWorld : public QBox2DWorld {
-public:
-    ArcanoidWorld() : QBox2DWorld() {}
-    void create(QGraphicsScene* const scene);
-    void updateKeys(int key, int state);
-private:
-    QBox2DRectItem* _paddle;
+public slots:
+    virtual void step();
+    virtual void handleContact(const ContactPoint &cp);
+            void grabItem(const QPointF &p);
+            void dropItem();
+            void moveItem(const QPointF &p);
+            QBox2DRectItem* createBox(const QPointF &pos);
+
+signals:
+            void contact(const ContactPoint &cp);
 };
 
 
 class QueryCallback : public b2QueryCallback
 {
 public:
-    QueryCallback(const b2Vec2& point)
-    {
+    QueryCallback(const b2Vec2& point){
         _point = point;
         _fixture = NULL;
     }
 
-    bool ReportFixture(b2Fixture* fixture)
-    {
+    bool ReportFixture(b2Fixture* fixture){
         b2Body* body = fixture->GetBody();
-        if (body->GetType() == b2_dynamicBody)
-        {
+        if (body->GetType() == b2_dynamicBody){
             bool inside = fixture->TestPoint(_point);
-            if (inside)
-            {
+            if (inside){
                 _fixture = fixture;
 
                 // We are done, terminate the query.
@@ -112,7 +78,7 @@ public:
         return true;
     }
 
-    b2Vec2 _point;
+    b2Vec2     _point;
     b2Fixture* _fixture;
 };
 

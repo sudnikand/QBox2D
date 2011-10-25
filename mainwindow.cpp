@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::createWorld(){
     world = new ExampleWorld();
+    //world = new TestWorld();
     //world = new ArcanoidWorld();
     world->setSettings(1.0f / 60.0f, 10, 10);
     world->create(scene);

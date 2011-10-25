@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QtGui>
-#include "world.h"
+#include "worlds.h"
 #include "view.h"
 
 namespace Ui {

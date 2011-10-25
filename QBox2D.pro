@@ -8,24 +8,30 @@ CONFIG   += qt release warn_off
 TARGET = qbox2d
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
            mainwindow.cpp \
-           qbox2ditems.cpp \
+           items.cpp \
+           view.cpp \
            world.cpp \
-           view.cpp
+           worlds/testworld.cpp \
+           worlds/exampleworld.cpp \
+           worlds/arcanoidworld.cpp
 
 HEADERS += mainwindow.h \
-           qbox2ditems.h \
+           items.h \
            def.h \
+           view.h \
            world.h \
-           view.h
+           worlds/worlds.h \
+           worlds/testworld.h \
+           worlds/exampleworld.h \
+           worlds/arcanoidworld.h
 
 FORMS   += mainwindow.ui
 
 MOC_DIR = tmp
 OBJECTS_DIR = tmp
 
-INCLUDEPATH += Box2D
+INCLUDEPATH += Box2D worlds
 QMAKE_LIBDIR += $$PWD/Box2D/lib
 LIBS += -lBox2D

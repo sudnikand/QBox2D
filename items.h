@@ -1,5 +1,5 @@
-#ifndef QBOX2DGRAPHICS_H
-#define QBOX2DGRAPHICS_H
+#ifndef ITEMS_H
+#define ITEMS_H
 
 #include <QGraphicsItem>
 #include <QPainter>
@@ -30,6 +30,7 @@ protected:
         bd.type = _bodytype;
         bd.angle = ANG2RAD(-rotation());
         _body = world->CreateBody(&bd);
+        _body->SetUserData(this);
     }
 
     void advance(int step) {
@@ -102,4 +103,4 @@ private:
     QRectF _rect;
 };
 
-#endif // QBOX2DGRAPHICS_H
+#endif // ITEMS_H
