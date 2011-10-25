@@ -119,7 +119,7 @@ void QBox2DWorld::PreSolve(b2Contact* contact, const b2Manifold* oldManifold){
     b2WorldManifold worldManifold;
     contact->GetWorldManifold(&worldManifold);
 
-    for (int i = 0; i < manifold->pointCount && _contacts.size() < 100; ++i){
+    for (int i = 0; i < manifold->pointCount && _contacts.size() < 1000; ++i){
         ContactPoint cp;
         cp.itemA = static_cast<QBox2DItem*>(contact->GetFixtureA()->GetBody()->GetUserData());
         cp.itemB = static_cast<QBox2DItem*>(contact->GetFixtureB()->GetBody()->GetUserData());
