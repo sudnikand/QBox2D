@@ -22,6 +22,7 @@ signals:
     void mouseRightButtonPressed(const QPointF&);
     void mouseLeftButtonPressed(const QPointF&);
     void mouseRightButtonReleased();
+    void mouseLeftButtonReleased();
     void mouseMoved(const QPointF&);
 };
 
