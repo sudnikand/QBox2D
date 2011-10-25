@@ -27,12 +27,15 @@ void QBox2DView::mousePressEvent(QMouseEvent *event) {
 void QBox2DView::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
         emit mouseRightButtonReleased();
+    } else
+    if (event->button() == Qt::LeftButton) {
+        emit mouseLeftButtonReleased();
     }
 }
 
 void QBox2DView::mouseMoveEvent(QMouseEvent *event) {
-    if (event->buttons() & Qt::RightButton) {
+    //if (event->buttons() & Qt::LeftButton || event->buttons() & Qt::RightButton) {
         QPointF pos = mapToScene(event->pos());
         emit mouseMoved(pos);
-    }
+    //}
 }
