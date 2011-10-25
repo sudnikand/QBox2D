@@ -23,9 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
     createWorld();
 
     timer = new QTimer(this);
-    connect(view,SIGNAL(mouseLeftButtonPressed(QPointF)),world,SLOT(createBox(QPointF)));
-    connect(view,SIGNAL(mouseRightButtonPressed(QPointF)),world,SLOT(grabItem(QPointF)));
-    connect(view,SIGNAL(mouseRightButtonReleased()),world,SLOT(dropItem()));
+    connect(view,SIGNAL(mouseLeftButtonPressed(QPointF)),world,SLOT(grabItem(QPointF)));
+    connect(view,SIGNAL(mouseRightButtonPressed(QPointF)),world,SLOT(createBox(QPointF)));
+    connect(view,SIGNAL(mouseLeftButtonReleased()),world,SLOT(dropItem()));
     connect(view,SIGNAL(mouseMoved(QPointF)),world,SLOT(moveItem(QPointF)));
     connect(timer,SIGNAL(timeout()),world,SLOT(step()));
     timer->start(1000/60);
@@ -33,9 +33,9 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::createWorld(){
-    world = new ExampleWorld();
+    //world = new ExampleWorld();
     //world = new TestWorld();
-    //world = new ArcanoidWorld();
+    world = new ArcanoidWorld();
     world->setSettings(1.0f / 60.0f, 10, 10);
     world->create(scene);
 }
