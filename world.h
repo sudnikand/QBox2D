@@ -24,13 +24,13 @@ public:
 
 protected:
     QList<ContactPoint>     _contacts;
+    b2Body*                 _groundBody;
 
 private:
     float32                 _timeStep;
     int32                   _velocityIterations;
     int32                   _positionIterations;
     b2MouseJoint*           _mouseJoint;
-    b2Body*                 _groundBody;
 
 public:
     explicit QBox2DWorld(QObject* parent = 0);
