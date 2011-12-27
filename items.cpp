@@ -3,8 +3,8 @@
 void QBox2DRectItem::create(b2World* const world){
     createBody(world);
     b2PolygonShape shape;
-    shape.SetAsBox(Q2W_(_rect.width())/2, Q2W_(_rect.height())/2,
-                      b2Vec2( Q2W(_rect.center().x(),-_rect.center().y()) ), 0);
+    shape.SetAsBox( Q2W(_rect.width()/2, _rect.height()/2),
+            b2Vec2( Q2W(_rect.center().x(),-_rect.center().y()) ), 0);
     _fd.shape = &shape;
     _body->CreateFixture(&_fd);
 }
