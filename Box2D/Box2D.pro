@@ -1,5 +1,6 @@
 QT -= core \
-      gui
+      gui \
+	  webkit
 
 TEMPLATE = lib
 
