@@ -27,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(view,SIGNAL(mouseRightButtonPressed(QPointF)),world,SLOT(createBox(QPointF)));
     connect(view,SIGNAL(mouseLeftButtonReleased()),world,SLOT(dropItem()));
     connect(view,SIGNAL(mouseMoved(QPointF)),world,SLOT(moveItem(QPointF)));
+    connect(view,SIGNAL(keyPressed(int)),world,SLOT(handleKeyPressed(int)));
+    connect(view,SIGNAL(keyReleased(int)),world,SLOT(handleKeyReleased(int)));
     connect(timer,SIGNAL(timeout()),world,SLOT(step()));
     timer->start(1000/60);
 
