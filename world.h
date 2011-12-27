@@ -38,12 +38,13 @@ public:
 
             void setSettings(float32 timeStep, int32 velIters, int32 posIters);
     virtual void create(QGraphicsScene* const scene) = 0;
-    virtual void updateKeys(int key, int state);
     virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 
 public slots:
     virtual void step();
     virtual void handleContact(const ContactPoint &cp);
+    virtual void handleKeyPressed(const int &key);
+    virtual void handleKeyReleased(const int &key);
             void grabItem(const QPointF &p);
             void dropItem();
             void moveItem(const QPointF &p);

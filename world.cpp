@@ -21,12 +21,18 @@ void QBox2DWorld::setSettings(float32 timeStep, int32 velIters, int32 posIters){
     _world->SetContinuousPhysics(true);
 }
 
-void QBox2DWorld::updateKeys(int key, int state) {
+void QBox2DWorld::handleKeyPressed(const int &key)
+{
     Q_UNUSED(key);
-    Q_UNUSED(state);
 }
 
-void handleContact(const ContactPoint &cp) {
+void QBox2DWorld::handleKeyReleased(const int &key)
+{
+    Q_UNUSED(key);
+}
+
+void handleContact(const ContactPoint &cp)
+{
     Q_UNUSED(cp);
 }
 
@@ -58,14 +64,11 @@ void QBox2DWorld::grabItem(const QPointF &p) {
         return;
     }
 
-    b2Vec2 pos;
-    pos.x =  Q2W_(p.x());
-    pos.y = -Q2W_(p.y());
+    b2Vec2 pos( Q2W(p.x(), -p.y()) );
 
     // Make a small box.
     b2AABB aabb;
-    b2Vec2 d;
-    d.Set(0.001f, 0.001f);
+    b2Vec2 d(0.001f, 0.001f);
     aabb.lowerBound = pos - d;
     aabb.upperBound = pos + d;
 

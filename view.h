@@ -13,6 +13,8 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 
 public slots:
     void zoomIn();
@@ -24,6 +26,9 @@ signals:
     void mouseRightButtonReleased();
     void mouseLeftButtonReleased();
     void mouseMoved(const QPointF&);
+    void keyPressed(const int&);
+    void keyReleased(const int&);
+
 };
 
 #endif // VIEW_H

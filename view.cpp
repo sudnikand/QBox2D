@@ -39,3 +39,11 @@ void QBox2DView::mouseMoveEvent(QMouseEvent *event) {
         emit mouseMoved(pos);
     //}
 }
+
+void QBox2DView::keyPressEvent(QKeyEvent *event) {
+    emit keyPressed(event->key());
+}
+
+void QBox2DView::keyReleaseEvent(QKeyEvent *event) {
+    emit keyReleased(event->key());
+}
