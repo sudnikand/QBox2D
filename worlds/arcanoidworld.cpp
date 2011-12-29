@@ -17,6 +17,9 @@ void ArcanoidWorld::step(){
                            ( cp.itemB == _ball ) ? cp.itemA : NULL;
         if (item && item->body()->GetType() != b2_staticBody ) {
             if (item == _paddle) continue;
+            if (item == _bound) {
+                // Add game over here
+            }
             destroy_items.insert(item);
         }
     }
@@ -24,9 +27,7 @@ void ArcanoidWorld::step(){
     QSetIterator<QBox2DItem*> i(destroy_items);
     while(i.hasNext()){
         QBox2DItem *item = i.next();
-        _world->DestroyBody(item->body());
-        _scene->removeItem(item);
-        delete item;
+        destroyItem(item);
     }
 }
 
