@@ -39,6 +39,7 @@ public:
             void setSettings(float32 timeStep, int32 velIters, int32 posIters);
     virtual void create(QGraphicsScene* const scene) = 0;
     virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
+            void destroyItem(QBox2DItem *item);
 
 public slots:
     virtual void step();

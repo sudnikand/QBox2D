@@ -132,3 +132,11 @@ void QBox2DWorld::PreSolve(b2Contact* contact, const b2Manifold* oldManifold){
         _contacts.append(cp);
     }
 }
+
+void QBox2DWorld::destroyItem(QBox2DItem *item)
+{
+    _world->DestroyBody(item->body());
+    _scene->removeItem(item);
+    delete item;
+    item = NULL;
+}
