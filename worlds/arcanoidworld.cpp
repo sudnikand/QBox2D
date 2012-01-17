@@ -82,7 +82,7 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
 
         _paddle->setFriction(1.0f);
         _paddle->setDensity(1.0f);
-        _paddle->setRestitution(2.0f);
+        _paddle->setRestitution(1.5f);
         _paddle->create(_world);
         _paddle->body()->SetLinearDamping(10.0f);
         //_paddle->body()->SetType(b2_staticBody);
