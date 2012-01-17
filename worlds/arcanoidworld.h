@@ -14,6 +14,8 @@ private:
 public:
     ArcanoidWorld();
     void create(QGraphicsScene* const scene);
+    void createBall(quint8 radius);
+    void createBall();
     void handleKeyPressed(const int &key);
     void step();
 

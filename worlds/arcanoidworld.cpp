@@ -18,7 +18,10 @@ void ArcanoidWorld::step(){
         if (item && item->body()->GetType() != b2_staticBody ) {
             if (item == _paddle) continue;
             if (item == _bound) {
+                destroyItem(_ball);
+                createBall();
                 // Add game over here
+                continue;
             }
             destroy_items.insert(item);
         }
@@ -103,22 +106,7 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
         vert_joint_def.enableLimit = true;
         _world->CreateJoint(&vert_joint_def);
 
-
-        {
-            int size = 5;
-            QBox2DCircleItem *item = new QBox2DCircleItem();
-            item->setShape(QRectF(-size , -size, size*2, size*2));
-            item->setPos(0, 200);
-            item->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
-            item->setBodyType(b2_dynamicBody);
-            item->setFriction(1.0f);
-            item->setDensity(1.0f);
-            item->setRestitution(1.0f);
-            item->create(_world);
-            item->body()->SetBullet(true);
-            _scene->addItem(item);
-            _ball = item;
-        }
+        createBall();
 
         for (int j = 0; j < 10; ++j){
             for (int i = 0; i < 10; ++i){
@@ -151,7 +139,6 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
         _scene->addItem(_bound);
         b2RevoluteJointDef jointDef;
         jointDef.Initialize(_bound->body(), groundup->body(), _bound->body()->GetWorldCenter());
-
         _world->CreateJoint(&jointDef);
     }
 
@@ -180,3 +167,21 @@ void ArcanoidWorld::handleKeyPressed(const int &key)
     }
 }
 
+void ArcanoidWorld::createBall(quint8 radius){
+        QBox2DCircleItem *item = new QBox2DCircleItem();
+        item->setShape(QRectF(-radius , -radius, radius*2, radius*2));
+        item->setPos(0, 200);
+        item->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+        item->setBodyType(b2_dynamicBody);
+        item->setFriction(1.0f);
+        item->setDensity(1.0f);
+        item->setRestitution(1.0f);
+        item->create(_world);
+        item->body()->SetBullet(true);
+        _ball = item;
+        _scene->addItem(_ball);
+}
+
+void ArcanoidWorld::createBall() {
+    createBall(5);
+}
