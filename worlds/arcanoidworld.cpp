@@ -15,15 +15,15 @@ void ArcanoidWorld::step(){
         ContactPoint cp = _contacts.at(i);
         QBox2DItem *item = ( cp.itemA == _ball ) ? cp.itemB :
                            ( cp.itemB == _ball ) ? cp.itemA : NULL;
-        if (item && item->body()->GetType() != b2_staticBody ) {
-            if (item == _paddle) continue;
-            if (item == _bound) {
-                destroyItem(_ball);
-                createBall();
-                // Add game over here
-                continue;
-            }
+        if (!item) continue;
+
+        if (item == _paddle) continue;
+        if (item->body()->GetType() == b2_dynamicBody) {
             destroy_items.insert(item);
+        } else if (item == _bound) {
+            destroyItem(_ball);
+            createBall();
+               // Add game over here
         }
     }
 
@@ -130,16 +130,10 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
         }
 
         _bound = new QBox2DRectItem();
-        _bound->setPos(-205, 400);
-        _bound->setShape(QRectF(0, 0, 400,5));
-        _bound->setBrush(QColor(128, 128, 128));
-        _bound->setRestitution(1.0f);
-        _bound->setBodyType(b2_dynamicBody);
+        _bound->setPos(-205, 410);
+        _bound->setShape(QRectF(0, 0, 410, 10));
+        _bound->setBodyType(b2_staticBody);
         _bound->create(_world);
-        _scene->addItem(_bound);
-        b2RevoluteJointDef jointDef;
-        jointDef.Initialize(_bound->body(), groundup->body(), _bound->body()->GetWorldCenter());
-        _world->CreateJoint(&jointDef);
     }
 
 
