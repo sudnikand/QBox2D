@@ -121,7 +121,7 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
                 _scene->addItem(brick);
 
                 b2RevoluteJointDef jointDef;
-                jointDef.Initialize(brick->body(), groundup->body(), brick->body()->GetWorldCenter());
+                jointDef.Initialize(brick->body(), _groundBody, brick->body()->GetWorldCenter());
                 jointDef.enableMotor = true;
                 jointDef.motorSpeed = b2_pi;
                 jointDef.maxMotorTorque = 5000.0f;
