@@ -60,6 +60,7 @@ HEADERS += Box2D.h \
 	Dynamics/Joints/b2RopeJoint.h \
 	Dynamics/Joints/b2WeldJoint.h \
 	Dynamics/Joints/b2WheelJoint.h \
+	Dynamics/Joints/b2MotorJoint.h \
 	Rope/b2Rope.h
 
 
@@ -107,4 +108,5 @@ SOURCES += Collision/b2BroadPhase.cpp \
 	Dynamics/Joints/b2RopeJoint.cpp \
 	Dynamics/Joints/b2WeldJoint.cpp \
 	Dynamics/Joints/b2WheelJoint.cpp \
+	Dynamics/Joints/b2MotorJoint.cpp \
 	Rope/b2Rope.cpp
