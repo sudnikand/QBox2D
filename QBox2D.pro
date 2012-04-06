@@ -15,7 +15,8 @@ SOURCES += main.cpp\
            world.cpp \
            worlds/testworld.cpp \
            worlds/exampleworld.cpp \
-           worlds/arcanoidworld.cpp
+           worlds/arcanoidworld.cpp \
+           qscene.cpp
 
 HEADERS += mainwindow.h \
            items.h \
@@ -25,7 +26,8 @@ HEADERS += mainwindow.h \
            worlds/worlds.h \
            worlds/testworld.h \
            worlds/exampleworld.h \
-           worlds/arcanoidworld.h
+           worlds/arcanoidworld.h \
+           qscene.h
 
 FORMS   += mainwindow.ui
 
