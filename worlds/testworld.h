@@ -10,7 +10,7 @@ private:
 
 public:
     TestWorld();
-    void create(QGraphicsScene* const scene);
+    void create();
     void handleContact(const ContactPoint &cp);
     void step();
 };

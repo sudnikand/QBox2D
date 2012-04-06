@@ -1,6 +1,9 @@
 #include "arcanoidworld.h"
 
-ArcanoidWorld::ArcanoidWorld() : QBox2DWorld() {
+ArcanoidWorld::ArcanoidWorld() :
+    QBox2DWorld()
+{
+
 }
 
 void ArcanoidWorld::step(){
@@ -34,9 +37,8 @@ void ArcanoidWorld::step(){
     }
 }
 
-void ArcanoidWorld::create(QGraphicsScene* const scene) {
-        _scene = scene;
-        scene->setSceneRect(-200, 0, 400, 400);
+void ArcanoidWorld::create() {
+    qDebug()<<"Enter in Create Arcanoid World";
         _world->SetGravity(b2Vec2(0, -1));
 
         QBox2DRectItem* groundl = new QBox2DRectItem();
@@ -46,7 +48,7 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
         groundl->setRestitution(1.0f);
         groundl->setBodyType(b2_staticBody);
         groundl->create(_world);
-        scene->addItem(groundl);
+        emit itemCreated(groundl);
 
         QBox2DRectItem* groundr = new QBox2DRectItem();
         groundr->setPos(200, 0);
@@ -55,7 +57,7 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
         groundr->setRestitution(1.0f);
         groundr->setBodyType(b2_staticBody);
         groundr->create(_world);
-        _scene->addItem(groundr);
+        emit itemCreated(groundr);
 
         QBox2DRectItem* groundup = new QBox2DRectItem();
         groundup->setPos(-200, 0);
@@ -63,7 +65,7 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
         groundup->setBrush(QColor(128, 128, 128));
         groundup->setBodyType(b2_staticBody);
         groundup->create(_world);
-        _scene->addItem(groundup);
+        emit itemCreated(groundup);
 
         QBox2DRectItem* hor_item = new QBox2DRectItem();
         hor_item->setPos(0, 400);
@@ -72,7 +74,7 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
         hor_item->setBodyType(b2_dynamicBody);
         hor_item->setDensity(0.0f);
         hor_item->create(_world);
-        //_scene->addItem(hor_item);
+        emit itemCreated(hor_item);
 
         _paddle = new QBox2DRectItem();
         _paddle->setPos(-50, 400 - 5);
@@ -86,7 +88,7 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
         _paddle->create(_world);
         _paddle->body()->SetLinearDamping(10.0f);
         //_paddle->body()->SetType(b2_staticBody);
-        scene->addItem(_paddle);
+        emit itemCreated(_paddle);
 
         b2PrismaticJointDef hor_joint_def;
         b2Vec2 axis(1.0f, 0.0f);
@@ -118,7 +120,7 @@ void ArcanoidWorld::create(QGraphicsScene* const scene) {
                 brick->setDensity(1.0f);
                 brick->setBodyType(b2_dynamicBody);
                 brick->create(_world);
-                _scene->addItem(brick);
+                emit itemCreated(brick);
 
                 b2RevoluteJointDef jointDef;
                 jointDef.Initialize(brick->body(), _groundBody, brick->body()->GetWorldCenter());
@@ -173,7 +175,7 @@ void ArcanoidWorld::createBall(quint8 radius){
         item->create(_world);
         item->body()->SetBullet(true);
         _ball = item;
-        _scene->addItem(_ball);
+        emit itemCreated(item);
 }
 
 void ArcanoidWorld::createBall() {

@@ -2,7 +2,6 @@
 #define WORLD_H
 
 #include <Box2D.h>
-#include <QGraphicsScene>
 #include <QObject>
 #include <QDebug>
 #include "items.h"
@@ -20,7 +19,6 @@ Q_OBJECT
 
 public:
     b2World*                _world;
-    QGraphicsScene*         _scene;
 
 protected:
     QList<ContactPoint>     _contacts;
@@ -37,7 +35,7 @@ public:
     ~QBox2DWorld();
 
             void setSettings(float32 timeStep, int32 velIters, int32 posIters);
-    virtual void create(QGraphicsScene* const scene) = 0;
+    virtual void create() = 0;
     virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
             void destroyItem(QBox2DItem *item);
 
@@ -53,6 +51,8 @@ public slots:
 
 signals:
             void contact(const ContactPoint &cp);
+            void itemCreated(QGraphicsItem *item);
+            void itemDestroyed(QGraphicsItem *item);
 };
 
 

@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    scene = new QGraphicsScene(this);
+    scene = new QScene(this);
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
     scene->setBackgroundBrush(Qt::white);
     scene->setStickyFocus(false);
@@ -29,7 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(view,SIGNAL(mouseMoved(QPointF)),world,SLOT(moveItem(QPointF)));
     connect(view,SIGNAL(keyPressed(int)),world,SLOT(handleKeyPressed(int)));
     connect(view,SIGNAL(keyReleased(int)),world,SLOT(handleKeyReleased(int)));
-    connect(timer,SIGNAL(timeout()),world,SLOT(step()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(update()));
+
     timer->start(1000/60);
 
 }
@@ -38,8 +39,17 @@ void MainWindow::createWorld(){
     //world = new ExampleWorld();
     //world = new TestWorld();
     world = new ArcanoidWorld();
+    connect(world,SIGNAL(itemDestroyed(QGraphicsItem*)),scene,SLOT(removeItem(QGraphicsItem*)));
+    connect(world,SIGNAL(itemCreated(QGraphicsItem*)),scene,SLOT(addItem(QGraphicsItem*)));
+
     world->setSettings(1.0f / 60.0f, 10, 10);
-    world->create(scene);
+    world->create();
+
+}
+
+void MainWindow::update(){
+    world->step();
+    scene->advance();
 }
 
 MainWindow::~MainWindow(){

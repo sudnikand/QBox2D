@@ -3,8 +3,7 @@
 ExampleWorld::ExampleWorld() : QBox2DWorld(){
 }
 
-void ExampleWorld::create(QGraphicsScene* const scene){
-    _scene = scene;
+void ExampleWorld::create(){
     _world->SetGravity(b2Vec2(0, -10));
 
     // ground
@@ -15,7 +14,7 @@ void ExampleWorld::create(QGraphicsScene* const scene){
     ground->setPos(-200, 0);
     ground->setBrush(groundColor);
     ground->create(_world);
-    scene->addItem(ground);
+    emit itemCreated(ground);
 
     // roof
     QBox2DRectItem *roof = new QBox2DRectItem();
@@ -23,7 +22,7 @@ void ExampleWorld::create(QGraphicsScene* const scene){
     roof->setPos(-200, -405);
     roof->setBrush(groundColor);
     roof->create(_world);
-    scene->addItem(roof);
+    emit itemCreated(roof);
 
     //left wall
     QBox2DRectItem *leftWall = new QBox2DRectItem();
@@ -32,7 +31,7 @@ void ExampleWorld::create(QGraphicsScene* const scene){
     leftWall->setPos(-205, -400);
     leftWall->setBrush(groundColor);
     leftWall->create(_world);
-    scene->addItem(leftWall);
+    emit itemCreated(leftWall);
 
     //right wall
     QBox2DRectItem *rightWall = new QBox2DRectItem();
@@ -40,7 +39,8 @@ void ExampleWorld::create(QGraphicsScene* const scene){
     rightWall->setPos(200, -400);
     rightWall->setBrush(groundColor);
     rightWall->create(_world);
-    scene->addItem(rightWall);
+    emit itemCreated(rightWall);
+
 
     //add motors
     for (int i = 0; i < 2; ++i) {
@@ -54,7 +54,7 @@ void ExampleWorld::create(QGraphicsScene* const scene){
         staticBox->setDensity(2.0f);
         staticBox->setRestitution(0.1f);
         staticBox->create(_world);
-        scene->addItem(staticBox);
+        emit itemCreated(staticBox);
         b2RevoluteJointDef jd1;
         jd1.Initialize(staticBox->body(), ground->body(), staticBox->body()->GetPosition());
         jd1.motorSpeed = (float32)(pow(-1.0f,i) * 2 * b2_pi);
@@ -77,7 +77,7 @@ void ExampleWorld::create(QGraphicsScene* const scene){
         item->setFriction(0.8f);
         item->setRestitution(0.4f);
         item->create(_world);
-        scene->addItem(item);
+        emit itemCreated(item);
     }
 
     // add triangles
@@ -95,7 +95,7 @@ void ExampleWorld::create(QGraphicsScene* const scene){
         testItem->setRestitution(0.5f);
         testItem->setBodyType(b2_dynamicBody);
         testItem->create(_world);
-        scene->addItem(testItem);
+        emit itemCreated(testItem);
     }
 
     //Add circles
@@ -110,6 +110,6 @@ void ExampleWorld::create(QGraphicsScene* const scene){
         item->setDensity(1.0f);
         item->setRestitution(0.1f);
         item->create(_world);
-        scene->addItem(item);
+        emit itemCreated(item);
     }
 }

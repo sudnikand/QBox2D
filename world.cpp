@@ -39,7 +39,6 @@ void handleContact(const ContactPoint &cp)
 void QBox2DWorld::step(){
     _contacts.clear();
     _world->Step(_timeStep,_velocityIterations,_positionIterations);
-    _scene->advance();
 }
 
 QBox2DRectItem* QBox2DWorld::createBox(const QPointF& pos) {
@@ -54,7 +53,7 @@ QBox2DRectItem* QBox2DWorld::createBox(const QPointF& pos) {
     box->setRestitution(0.5f);
     box->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
     box->create(_world);
-    _scene->addItem(box);
+    emit itemCreated(box);
     return box;
 }
 
@@ -136,7 +135,8 @@ void QBox2DWorld::PreSolve(b2Contact* contact, const b2Manifold* oldManifold){
 void QBox2DWorld::destroyItem(QBox2DItem *item)
 {
     _world->DestroyBody(item->body());
-    _scene->removeItem(item);
+    emit itemDestroyed(item);
+//FIXME: leaking incomlete type
     delete item;
     item = NULL;
 }
