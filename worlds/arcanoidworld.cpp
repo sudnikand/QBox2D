@@ -125,7 +125,7 @@ void ArcanoidWorld::create() {
                 b2RevoluteJointDef jointDef;
                 jointDef.Initialize(brick->body(), _groundBody, brick->body()->GetWorldCenter());
                 jointDef.enableMotor = true;
-                jointDef.motorSpeed = b2_pi;
+                jointDef.motorSpeed = pow(-1,i+j) * (qrand() % 100) / 10;
                 jointDef.maxMotorTorque = 5000.0f;
                 _world->CreateJoint(&jointDef);
             }
@@ -143,22 +143,22 @@ void ArcanoidWorld::handleKeyPressed(const int &key)
 {
     switch( key ) {
     case Qt::Key_W:
-        _paddle->body()->ApplyLinearImpulse(b2Vec2(0.0, 5.0f),_paddle->body()->GetWorldCenter());
+        _paddle->body()->ApplyLinearImpulse(b2Vec2(0.0, 5.0f),_paddle->body()->GetWorldCenter(), true);
         break;
     case Qt::Key_S:
-        _paddle->body()->ApplyLinearImpulse(b2Vec2(0.0, -5.0f),_paddle->body()->GetWorldCenter());
+        _paddle->body()->ApplyLinearImpulse(b2Vec2(0.0, -5.0f),_paddle->body()->GetWorldCenter(), true);
         break;
     case Qt::Key_A:
-        _paddle->body()->ApplyLinearImpulse(b2Vec2(-10.0f,0.0f),_paddle->body()->GetWorldCenter());
+        _paddle->body()->ApplyLinearImpulse(b2Vec2(-10.0f,0.0f),_paddle->body()->GetWorldCenter(), true);
         break;
     case Qt::Key_D:
-        _paddle->body()->ApplyLinearImpulse(b2Vec2(10.0f,0.0f),_paddle->body()->GetWorldCenter());
+        _paddle->body()->ApplyLinearImpulse(b2Vec2(10.0f,0.0f),_paddle->body()->GetWorldCenter(), true);
         break;
     case Qt::Key_Q:
-        _paddle->body()->ApplyTorque(1000);
+        _paddle->body()->ApplyTorque(1000,false);
         break;
     case Qt::Key_E:
-        _paddle->body()->ApplyTorque(-1000);
+        _paddle->body()->ApplyTorque(-1000, false);
         break;
     }
 }
