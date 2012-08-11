@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QGLWidget>
+#include "glscene.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionZoomIn, SIGNAL(triggered()), view, SLOT(zoomIn()));
     connect(ui->actionZoomOut, SIGNAL(triggered()), view, SLOT(zoomOut()));
     ui->horizontalLayout->addWidget(view);
+    GLScene * glscene = new GLScene(this);
+    ui->horizontalLayout->addWidget(glscene);
 
     createWorld();
 

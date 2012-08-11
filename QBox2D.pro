@@ -1,7 +1,8 @@
 QT       += opengl core gui
 
-CONFIG   += qt release warn_off
-#CONFIG   += qt debug warn_on
+#CONFIG   += qt release warn_off
+CONFIG   += qt debug warn_on
+QMAKE_CXXFLAGS_DEBUG +=-Wall
 #QMAKE_CXXFLAGS_RELEASE -= -O2
 #QMAKE_CXXFLAGS_RELEASE += -O3 -march=native -mtune=native -fomit-frame-pointer
 
@@ -16,7 +17,8 @@ SOURCES += main.cpp\
            worlds/testworld.cpp \
            worlds/exampleworld.cpp \
            worlds/arcanoidworld.cpp \
-           qscene.cpp
+           qscene.cpp \
+           glscene.cpp
 
 HEADERS += mainwindow.h \
            items.h \
@@ -27,7 +29,8 @@ HEADERS += mainwindow.h \
            worlds/testworld.h \
            worlds/exampleworld.h \
            worlds/arcanoidworld.h \
-           qscene.h
+           qscene.h \
+           glscene.h
 
 FORMS   += mainwindow.ui
 
