@@ -14,9 +14,8 @@ GLScene::~GLScene()
 
 }
 
-void GLScene::initializeGL(void){
+void GLScene::initializeGL(){
     glClearColor(0,0,0,1.0f);
-
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
 	glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
@@ -34,22 +33,20 @@ void GLScene::resizeGL(int width, int height)
     glViewport(0, 0, width, height);
 }
 
-void GLScene::paintGL(void)
+void GLScene::paintGL()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
     begin2D(100,100);
-    glBegin(GL_TRIANGLES);
-    glColor3f(1,0,0);
-    glVertex3f(0,0,0);
-    glColor3f(0,1,0);
-    glVertex3f(50,0,0);
-    glColor3f(0,0,1);
-    glVertex3f(50,50,0);
-    glEnd();
-	end2D();
+
+    int numItems = _glitems.size();
+    for (int i=0; i < numItems; ++i){
+        _glitems.at(i)->render();
+    }
+
+    end2D();
 }
 
-void GLScene::updateGL(void)
+void GLScene::updateGL()
 {
 	QGLWidget::updateGL();
 }
