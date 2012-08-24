@@ -21,7 +21,7 @@ void ArcanoidWorld::step(){
         if (!item) continue;
 
         if (item == _paddle) continue;
-        if (item->body()->GetType() == b2_dynamicBody) {
+        if (item->bodyType() == b2_dynamicBody) {
             destroy_items.insert(item);
         } else if (item == _bound) {
             destroyItem(_ball);
@@ -43,49 +43,48 @@ void ArcanoidWorld::create() {
 
         QBox2DRectItem* groundl = new QBox2DRectItem();
         groundl->setPos(-205, 0);
-        groundl->setShape(QRectF(0, 0, 5, 400));
         groundl->setBrush(QColor(128, 128, 128));
         groundl->setRestitution(1.0f);
         groundl->setBodyType(b2_staticBody);
         groundl->create(_world);
+        groundl->setShape(QRectF(0, 0, 5, 400));
         emit itemCreated(groundl);
 
         QBox2DRectItem* groundr = new QBox2DRectItem();
         groundr->setPos(200, 0);
-        groundr->setShape(QRectF(0, 0, 5, 400));
         groundr->setBrush(QColor(128, 128, 128));
         groundr->setRestitution(1.0f);
         groundr->setBodyType(b2_staticBody);
         groundr->create(_world);
+        groundr->setShape(QRectF(0, 0, 5, 400));
         emit itemCreated(groundr);
 
         QBox2DRectItem* groundup = new QBox2DRectItem();
         groundup->setPos(-200, 0);
-        groundup->setShape(QRectF(0, 0, 400, 5));
         groundup->setBrush(QColor(128, 128, 128));
         groundup->setBodyType(b2_staticBody);
         groundup->create(_world);
+        groundup->setShape(QRectF(0, 0, 400, 5));
         emit itemCreated(groundup);
 
         QBox2DRectItem* hor_item = new QBox2DRectItem();
         hor_item->setPos(0, 400);
-        hor_item->setShape(QRectF(0, 0, 5, 5));
         hor_item->setBrush(QColor(128, 128, 128));
         hor_item->setBodyType(b2_dynamicBody);
         hor_item->setDensity(0.0f);
         hor_item->create(_world);
+        hor_item->setShape(QRectF(0, 0, 5, 5));
         emit itemCreated(hor_item);
 
         _paddle = new QBox2DRectItem();
         _paddle->setPos(-50, 400 - 5);
-        _paddle->setShape(QRectF(0, 0, 100, 10));
         _paddle->setBrush(QColor(128, 128, 128));
         _paddle->setBodyType(b2_dynamicBody);
-
         _paddle->setFriction(1.0f);
         _paddle->setDensity(1.0f);
         _paddle->setRestitution(1.5f);
         _paddle->create(_world);
+        _paddle->setShape(QRectF(0, 0, 100, 10));
         _paddle->body()->SetLinearDamping(10.0f);
         //_paddle->body()->SetType(b2_staticBody);
         emit itemCreated(_paddle);
@@ -114,12 +113,12 @@ void ArcanoidWorld::create() {
             for (int i = 0; i < 10; ++i){
                 QBox2DRectItem* brick = new QBox2DRectItem();
                 brick->setPos(-150 + 30*i, 10 + 30*j);
-                brick->setShape(QRectF(0, 0, 10, 20));
                 brick->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
                 brick->setRestitution(1.0f);
                 brick->setDensity(1.0f);
                 brick->setBodyType(b2_dynamicBody);
                 brick->create(_world);
+                brick->setShape(QRectF(0, 0, 10, 20));
                 emit itemCreated(brick);
 
                 b2RevoluteJointDef jointDef;
@@ -133,9 +132,9 @@ void ArcanoidWorld::create() {
 
         _bound = new QBox2DRectItem();
         _bound->setPos(-205, 410);
-        _bound->setShape(QRectF(0, 0, 410, 10));
         _bound->setBodyType(b2_staticBody);
         _bound->create(_world);
+        _bound->setShape(QRectF(0, 0, 410, 10));
     }
 
 
@@ -165,7 +164,6 @@ void ArcanoidWorld::handleKeyPressed(const int &key)
 
 void ArcanoidWorld::createBall(quint8 radius){
         QBox2DCircleItem *item = new QBox2DCircleItem();
-        item->setShape(QRectF(-radius , -radius, radius*2, radius*2));
         item->setPos(0, 200);
         item->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
         item->setBodyType(b2_dynamicBody);
@@ -173,6 +171,7 @@ void ArcanoidWorld::createBall(quint8 radius){
         item->setDensity(1.0f);
         item->setRestitution(1.0f);
         item->create(_world);
+        item->setShape(QRectF(-radius , -radius, radius*2, radius*2));
         item->body()->SetBullet(true);
         _ball = item;
         emit itemCreated(item);

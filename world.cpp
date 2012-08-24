@@ -45,14 +45,14 @@ QBox2DRectItem* QBox2DWorld::createBox(const QPointF& pos) {
     QBox2DRectItem *box = new QBox2DRectItem();
     box->setBodyType(b2_dynamicBody);
     uint l = 10;
-    QRectF rect(0, 0, l, l);
-    box->setShape(rect);
     box->setPos(pos.x()-l, pos.y()-l);
     box->setFriction(0.9f);
     box->setDensity(1.0f);
     box->setRestitution(0.5f);
     box->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
     box->create(_world);
+    QRectF rect(0, 0, l, l);
+    box->setShape(rect);
     emit itemCreated(box);
     return box;
 }

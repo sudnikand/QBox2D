@@ -18,7 +18,9 @@ SOURCES += main.cpp\
            worlds/exampleworld.cpp \
            worlds/arcanoidworld.cpp \
            qscene.cpp \
-           glscene.cpp
+           glscene.cpp \
+           physicitem.cpp \
+           glitem.cpp
 
 HEADERS += mainwindow.h \
            items.h \
@@ -30,7 +32,9 @@ HEADERS += mainwindow.h \
            worlds/exampleworld.h \
            worlds/arcanoidworld.h \
            qscene.h \
-           glscene.h
+           glscene.h \
+           physicitem.h \
+           glitem.h
 
 FORMS   += mainwindow.ui
 

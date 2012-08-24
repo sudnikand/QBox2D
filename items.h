@@ -1,10 +1,10 @@
 #ifndef ITEMS_H
 #define ITEMS_H
 
+#include "def.h"
+#include "physicitem.h"
 #include <QGraphicsItem>
 #include <QPainter>
-#include <Box2D.h>
-#include "def.h"
 
 class QBox2DItem : public QGraphicsItem {
 public:
@@ -12,43 +12,50 @@ public:
     QBox2DItem(QGraphicsItem* parent = 0) : QGraphicsItem(parent) { }
     virtual ~QBox2DItem(){}
 
-    void setRestitution(const float32 & r)     { _fd.restitution = r; }
-    void setDensity    (const float32 & d)     { _fd.density = d; }
-    void setFriction   (const float32 & f)     { _fd.friction = f; }
-    void setBodyType   (const b2BodyType & bt) { _bodytype = bt; }
+    void setRestitution(const float32 & r)     { _physic.setRestitution(r); }
+    void setDensity    (const float32 & d)     { _physic.setDensity(d); }
+    void setFriction   (const float32 & f)     { _physic.setFriction(f); }
+    void setBodyType   (const b2BodyType & bt) { _physic.setBodyType(bt); }
+    void setShapeB2    (const b2Shape & s )    { _physic.setShape(s); }
     void setBrush      (const QBrush & brush)  { _brush = brush; update(); }
     void setPen        (const QPen & pen)      { _pen = pen; update(); }
+    void createFixture ()                      { _physic.createFixture(); }
 
-    b2Body* body() const { return _body; }
+    b2Body* body() const { return _physic.body(); }
+    b2BodyType bodyType() const { return _physic.bodyType(); }
+
+    void setPos(const QPointF &pos){
+        _physic.setPos(b2Vec2(Q2W(pos.x(),-pos.y())));
+        QGraphicsItem::setPos(pos);
+    }
+
+    void setPos(const qreal &x, const qreal &y){
+        _physic.setPos(b2Vec2(Q2W_(x),-Q2W_(y)));
+        QGraphicsItem::setPos(x,y);
+    }
 
 
 protected:
 
     void createBody(b2World* const world){
-        b2BodyDef bd;
-        bd.position.Set(Q2W(x(),-y()));
-        bd.type = _bodytype;
-        bd.angle = ANG2RAD(-rotation());
-        _body = world->CreateBody(&bd);
-        _body->SetUserData(this);
+        _physic.createBody(world);
+        _physic.setUserData(this);
     }
 
     void advance(int step) {
         if (!step) return;
-        if (!_body->IsAwake()) return;
-        if (_bodytype == b2_staticBody) return;
-        const b2Vec2 &position = _body->GetPosition();
-        setPos(W2Q(position.x, -position.y));
-        setRotation(RAD2ANG(-_body->GetAngle()));
+        if (!body()->IsAwake()) return;
+        if (bodyType() == b2_staticBody) return;
+        const b2Vec2 &position = body()->GetPosition();
+        QGraphicsItem::setPos(W2Q(position.x, -position.y));
+        setRotation(RAD2ANG(-body()->GetAngle()));
     }
 
 protected:
-            b2Body*      _body;
-            b2BodyType   _bodytype;
-            b2FixtureDef _fd;
     mutable QRectF       _boundingRect;
             QBrush       _brush;
             QPen         _pen;
+            PhysicItem   _physic;
 };
 
 

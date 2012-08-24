@@ -8,11 +8,11 @@ void TestWorld::create(){
     QBox2DRectItem *ground = new QBox2DRectItem();
     QRectF groundrect(0, 0, 400, 5);
     QColor groundColor(64, 64, 64);
-    ground->setShape(groundrect);
     ground->setPos(-200, 0);
     ground->setBrush(groundColor);
     ground->setBodyType(b2_staticBody);
     ground->create(_world);
+    ground->setShape(groundrect);
     emit itemCreated(ground);
     _box = createBox(QPointF(0, -10));
 }
@@ -29,7 +29,7 @@ void TestWorld::step(){
         ContactPoint cp = _contacts.at(i);
         QBox2DItem *item = ( cp.itemA == _box ) ? cp.itemB :
                            ( cp.itemB == _box ) ? cp.itemA : NULL;
-        if (item && item->body()->GetType() != b2_staticBody ) {
+        if (item && item->bodyType() != b2_staticBody ) {
             dest_items.insert(item);
         }
     }
