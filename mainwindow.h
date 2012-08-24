@@ -1,11 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QtGui>
 #include "worlds.h"
 #include "view.h"
 #include "qscene.h"
+#include "glscene.h"
+#include <QMainWindow>
+#include <QtGui>
 
 namespace Ui {
     class MainWindow;
@@ -30,6 +31,7 @@ private:
     QTimer         *timer;
     QBox2DWorld    *world;
     QBox2DView     *view;
+    GLScene        *glscene;
 };
 
 #endif // MAINWINDOW_H

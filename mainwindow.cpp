@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "glitem.h"
 #include <QGLWidget>
-#include "glscene.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionZoomIn, SIGNAL(triggered()), view, SLOT(zoomIn()));
     connect(ui->actionZoomOut, SIGNAL(triggered()), view, SLOT(zoomOut()));
     ui->horizontalLayout->addWidget(view);
-    GLScene * glscene = new GLScene(this);
+    glscene = new GLScene(this);
     ui->horizontalLayout->addWidget(glscene);
 
     createWorld();
@@ -40,19 +40,27 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::createWorld(){
     //world = new ExampleWorld();
-    //world = new TestWorld();
-    world = new ArcanoidWorld();
+    world = new TestWorld();
+    //world = new ArcanoidWorld();
     connect(world,SIGNAL(itemDestroyed(QGraphicsItem*)),scene,SLOT(removeItem(QGraphicsItem*)));
     connect(world,SIGNAL(itemCreated(QGraphicsItem*)),scene,SLOT(addItem(QGraphicsItem*)));
 
     world->setSettings(1.0f / 60.0f, 10, 10);
     world->create();
+    GLItem* myitem = new GLItem();
+    myitem->setPos(1,1);
+    myitem->setRotation(4);
+    myitem->setBodyType(b2_dynamicBody);
+    myitem->createBody(world->_world);
+    glscene->addItem(myitem);
+
 
 }
 
 void MainWindow::update(){
     world->step();
     scene->advance();
+    glscene->updateGL();
 }
 
 MainWindow::~MainWindow(){
