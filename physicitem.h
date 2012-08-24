@@ -15,7 +15,8 @@ public:
             void setRotation   (const float32 & r)     { _rotation = r; }
             void setPos        (const b2Vec2 & p)      { _position = p; }
             void setShape      (const b2Shape &s )     { _fd.shape = &s; }
-            void setUserData   (void *data)            { _body->SetUserData(data); }
+            void setUserData   (void *data);
+            void createFixture ();
             void createBody    (b2World *const world);
 
             b2Body*    body()     const { return _body; }
