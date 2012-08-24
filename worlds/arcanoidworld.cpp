@@ -124,7 +124,7 @@ void ArcanoidWorld::create() {
                 b2RevoluteJointDef jointDef;
                 jointDef.Initialize(brick->body(), _groundBody, brick->body()->GetWorldCenter());
                 jointDef.enableMotor = true;
-                jointDef.motorSpeed = pow(-1,i+j) * (qrand() % 100) / 10;
+                jointDef.motorSpeed = pow(-1.0f,i+j) * (qrand() % 100) / 10;
                 jointDef.maxMotorTorque = 5000.0f;
                 _world->CreateJoint(&jointDef);
             }
