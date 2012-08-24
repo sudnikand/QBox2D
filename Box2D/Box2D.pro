@@ -4,8 +4,8 @@ QT -= core \
 
 TEMPLATE = lib
 
-#CONFIG += debug staticlib warn_on
-CONFIG += release staticlib warn_off
+CONFIG += debug staticlib warn_on
+#CONFIG += release staticlib warn_off
 #QMAKE_CXXFLAGS_RELEASE -= -O2
 #QMAKE_CXXFLAGS_RELEASE += -O3 -march=native -mtune=native -fomit-frame-pointer
 
