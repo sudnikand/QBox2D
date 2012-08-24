@@ -1,5 +1,5 @@
 #include "glitem.h"
-#include <GL/gl.h>
+#include <QtOpenGL>
 
 GLItem::GLItem()
 {
