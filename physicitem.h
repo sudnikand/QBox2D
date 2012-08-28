@@ -1,13 +1,13 @@
 #ifndef PHYSICITEM_H
 #define PHYSICITEM_H
-
+#include "def.h"
 #include <Box2D.h>
 
 class PhysicItem
 {
 public:
             PhysicItem();
-            ~PhysicItem();
+            virtual ~PhysicItem();
             void setRestitution(const float32 & r)     { _fd.restitution = r; }
             void setDensity    (const float32 & d)     { _fd.density = d; }
             void setFriction   (const float32 & f)     { _fd.friction = f; }
