@@ -17,7 +17,7 @@ public:
     void clear() { _glitems.clear(); }
 
 public slots:
-    void addItem(GLItem *item) { _glitems << item; }
+    void addItem(GLItem *item)    { _glitems << item; }
     void removeItem(GLItem *item) { _glitems.removeOne(item); }
 
 protected:
@@ -28,12 +28,12 @@ protected:
     void begin2D(int, int);
     void end2D();
 
-	void mouseMoveEvent(QMouseEvent *pEvent);
-	void mousePressEvent(QMouseEvent *pEvent);
-	void mouseReleaseEvent(QMouseEvent *pEvent);
+    void mouseMoveEvent(QMouseEvent *pEvent);
+    void mousePressEvent(QMouseEvent *pEvent);
+    void mouseReleaseEvent(QMouseEvent *pEvent);
 
-	void keyPressEvent(QKeyEvent *pEvent);
-	void keyReleaseEvent(QKeyEvent *pEvent);
+    void keyPressEvent(QKeyEvent *pEvent);
+    void keyReleaseEvent(QKeyEvent *pEvent);
 
 private:
     QList<GLItem*> _glitems;
