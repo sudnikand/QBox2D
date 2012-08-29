@@ -10,7 +10,7 @@ public:
     QScene(QObject* parent = 0);
 public slots:
     void removeItem(QGraphicsItem *item);
-    void addItem(QGraphicsItem* item);
+    void addItem(QGraphicsItem *item);
 };
 
 #endif // QSCENE_H
