@@ -19,7 +19,6 @@ public:
     void setDensity    (const float32 & d  )     { _physic.setDensity(d); }
     void setFriction   (const float32 & f  )     { _physic.setFriction(f); }
     void setBodyType   (const b2BodyType & bt)   { _physic.setBodyType(bt); }
-    void createFixture ()                        { _physic.createFixture(); }
 
     b2Body* body() const { return _physic.body(); }
 

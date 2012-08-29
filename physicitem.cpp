@@ -1,9 +1,7 @@
 #include "physicitem.h"
 
 PhysicItem::PhysicItem() :
-    _body(NULL),
-    _position(b2Vec2(0,0)),
-    _rotation(0)
+    _body(NULL)
 {
 }
 
@@ -12,15 +10,18 @@ PhysicItem::~PhysicItem()
 }
 
 void PhysicItem::createBody(b2World *const world){
-    b2BodyDef bd;
-    bd.position = _position;
-    bd.type = _bodytype;
-    bd.angle = _rotation;
-    _body = world->CreateBody(&bd);
+    if(_body) {
+        _bd.position = position();
+        _bd.angle = rotation();
+        _bd.type = bodyType();
+        world->DestroyBody(_body);
+    }
+    _body = world->CreateBody(&_bd);
 }
 
-void PhysicItem::createFixture(){
-    if (!_body) return;
+void PhysicItem::setShape(const b2Shape &s ){
+    if(!_body) return;
+    _fd.shape = &s;
     _body->CreateFixture(&_fd);
 }
 
