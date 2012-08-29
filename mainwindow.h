@@ -31,7 +31,6 @@ private:
     QTimer         *timer;
     QBox2DWorld    *world;
     QBox2DView     *view;
-    GLScene        *glscene;
 };
 
 #endif // MAINWINDOW_H

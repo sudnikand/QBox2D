@@ -16,12 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     view = new QBox2DView(ui->centralWidget);
     view->setScene(scene);
-    view->setViewport(new QGLWidget());
     connect(ui->actionZoomIn, SIGNAL(triggered()), view, SLOT(zoomIn()));
     connect(ui->actionZoomOut, SIGNAL(triggered()), view, SLOT(zoomOut()));
     ui->horizontalLayout->addWidget(view);
-    glscene = new GLScene(this);
-    ui->horizontalLayout->addWidget(glscene);
 
     createWorld();
 
@@ -47,20 +44,11 @@ void MainWindow::createWorld(){
 
     world->setSettings(1.0f / 60.0f, 10, 10);
     world->create();
-    GLItem* myitem = new GLItem();
-    myitem->setPos(1,1);
-    myitem->setRotation(4);
-    myitem->setBodyType(b2_dynamicBody);
-    myitem->createBody(world->_world);
-    glscene->addItem(myitem);
-
-
 }
 
 void MainWindow::update(){
     world->step();
     scene->advance();
-    glscene->updateGL();
 }
 
 MainWindow::~MainWindow(){
