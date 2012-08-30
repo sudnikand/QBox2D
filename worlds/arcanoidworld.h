@@ -7,9 +7,9 @@ class ArcanoidWorld : public QBox2DWorld
 {
 
 private:
-    QBox2DRectItem*   _paddle;
-    QBox2DRectItem*   _bound;
-    QBox2DCircleItem* _ball;
+    //QBox2DRectItem*   _paddle;
+    //QBox2DRectItem*   _bound;
+    //QBox2DCircleItem* _ball;
 
 public:
     ArcanoidWorld();

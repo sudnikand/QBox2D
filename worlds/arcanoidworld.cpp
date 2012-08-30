@@ -12,7 +12,7 @@ void ArcanoidWorld::step(){
     if (_contacts.size() == 0) {
         return;
     }
-
+/*
     QSet<QBox2DItem*> destroy_items;
     for(uint i = 0; i < (uint)_contacts.size() ; ++i){
         ContactPoint cp = _contacts.at(i);
@@ -35,10 +35,11 @@ void ArcanoidWorld::step(){
         QBox2DItem *item = i.next();
         destroyItem(item);
     }
+    */
 }
 
 void ArcanoidWorld::create() {
-    qDebug()<<"Enter in Create Arcanoid World";
+ /*   qDebug()<<"Enter in Create Arcanoid World";
         _world->SetGravity(b2Vec2(0, -1));
 
         QBox2DRectItem* groundl = new QBox2DRectItem();
@@ -135,11 +136,13 @@ void ArcanoidWorld::create() {
         _bound->setBodyType(b2_staticBody);
         _bound->create(_world);
         _bound->setShape(QRectF(0, 0, 410, 10));
+        */
     }
 
 
 void ArcanoidWorld::handleKeyPressed(const int &key)
 {
+    /*
     switch( key ) {
     case Qt::Key_W:
         _paddle->body()->ApplyLinearImpulse(b2Vec2(0.0, 5.0f),_paddle->body()->GetWorldCenter(), true);
@@ -160,9 +163,11 @@ void ArcanoidWorld::handleKeyPressed(const int &key)
         _paddle->body()->ApplyTorque(-1000, false);
         break;
     }
+*/
 }
 
 void ArcanoidWorld::createBall(quint8 radius){
+    /*
         QBox2DCircleItem *item = new QBox2DCircleItem();
         item->setPos(0, 200);
         item->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
@@ -175,8 +180,9 @@ void ArcanoidWorld::createBall(quint8 radius){
         item->body()->SetBullet(true);
         _ball = item;
         emit itemCreated(item);
+        */
 }
 
 void ArcanoidWorld::createBall() {
-    createBall(5);
+    //createBall(5);
 }
