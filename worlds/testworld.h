@@ -6,7 +6,7 @@
 class TestWorld : public QBox2DWorld {
 
 private:
-    QBox2DRectItem* _box;
+    QBox2DItem* _box;
 
 public:
     TestWorld();

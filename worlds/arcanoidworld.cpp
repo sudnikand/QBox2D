@@ -12,17 +12,18 @@ void ArcanoidWorld::step(){
     if (_contacts.size() == 0) {
         return;
     }
-/*
-    QSet<QBox2DItem*> destroy_items;
-    for(uint i = 0; i < (uint)_contacts.size() ; ++i){
+
+    QSet<QBox2DItem*> destroyItems;
+    for(int i = 0; i < _contacts.size() ; ++i){
         ContactPoint cp = _contacts.at(i);
         QBox2DItem *item = ( cp.itemA == _ball ) ? cp.itemB :
                            ( cp.itemB == _ball ) ? cp.itemA : NULL;
+
         if (!item) continue;
 
         if (item == _paddle) continue;
         if (item->bodyType() == b2_dynamicBody) {
-            destroy_items.insert(item);
+            destroyItems.insert(item);
         } else if (item == _bound) {
             destroyItem(_ball);
             createBall();
@@ -30,125 +31,140 @@ void ArcanoidWorld::step(){
         }
     }
 
-    QSetIterator<QBox2DItem*> i(destroy_items);
+    QSetIterator<QBox2DItem*> i(destroyItems);
     while(i.hasNext()){
         QBox2DItem *item = i.next();
         destroyItem(item);
     }
-    */
 }
 
 void ArcanoidWorld::create() {
- /*   qDebug()<<"Enter in Create Arcanoid World";
-        _world->SetGravity(b2Vec2(0, -1));
+    qDebug()<< "Starting Arcanoid World";
+    _world->SetGravity(b2Vec2(0, 10));
+    float32 fieldSize = 200;
+    QColor gray = QColor(128, 128, 128);
+    b2PolygonShape shape;
 
-        QBox2DRectItem* groundl = new QBox2DRectItem();
-        groundl->setPos(-205, 0);
-        groundl->setBrush(QColor(128, 128, 128));
-        groundl->setRestitution(1.0f);
-        groundl->setBodyType(b2_staticBody);
-        groundl->create(_world);
-        groundl->setShape(QRectF(0, 0, 5, 400));
-        emit itemCreated(groundl);
+    QBox2DItem* groundl = new QBox2DItem();
+    groundl->setPos(b2Vec2(Q2W(-fieldSize, 0)));
+    groundl->createBody(_world);
+    shape.SetAsBox(Q2W(5,fieldSize));
+    groundl->setShape(shape);
+    groundl->graphics()->setBrush(gray);
+    groundl->setUserData(groundl);
+    appendItem(groundl);
 
-        QBox2DRectItem* groundr = new QBox2DRectItem();
-        groundr->setPos(200, 0);
-        groundr->setBrush(QColor(128, 128, 128));
-        groundr->setRestitution(1.0f);
-        groundr->setBodyType(b2_staticBody);
-        groundr->create(_world);
-        groundr->setShape(QRectF(0, 0, 5, 400));
-        emit itemCreated(groundr);
+    QBox2DItem* groundr = new QBox2DItem();
+    groundr->setPos(b2Vec2(Q2W(fieldSize, 0)));
+    groundr->createBody(_world);
+    groundr->setShape(shape);
+    groundr->graphics()->setBrush(gray);
+    groundr->setUserData(groundr);
+    appendItem(groundr);
 
-        QBox2DRectItem* groundup = new QBox2DRectItem();
-        groundup->setPos(-200, 0);
-        groundup->setBrush(QColor(128, 128, 128));
-        groundup->setBodyType(b2_staticBody);
-        groundup->create(_world);
-        groundup->setShape(QRectF(0, 0, 400, 5));
-        emit itemCreated(groundup);
+    QBox2DItem* groundup = new QBox2DItem();
+    groundup->setPos(b2Vec2(Q2W(0, -fieldSize)));
+    groundup->setRotation(90);
+    groundup->createBody(_world);
+    groundup->setShape(shape);
+    groundup->graphics()->setBrush(gray);
+    groundup->setUserData(groundup);
+    appendItem(groundup);
 
-        QBox2DRectItem* hor_item = new QBox2DRectItem();
-        hor_item->setPos(0, 400);
-        hor_item->setBrush(QColor(128, 128, 128));
-        hor_item->setBodyType(b2_dynamicBody);
-        hor_item->setDensity(0.0f);
-        hor_item->create(_world);
-        hor_item->setShape(QRectF(0, 0, 5, 5));
-        emit itemCreated(hor_item);
+    createBall();
 
-        _paddle = new QBox2DRectItem();
-        _paddle->setPos(-50, 400 - 5);
-        _paddle->setBrush(QColor(128, 128, 128));
-        _paddle->setBodyType(b2_dynamicBody);
-        _paddle->setFriction(1.0f);
-        _paddle->setDensity(1.0f);
-        _paddle->setRestitution(1.5f);
-        _paddle->create(_world);
-        _paddle->setShape(QRectF(0, 0, 100, 10));
-        _paddle->body()->SetLinearDamping(10.0f);
-        //_paddle->body()->SetType(b2_staticBody);
-        emit itemCreated(_paddle);
+    QBox2DItem* horItem = new QBox2DItem();
+    horItem->setPos(b2Vec2(Q2W(0, fieldSize)));
+    horItem->setBodyType(b2_dynamicBody);
+    horItem->setDensity(0.0f);
+    horItem->createBody(_world);
+    shape.SetAsBox(Q2W(1,1));
+    horItem->setShape(shape);
+    horItem->graphics()->setBrush(gray);
+    appendItem(horItem);
 
-        b2PrismaticJointDef hor_joint_def;
-        b2Vec2 axis(1.0f, 0.0f);
 
-        hor_joint_def.Initialize(hor_item->body(), _groundBody, b2Vec2(0,0), axis);
-        hor_joint_def.lowerTranslation = -2.96f;
-        hor_joint_def.upperTranslation = 2.96f;
-        hor_joint_def.enableLimit = true;
-        _world->CreateJoint(&hor_joint_def);
 
-        b2PrismaticJointDef vert_joint_def;
-        axis = b2Vec2(0.0f, 1.0f);
+    _paddle = new QBox2DItem();
+    _paddle->setPos(b2Vec2(Q2W(0, fieldSize)));
+    _paddle->setBodyType(b2_dynamicBody);
+    _paddle->setFriction(1.0f);
+    _paddle->setDensity(1.0f);
+    _paddle->setRestitution(1.1f);
+    _paddle->createBody(_world);
+    shape.SetAsBox(Q2W(50,5));
+    _paddle->setShape(shape);
+    _paddle->graphics()->setBrush(gray);
+    _paddle->setUserData(_paddle);
+    _paddle->body()->SetLinearDamping(10.0f);
+    appendItem(_paddle);
 
-        vert_joint_def.Initialize(_paddle->body(), hor_item->body(), b2Vec2(0,0), axis);
-        vert_joint_def.lowerTranslation = -0.5f;
-        vert_joint_def.upperTranslation = 0.0f;
-        vert_joint_def.enableLimit = true;
-        _world->CreateJoint(&vert_joint_def);
+    b2PrismaticJointDef horJointDef;
+    b2Vec2 axis(1.0f, 0.0f);
 
-        createBall();
+    horJointDef.Initialize(horItem->body(), _ground, b2Vec2(0,0), axis);
+    horJointDef.lowerTranslation = -2.96f;
+    horJointDef.upperTranslation = 2.96f;
+    horJointDef.enableLimit = true;
+    _world->CreateJoint(&horJointDef);
 
-        for (int j = 0; j < 10; ++j){
-            for (int i = 0; i < 10; ++i){
-                QBox2DRectItem* brick = new QBox2DRectItem();
-                brick->setPos(-150 + 30*i, 10 + 30*j);
-                brick->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
-                brick->setRestitution(1.0f);
-                brick->setDensity(1.0f);
-                brick->setBodyType(b2_dynamicBody);
-                brick->create(_world);
-                brick->setShape(QRectF(0, 0, 10, 20));
-                emit itemCreated(brick);
+    b2PrismaticJointDef vertJointDef;
+    axis = b2Vec2(0.0f, 1.0f);
 
-                b2RevoluteJointDef jointDef;
-                jointDef.Initialize(brick->body(), _groundBody, brick->body()->GetWorldCenter());
-                jointDef.enableMotor = true;
-                jointDef.motorSpeed = pow(-1.0f,i+j) * (qrand() % 100) / 10;
-                jointDef.maxMotorTorque = 5000.0f;
-                _world->CreateJoint(&jointDef);
-            }
+    vertJointDef.Initialize(_paddle->body(), horItem->body(), b2Vec2(0,0), axis);
+    vertJointDef.lowerTranslation = 0.0f;
+    vertJointDef.upperTranslation = 0.5f;
+    vertJointDef.enableLimit = true;
+    _world->CreateJoint(&vertJointDef);
+
+    int n = 10;
+    int brickWidth = 20;
+    int xStep = fieldSize/n + brickWidth;
+    int yStep = fieldSize/n + brickWidth;
+    for (int j = 0; j < n-1; ++j){
+        for (int i = 0; i < n; ++i){
+            QBox2DItem* brick = new QBox2DItem();
+            int xPos = i * xStep - fieldSize + brickWidth;
+            int yPos = j * yStep - fieldSize + brickWidth;
+            brick->setPos(b2Vec2(Q2W(xPos,yPos)));
+            brick->setRestitution(1.0f);
+            brick->setDensity(1.0f);
+            brick->setBodyType(b2_dynamicBody);
+            brick->createBody(_world);
+            b2PolygonShape brickShape;
+            brickShape.SetAsBox(Q2W(5,brickWidth/2));
+            brick->setShape(brickShape);
+            brick->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+            brick->body()->SetUserData(brick);
+            appendItem(brick);
+            b2RevoluteJointDef jointDef;
+            jointDef.Initialize(brick->body(), _ground, brick->body()->GetWorldCenter());
+            jointDef.enableMotor = true;
+            jointDef.motorSpeed = pow(-1.0f,i+j) * (qrand() % 100) / 10;
+            jointDef.maxMotorTorque = 5000.0f;
+            _world->CreateJoint(&jointDef);
         }
-
-        _bound = new QBox2DRectItem();
-        _bound->setPos(-205, 410);
-        _bound->setBodyType(b2_staticBody);
-        _bound->create(_world);
-        _bound->setShape(QRectF(0, 0, 410, 10));
-        */
     }
+    _bound = new QBox2DItem();
+    _bound->setPos(b2Vec2(Q2W(0, (fieldSize+20))));
+    _bound->setBodyType(b2_staticBody);
+    _bound->createBody(_world);
+    shape.SetAsBox(Q2W(fieldSize,5));
+    _bound->setShape(shape);
+    _bound->body()->SetUserData(_bound);
+    //appendItem(_bound);
+
+}
 
 
 void ArcanoidWorld::handleKeyPressed(const int &key)
 {
-    /*
     switch( key ) {
     case Qt::Key_W:
-        _paddle->body()->ApplyLinearImpulse(b2Vec2(0.0, 5.0f),_paddle->body()->GetWorldCenter(), true);
+        _paddle->body()->ApplyLinearImpulse(b2Vec2(0.0, -5.0f),_paddle->body()->GetWorldCenter(), true);
         break;
     case Qt::Key_S:
-        _paddle->body()->ApplyLinearImpulse(b2Vec2(0.0, -5.0f),_paddle->body()->GetWorldCenter(), true);
+        _paddle->body()->ApplyLinearImpulse(b2Vec2(0.0, 5.0f),_paddle->body()->GetWorldCenter(), true);
         break;
     case Qt::Key_A:
         _paddle->body()->ApplyLinearImpulse(b2Vec2(-10.0f,0.0f),_paddle->body()->GetWorldCenter(), true);
@@ -163,26 +179,27 @@ void ArcanoidWorld::handleKeyPressed(const int &key)
         _paddle->body()->ApplyTorque(-1000, false);
         break;
     }
-*/
 }
 
-void ArcanoidWorld::createBall(quint8 radius){
-    /*
-        QBox2DCircleItem *item = new QBox2DCircleItem();
-        item->setPos(0, 200);
-        item->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
-        item->setBodyType(b2_dynamicBody);
-        item->setFriction(1.0f);
-        item->setDensity(1.0f);
-        item->setRestitution(1.0f);
-        item->create(_world);
-        item->setShape(QRectF(-radius , -radius, radius*2, radius*2));
-        item->body()->SetBullet(true);
-        _ball = item;
-        emit itemCreated(item);
-        */
+void ArcanoidWorld::createBall(float32 radius){
+    QBox2DItem *ball = new QBox2DItem();
+    ball->setBodyType(b2_dynamicBody);
+    ball->setPos(b2Vec2(Q2W(0, 100)));
+    ball->setFriction(1.0f);
+    ball->setDensity(1.0f);
+    ball->setRestitution(1.0f);
+    ball->createBody(_world);
+
+    b2CircleShape circle;
+    circle.m_radius = radius;
+    ball->setShape(circle);
+    ball->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+    ball->body()->SetUserData(ball);
+    ball->body()->SetBullet(true);
+    _ball = ball;
+    appendItem(ball);
 }
 
 void ArcanoidWorld::createBall() {
-    //createBall(5);
+    createBall(Q2W_(5));
 }

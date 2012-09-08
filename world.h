@@ -1,10 +1,10 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include "items.h"
 #include <Box2D.h>
 #include <QObject>
-#include <QDebug>
-#include "items.h"
+#include <QSet>
 
 struct ContactPoint {
     QBox2DItem* itemA;
@@ -21,8 +21,9 @@ public:
     b2World*                _world;
 
 protected:
+    QList<QBox2DItem*>      _items;
     QList<ContactPoint>     _contacts;
-    b2Body*                 _groundBody;
+    b2Body*                 _ground;
 
 private:
     float32                 _timeStep;
@@ -32,12 +33,14 @@ private:
 
 public:
     explicit QBox2DWorld(QObject* parent = 0);
-    ~QBox2DWorld();
+    virtual ~QBox2DWorld();
 
             void setSettings(float32 timeStep, int32 velIters, int32 posIters);
     virtual void create() = 0;
     virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
             void destroyItem(QBox2DItem *item);
+            void appendItem(QBox2DItem* item);
+            void removeItem(QBox2DItem *item);
 
 public slots:
     virtual void step();
@@ -47,7 +50,7 @@ public slots:
             void grabItem(const QPointF &p);
             void dropItem();
             void moveItem(const QPointF &p);
-            QBox2DRectItem* createBox(const QPointF &pos);
+            QBox2DItem* createBox(const QPointF &pos);
 
 signals:
             void contact(const ContactPoint &cp);

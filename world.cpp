@@ -5,7 +5,7 @@ QBox2DWorld::QBox2DWorld(QObject* parent): QObject(parent),
     _world = new b2World(b2Vec2(0,0));
     _world->SetContactListener(this);
     b2BodyDef bd;
-    _groundBody = _world->CreateBody(&bd);
+    _ground = _world->CreateBody(&bd);
 }
 
 QBox2DWorld::~QBox2DWorld() {
@@ -38,22 +38,35 @@ void handleContact(const ContactPoint &cp)
 
 void QBox2DWorld::step(){
     _contacts.clear();
+
+    QListIterator<QBox2DItem*> i(_items);
+    while(i.hasNext()){
+        QBox2DItem *item = i.next();
+        b2Vec2 pos = item->position();
+        QGraphicsItem *graphics = item->graphics();
+        graphics->setPos(W2Q(pos.x,pos.y));
+        graphics->setRotation(RAD2ANG(item->rotation()));
+    }
+
     _world->Step(_timeStep,_velocityIterations,_positionIterations);
 }
 
-QBox2DRectItem* QBox2DWorld::createBox(const QPointF& pos) {
-    QBox2DRectItem *box = new QBox2DRectItem();
+QBox2DItem* QBox2DWorld::createBox(const QPointF& pos) {
+    QBox2DItem *box = new QBox2DItem();
     box->setBodyType(b2_dynamicBody);
-    uint l = 10;
-    box->setPos(pos.x()-l, pos.y()-l);
     box->setFriction(0.9f);
     box->setDensity(1.0f);
     box->setRestitution(0.5f);
-    box->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
-    box->create(_world);
-    QRectF rect(0, 0, l, l);
+    box->setPos(b2Vec2(Q2W(pos.x(), pos.y())));
+    box->createBody(_world);
+    float32 l = 1.0f;
+    b2PolygonShape rect;
+    rect.SetAsBox(l/2,l/2);
     box->setShape(rect);
-    emit itemCreated(box);
+    box->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+    box->body()->SetUserData(box);
+    appendItem(box);
+    qDebug() << "Box created";
     return box;
 }
 
@@ -63,7 +76,7 @@ void QBox2DWorld::grabItem(const QPointF &p) {
         return;
     }
 
-    b2Vec2 pos( Q2W(p.x(), -p.y()) );
+    b2Vec2 pos( Q2W(p.x(), p.y()) );
 
     // Make a small box.
     b2AABB aabb;
@@ -79,7 +92,7 @@ void QBox2DWorld::grabItem(const QPointF &p) {
     if (callback._fixture) {
         b2Body* body = callback._fixture->GetBody();
         b2MouseJointDef md;
-        md.bodyA = _groundBody;
+        md.bodyA = _ground;
         md.bodyB = body;
         md.target = pos;
         md.maxForce = 1000.0f * body->GetMass();
@@ -97,10 +110,7 @@ void QBox2DWorld::dropItem(){
 
 void QBox2DWorld::moveItem(const QPointF &p){
     if(_mouseJoint){
-        b2Vec2 pos;
-        pos.x =  Q2W_(p.x());
-        pos.y = -Q2W_(p.y());
-        _mouseJoint->SetTarget(pos);
+        _mouseJoint->SetTarget(b2Vec2(Q2W(p.x(),p.y())));
     }
 }
 
@@ -135,8 +145,17 @@ void QBox2DWorld::PreSolve(b2Contact* contact, const b2Manifold* oldManifold){
 void QBox2DWorld::destroyItem(QBox2DItem *item)
 {
     _world->DestroyBody(item->body());
-    emit itemDestroyed(item);
-//FIXME: leaking incomlete type
+    removeItem(item);
     delete item;
     item = NULL;
+}
+
+void QBox2DWorld::appendItem(QBox2DItem *item){
+    _items.append(item);
+    emit itemCreated(item->graphics());
+}
+
+void QBox2DWorld::removeItem(QBox2DItem *item){
+    _items.removeOne(item);
+    emit itemDestroyed(item->graphics());
 }

@@ -7,14 +7,14 @@ class ArcanoidWorld : public QBox2DWorld
 {
 
 private:
-    //QBox2DRectItem*   _paddle;
-    //QBox2DRectItem*   _bound;
-    //QBox2DCircleItem* _ball;
+    QBox2DItem*   _paddle;
+    QBox2DItem*   _bound;
+    QBox2DItem*   _ball;
 
 public:
     ArcanoidWorld();
     void create();
-    void createBall(quint8 radius);
+    void createBall(float32 radius);
     void createBall();
     void handleKeyPressed(const int &key);
     void step();

@@ -4,17 +4,36 @@ TestWorld::TestWorld() : QBox2DWorld() {
 }
 
 void TestWorld::create(){
-    _world->SetGravity(b2Vec2(0, -10));
-    QBox2DRectItem *ground = new QBox2DRectItem();
-    QRectF groundrect(0, 0, 400, 5);
-    QColor groundColor(64, 64, 64);
-    ground->setPos(-200, 0);
-    ground->setBrush(groundColor);
-    ground->setBodyType(b2_staticBody);
-    ground->create(_world);
-    ground->setShape(groundrect);
-    emit itemCreated(ground);
-    _box = createBox(QPointF(0, -10));
+    _world->SetGravity(b2Vec2(0, 10));
+    {
+    QBox2DItem *ground = new QBox2DItem();
+    ground->setPos(b2Vec2(0, 0));
+    ground->createBody(_world);
+    b2PolygonShape shape;
+    shape.SetAsBox(20,1);
+    ground->setShape(shape);
+    ground->graphics()->setBrush(QColor(64,80,64));
+    ground->body()->SetUserData(ground);
+    appendItem(ground);
+    }
+
+    {
+    QBox2DItem *ball = new QBox2DItem();
+    ball->setBodyType(b2_dynamicBody);
+    float32 radius = 1.0f;
+    ball->setPos(b2Vec2(Q2W(0, -200)));
+    ball->setFriction(0.9f);
+    ball->setDensity(1.0f);
+    ball->setRestitution(0.5f);
+    ball->createBody(_world);
+
+    b2CircleShape circle;
+    circle.m_radius = radius;
+    ball->setShape(circle);
+    ball->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+    ball->body()->SetUserData(ball);
+    appendItem(ball);
+    }
 }
 
 void TestWorld::step(){
@@ -39,9 +58,9 @@ void TestWorld::step(){
         QBox2DItem *item = i.next();
         destroyItem(item);
     }
+
 }
 
 void TestWorld::handleContact(const ContactPoint &cp){
-    qDebug() << "handle Contact here";
     Q_UNUSED(cp);
 }
