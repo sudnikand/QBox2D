@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionZoomIn, SIGNAL(triggered()), view, SLOT(zoomIn()));
     connect(ui->actionZoomOut, SIGNAL(triggered()), view, SLOT(zoomOut()));
     ui->horizontalLayout->addWidget(view);
+    view->fitInView(QRectF(0,0,100,100),Qt::KeepAspectRatioByExpanding);
 
     createWorld();
 
@@ -36,9 +37,9 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::createWorld(){
+    //world = new TestWorld();
     //world = new ExampleWorld();
-    world = new TestWorld();
-    //world = new ArcanoidWorld();
+    world = new ArcanoidWorld();
     connect(world,SIGNAL(itemDestroyed(QGraphicsItem*)),scene,SLOT(removeItem(QGraphicsItem*)));
     connect(world,SIGNAL(itemCreated(QGraphicsItem*)),scene,SLOT(addItem(QGraphicsItem*)));
 
