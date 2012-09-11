@@ -36,7 +36,7 @@
   <action name="actionZoomIn">
    <property name="icon">
     <iconset>
-     <normaloff>../../../../usr/share/icons/oxygen/32x32/actions/zoom-in.png</normaloff>../../../../usr/share/icons/oxygen/32x32/actions/zoom-in.png</iconset>
+     <normaloff>res/zoom-in.png</normaloff>res/zoom-in.png</iconset>
    </property>
    <property name="text">
     <string>Zoom In</string>
@@ -48,7 +48,7 @@
   <action name="actionZoomOut">
    <property name="icon">
     <iconset>
-     <normaloff>../../../../usr/share/icons/oxygen/32x32/actions/zoom-out.png</normaloff>../../../../usr/share/icons/oxygen/32x32/actions/zoom-out.png</iconset>
+     <normaloff>res/zoom-out.png</normaloff>res/zoom-out.png</iconset>
    </property>
    <property name="text">
     <string>Zoom Out</string>
