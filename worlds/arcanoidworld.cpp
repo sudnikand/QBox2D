@@ -50,26 +50,26 @@ void ArcanoidWorld::create() {
     groundl->createBody(_world);
     shape.SetAsBox(Q2W(5,fieldSize));
     groundl->setShape(shape);
-    groundl->graphics()->setBrush(gray);
-    groundl->setUserData(groundl);
     appendItem(groundl);
+    groundl->setUserData(groundl);
+    groundl->graphics()->setBrush(gray);
 
     QBox2DItem* groundr = new QBox2DItem();
     groundr->setPos(b2Vec2(Q2W(fieldSize, 0)));
     groundr->createBody(_world);
     groundr->setShape(shape);
-    groundr->graphics()->setBrush(gray);
     groundr->setUserData(groundr);
     appendItem(groundr);
+    groundr->graphics()->setBrush(gray);
 
     QBox2DItem* groundup = new QBox2DItem();
     groundup->setPos(b2Vec2(Q2W(0, -fieldSize)));
     groundup->setRotation(90);
     groundup->createBody(_world);
     groundup->setShape(shape);
-    groundup->graphics()->setBrush(gray);
     groundup->setUserData(groundup);
     appendItem(groundup);
+    groundup->graphics()->setBrush(gray);
 
     createBall();
 
@@ -80,9 +80,8 @@ void ArcanoidWorld::create() {
     horItem->createBody(_world);
     shape.SetAsBox(Q2W(1,1));
     horItem->setShape(shape);
-    horItem->graphics()->setBrush(gray);
     appendItem(horItem);
-
+    horItem->graphics()->setBrush(gray);
 
 
     _paddle = new QBox2DItem();
@@ -94,10 +93,10 @@ void ArcanoidWorld::create() {
     _paddle->createBody(_world);
     shape.SetAsBox(Q2W(50,5));
     _paddle->setShape(shape);
-    _paddle->graphics()->setBrush(gray);
     _paddle->setUserData(_paddle);
     _paddle->body()->SetLinearDamping(10.0f);
     appendItem(_paddle);
+    _paddle->graphics()->setBrush(gray);
 
     b2PrismaticJointDef horJointDef;
     b2Vec2 axis(1.0f, 0.0f);
@@ -134,9 +133,10 @@ void ArcanoidWorld::create() {
             b2PolygonShape brickShape;
             brickShape.SetAsBox(Q2W(5,brickWidth/2));
             brick->setShape(brickShape);
-            brick->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
             brick->body()->SetUserData(brick);
             appendItem(brick);
+            brick->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+
             b2RevoluteJointDef jointDef;
             jointDef.Initialize(brick->body(), _ground, brick->body()->GetWorldCenter());
             jointDef.enableMotor = true;
@@ -193,11 +193,11 @@ void ArcanoidWorld::createBall(float32 radius){
     b2CircleShape circle;
     circle.m_radius = radius;
     ball->setShape(circle);
+    appendItem(ball);
     ball->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
     ball->body()->SetUserData(ball);
     ball->body()->SetBullet(true);
     _ball = ball;
-    appendItem(ball);
 }
 
 void ArcanoidWorld::createBall() {

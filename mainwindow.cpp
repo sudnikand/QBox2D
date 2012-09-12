@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "glitem.h"
 #include <QGLWidget>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -40,8 +39,8 @@ void MainWindow::createWorld(){
     //world = new TestWorld();
     //world = new ExampleWorld();
     world = new ArcanoidWorld();
-    connect(world,SIGNAL(itemDestroyed(QGraphicsItem*)),scene,SLOT(removeItem(QGraphicsItem*)));
-    connect(world,SIGNAL(itemCreated(QGraphicsItem*)),scene,SLOT(addItem(QGraphicsItem*)));
+    connect(world,SIGNAL(itemDestroyed(QBox2DItem*)),scene,SLOT(removeItem(QBox2DItem*)));
+    connect(world,SIGNAL(itemCreated(QBox2DItem*)),scene,SLOT(addItem(QBox2DItem*)));
 
     world->setSettings(1.0f / 60.0f, 10, 10);
     world->create();

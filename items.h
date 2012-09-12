@@ -20,7 +20,6 @@ public:
         }
         _graphics = gi;
     }
-    void setShape(const b2Shape &s);
     QAbstractGraphicsShapeItem* graphics() { return _graphics; }
 
 private:

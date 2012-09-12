@@ -12,9 +12,10 @@ void TestWorld::create(){
     b2PolygonShape shape;
     shape.SetAsBox(20,1);
     ground->setShape(shape);
+    appendItem(ground);
     ground->graphics()->setBrush(QColor(64,80,64));
     ground->body()->SetUserData(ground);
-    appendItem(ground);
+
     }
 
     {
@@ -30,9 +31,9 @@ void TestWorld::create(){
     b2CircleShape circle;
     circle.m_radius = radius;
     ball->setShape(circle);
+    appendItem(ball);
     ball->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
     ball->body()->SetUserData(ball);
-    appendItem(ball);
     }
 }
 

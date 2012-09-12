@@ -54,8 +54,8 @@ public slots:
 
 signals:
             void contact(const ContactPoint &cp);
-            void itemCreated(QGraphicsItem *item);
-            void itemDestroyed(QGraphicsItem *item);
+            void itemCreated(QBox2DItem *item);
+            void itemDestroyed(QBox2DItem *item);
 };
 
 

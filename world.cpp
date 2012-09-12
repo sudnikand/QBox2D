@@ -63,9 +63,9 @@ QBox2DItem* QBox2DWorld::createBox(const QPointF& pos) {
     b2PolygonShape rect;
     rect.SetAsBox(l/2,l/2);
     box->setShape(rect);
+    appendItem(box);
     box->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
     box->body()->SetUserData(box);
-    appendItem(box);
     qDebug() << "Box created";
     return box;
 }
@@ -152,10 +152,10 @@ void QBox2DWorld::destroyItem(QBox2DItem *item)
 
 void QBox2DWorld::appendItem(QBox2DItem *item){
     _items.append(item);
-    emit itemCreated(item->graphics());
+    emit itemCreated(item);
 }
 
 void QBox2DWorld::removeItem(QBox2DItem *item){
     _items.removeOne(item);
-    emit itemDestroyed(item->graphics());
+    emit itemDestroyed(item);
 }
