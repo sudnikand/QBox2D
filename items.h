@@ -5,6 +5,7 @@
 #include "physicitem.h"
 #include <QAbstractGraphicsShapeItem>
 #include <QBrush>
+#include <QtOpenGL>
 
 class QBox2DItem : public PhysicItem {
 public:
@@ -20,10 +21,21 @@ public:
         }
         _graphics = gi;
     }
+
+    void setColor(const QColor &c) {
+        _color = c;
+        if (graphics()) {
+            graphics()->setBrush(c);
+        }
+    }
     QAbstractGraphicsShapeItem* graphics() { return _graphics; }
+    const QColor color() {return _color; }
+
+    void render();
 
 private:
     QAbstractGraphicsShapeItem* _graphics;
+    QColor _color;
 };
 
 

@@ -41,6 +41,7 @@ void QScene::addItem(QBox2DItem *item){
 
     graphics->setPos(W2Q(item->position().x,item->position().y));
     graphics->setRotation(RAD2ANG(item->rotation()));
+    graphics->setBrush(item->color());
     item->setGraphics(graphics);
 
     QGraphicsScene::addItem(graphics);

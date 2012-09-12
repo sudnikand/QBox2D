@@ -63,9 +63,9 @@ QBox2DItem* QBox2DWorld::createBox(const QPointF& pos) {
     b2PolygonShape rect;
     rect.SetAsBox(l/2,l/2);
     box->setShape(rect);
-    appendItem(box);
-    box->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+    box->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
     box->body()->SetUserData(box);
+    appendItem(box);
     qDebug() << "Box created";
     return box;
 }
