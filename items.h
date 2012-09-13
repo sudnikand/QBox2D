@@ -28,10 +28,11 @@ public:
             graphics()->setBrush(c);
         }
     }
-    QAbstractGraphicsShapeItem* graphics() { return _graphics; }
-    const QColor color() {return _color; }
 
     void render();
+
+    QAbstractGraphicsShapeItem* graphics() const { return _graphics; }
+    const QColor color() const {return _color; }
 
 private:
     QAbstractGraphicsShapeItem* _graphics;
