@@ -35,3 +35,10 @@ void QBox2DItem::render(){
 
     glPopMatrix();
 }
+
+void QBox2DItem::update(){
+    if(!graphics()) return;
+
+    graphics()->setPos(W2Q(position().x,position().y));
+    graphics()->setRotation(RAD2ANG(rotation()));
+}

@@ -42,10 +42,7 @@ void QBox2DWorld::step(){
     QListIterator<QBox2DItem*> i(_items);
     while(i.hasNext()){
         QBox2DItem *item = i.next();
-        b2Vec2 pos = item->position();
-        QGraphicsItem *graphics = item->graphics();
-        graphics->setPos(W2Q(pos.x,pos.y));
-        graphics->setRotation(RAD2ANG(item->rotation()));
+        item->update();
     }
 
     _world->Step(_timeStep,_velocityIterations,_positionIterations);

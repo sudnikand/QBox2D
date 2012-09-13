@@ -28,8 +28,8 @@ public:
             graphics()->setBrush(c);
         }
     }
-
     void render();
+    void update();
 
     QAbstractGraphicsShapeItem* graphics() const { return _graphics; }
     const QColor color() const {return _color; }
