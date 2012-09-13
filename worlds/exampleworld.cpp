@@ -15,16 +15,16 @@ void ExampleWorld::create(){
     b2PolygonShape shape;
     shape.SetAsBox(20,1);
     ground->setShape(shape);
+    ground->setColor(groundColor);
     appendItem(ground);
-    ground->graphics()->setBrush(groundColor);
 
     // roof
     QBox2DItem *roof = new QBox2DItem();
     roof->setPos(b2Vec2(0, -20));
     roof->createBody(_world);
     roof->setShape(shape);
+    roof->setColor(groundColor);
     appendItem(roof);
-    roof->graphics()->setBrush(groundColor);
 
     //left wall
     QBox2DItem *leftWall = new QBox2DItem();
@@ -32,8 +32,8 @@ void ExampleWorld::create(){
     leftWall->createBody(_world);
     shape.SetAsBox(1,20);
     leftWall->setShape(shape);
+    leftWall->setColor(groundColor);
     appendItem(leftWall);
-    leftWall->graphics()->setBrush(groundColor);
 
 
     //right wall
@@ -41,8 +41,8 @@ void ExampleWorld::create(){
     rightWall->setPos(b2Vec2(20, 0));
     rightWall->createBody(_world);
     rightWall->setShape(shape);
+    rightWall->setColor(groundColor);
     appendItem(rightWall);
-    rightWall->graphics()->setBrush(groundColor);
 
     //add motors
     for (int i = 0; i < 2; ++i) {
@@ -55,8 +55,8 @@ void ExampleWorld::create(){
         motor->createBody(_world);
         shape.SetAsBox(0.5f, 4.0f);
         motor->setShape(shape);
+        motor->setColor(groundColor);
         appendItem(motor);
-        motor->graphics()->setBrush(groundColor);
 
         b2RevoluteJointDef jd1;
         jd1.Initialize(motor->body(), _ground, motor->body()->GetPosition());
@@ -80,8 +80,8 @@ void ExampleWorld::create(){
         b2PolygonShape rect;
         rect.SetAsBox(size,size);
         box->setShape(rect);
+        box->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
         appendItem(box);
-        box->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
     }
 
     // add triangles
@@ -100,28 +100,27 @@ void ExampleWorld::create(){
         vertex << b2Vec2(0,-size*2) << b2Vec2(-size,0) << b2Vec2(size,0);
         shape.Set(&vertex.toStdVector().at(0),vertex.size());
         testItem->setShape(shape);
+        testItem->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
         appendItem(testItem);
-        testItem->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
     }
 
 
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 1000; ++i) {
+        QBox2DItem *ball = new QBox2DItem();
+        ball->setBodyType(b2_dynamicBody);
+        ball->setPos(b2Vec2((qrand() % 300)/10.0f - 20.0f, (qrand() % 100)/10.0f - 10.0f));
+        ball->setFriction(0.1f);
+        ball->setDensity(1.0f);
+        ball->setRestitution(0.5f);
+        ball->createBody(_world);
 
-      QBox2DItem *ball = new QBox2DItem();
-       ball->setBodyType(b2_dynamicBody);
-       ball->setPos(b2Vec2(qrand() % 20-10, -10 + qrand() % 5));
-       ball->setFriction(0.9f);
-       ball->setDensity(1.0f);
-       ball->setRestitution(0.5f);
-       ball->createBody(_world);
-
-       float32 radius = 0.3f;
-       b2CircleShape circle;
-       circle.m_radius = radius;
-       ball->setShape(circle);
-       appendItem(ball);
-       ball->graphics()->setBrush(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
-       ball->body()->SetUserData(ball);
+        float32 radius = 0.3f;
+        b2CircleShape circle;
+        circle.m_radius = radius;
+        ball->setShape(circle);
+        ball->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+        ball->body()->SetUserData(ball);
+        appendItem(ball);
     }
 }
