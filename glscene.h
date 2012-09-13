@@ -1,7 +1,7 @@
 #ifndef GLSCENE_H
 #define GLSCENE_H
 
-#include "glitem.h"
+#include "items.h"
 #include <QGLWidget>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QKeyEvent>
@@ -17,8 +17,8 @@ public:
     void clear() { _glitems.clear(); }
 
 public slots:
-    void addItem(GLItem *item)    { _glitems << item; }
-    void removeItem(GLItem *item) { _glitems.removeOne(item); }
+    void addItem(QBox2DItem *item)    { _glitems << item; }
+    void removeItem(QBox2DItem *item) { _glitems.removeOne(item); }
 
 protected:
     void initializeGL();
@@ -36,7 +36,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *pEvent);
 
 private:
-    QList<GLItem*> _glitems;
+    QList<QBox2DItem*> _glitems;
 };
 
 
