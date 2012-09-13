@@ -1,7 +1,5 @@
 #include "glscene.h"
-#include <QGLWidget>
 #include <QtOpenGL>
-#include <QtGui/QApplication>
 
 GLScene::GLScene(QWidget *parent) : QGLWidget(parent)
 {
