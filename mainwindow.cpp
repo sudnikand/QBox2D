@@ -13,11 +13,14 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->setBackgroundBrush(Qt::white);
     scene->setStickyFocus(false);
 
+    glscene = new GLScene(this);
+
     view = new QBox2DView(ui->centralWidget);
     view->setScene(scene);
     connect(ui->actionZoomIn, SIGNAL(triggered()), view, SLOT(zoomIn()));
     connect(ui->actionZoomOut, SIGNAL(triggered()), view, SLOT(zoomOut()));
     ui->horizontalLayout->addWidget(view);
+    ui->horizontalLayout->addWidget(glscene);
     view->fitInView(QRectF(0,0,100,100),Qt::KeepAspectRatioByExpanding);
 
     createWorld();
@@ -39,8 +42,11 @@ void MainWindow::createWorld(){
     //world = new TestWorld();
     //world = new ExampleWorld();
     world = new ArcanoidWorld();
-    connect(world,SIGNAL(itemDestroyed(QBox2DItem*)),scene,SLOT(removeItem(QBox2DItem*)));
+
     connect(world,SIGNAL(itemCreated(QBox2DItem*)),scene,SLOT(addItem(QBox2DItem*)));
+    connect(world,SIGNAL(itemDestroyed(QBox2DItem*)),scene,SLOT(removeItem(QBox2DItem*)));
+    connect(world,SIGNAL(itemCreated(QBox2DItem*)),glscene,SLOT(addItem(QBox2DItem*)));
+    connect(world,SIGNAL(itemDestroyed(QBox2DItem*)),glscene,SLOT(removeItem(QBox2DItem*)));
 
     world->setSettings(1.0f / 60.0f, 10, 10);
     world->create();
@@ -49,6 +55,7 @@ void MainWindow::createWorld(){
 void MainWindow::update(){
     world->step();
     scene->advance();
+    glscene->updateGL();
 }
 
 MainWindow::~MainWindow(){

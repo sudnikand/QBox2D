@@ -28,6 +28,7 @@ public slots:
 private:
     Ui::MainWindow *ui;
     QScene         *scene;
+    GLScene        *glscene;
     QTimer         *timer;
     QBox2DWorld    *world;
     QBox2DView     *view;
