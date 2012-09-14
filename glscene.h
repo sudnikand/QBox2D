@@ -14,6 +14,8 @@ public:
     GLScene(QWidget *parent=0);
     virtual ~GLScene();
     void clear() { _glitems.clear(); }
+    QPointF mapToScene(const QPointF &p);
+
 
 public slots:
     void updateGL();

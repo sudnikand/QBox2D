@@ -53,7 +53,7 @@ void GLScene::begin2D( int width, int height ){
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    glOrtho(-width*_scale, width*_scale, height*_scale, -height*_scale, -10, 10);
+    glOrtho(-width*_scale, width*_scale, height*_scale, -height*_scale, -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
@@ -67,13 +67,16 @@ void GLScene::end2D( void )
     glPopMatrix();
 }
 
-void GLScene::mousePressEvent(QMouseEvent *event) {
-    QPointF pos = event->pos();
-    qDebug("X: %f, Y: %f", pos.x(), pos.y());
-    qDebug("W: %d, H: %d", width(), height());
+QPointF GLScene::mapToScene(const QPointF &p){
+    QPointF point;
+    point.setY((p.y()*2 - height())*_scale);
+    point.setX((p.x()*2 - width())*_scale);
+    return point;
+}
 
-    pos.setY(pos.y()*_scale);
-    pos.setX(pos.x()*_scale);
+void GLScene::mousePressEvent(QMouseEvent *event) {
+    QPointF pos = mapToScene(event->pos());
+
     if (event->button() == Qt::LeftButton) {
          emit mouseLeftButtonPressed(pos);
     } else
@@ -92,7 +95,7 @@ void GLScene::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 void GLScene::mouseMoveEvent(QMouseEvent *event) {
-    QPointF pos = event->pos();
+    QPointF pos = mapToScene(event->pos());
     emit mouseMoved(pos);
 }
 
