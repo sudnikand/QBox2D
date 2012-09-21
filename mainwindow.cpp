@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionZoomIn, SIGNAL(triggered()), glscene, SLOT(zoomIn()));
     connect(ui->actionZoomOut, SIGNAL(triggered()), glscene, SLOT(zoomOut()));
     //ui->horizontalLayout->addWidget(view);
-    ui->horizontalLayout->addWidget(glscene);
+    ui->frameL->layout()->addWidget(glscene);
     //view->fitInView(QRectF(0,0,100,100),Qt::KeepAspectRatioByExpanding);
 
     createWorld();
