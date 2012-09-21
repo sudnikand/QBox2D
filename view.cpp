@@ -6,11 +6,11 @@ QBox2DView::QBox2DView(QWidget* parent) : QGraphicsView(parent)
 }
 
 void QBox2DView::zoomIn() {
-    scale(1.2,1.2);
+    scale(1.1,1.1);
 }
 
 void QBox2DView::zoomOut() {
-    scale(0.8,0.8);
+    scale(0.9,0.9);
 }
 
 void QBox2DView::mousePressEvent(QMouseEvent *event) {
