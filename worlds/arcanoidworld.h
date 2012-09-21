@@ -13,7 +13,7 @@ private:
 
 public:
     ArcanoidWorld();
-    void create();
+    void populate();
     void createBall(float32 radius);
     void createBall();
     void handleKeyPressed(const int &key);

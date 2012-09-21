@@ -38,7 +38,7 @@ void ArcanoidWorld::step(){
     }
 }
 
-void ArcanoidWorld::create() {
+void ArcanoidWorld::populate() {
     qDebug()<< "Starting Arcanoid World";
     _world->SetGravity(b2Vec2(0, 10));
     float32 fieldSize = 200;

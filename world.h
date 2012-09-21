@@ -36,7 +36,7 @@ public:
     virtual ~QBox2DWorld();
 
             void setSettings(float32 timeStep, int32 velIters, int32 posIters);
-    virtual void create() = 0;
+    virtual void populate() = 0;
     virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
             void destroyItem(QBox2DItem *item);
             void appendItem(QBox2DItem* item);

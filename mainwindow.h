@@ -21,6 +21,8 @@ public:
     ~MainWindow();
 
     void createWorld();
+    void createGLScene();
+    void createQScene();
 
 public slots:
     void update();
