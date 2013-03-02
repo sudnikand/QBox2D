@@ -6,7 +6,7 @@
 class ExampleWorld : public QBox2DWorld {
 public:
     ExampleWorld();
-    void create();
+    void populate();
 };
 
 

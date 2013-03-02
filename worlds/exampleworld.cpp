@@ -3,7 +3,7 @@
 ExampleWorld::ExampleWorld() : QBox2DWorld(){
 }
 
-void ExampleWorld::create(){
+void ExampleWorld::populate(){
     _world->SetGravity(b2Vec2(0, 10));
 
     QColor groundColor(64, 64, 64);
