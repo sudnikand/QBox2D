@@ -10,7 +10,7 @@ private:
 
 public:
     TestWorld();
-    void create();
+    void populate();
     void handleContact(const ContactPoint &cp);
     void step();
 };
