@@ -5,34 +5,40 @@
     <objects>
       <object bodyType='static'>
         <position x='0' y='0' />
-        <color r='255' g='0' b='0' />
+        <color name='#444' />
         <geometry type='box' width='50' height='1' />
       </object>
       <object bodyType='static'>
         <position x='0' y='-50' />
-        <color r='255' g='0' b='0' />
+        <color name='#444' />
         <geometry type='box' width='50' height='1' />
       </object>
       <object bodyType='static'>
         <position x='-25' y='-25' rotation='90' />
-        <color r='255' g='0' b='0' />
+        <color name='#444' />
         <geometry type='box' width='50' height='1' />
       </object>
       <object bodyType='static'>
         <position x='25' y='-25' rotation='90' />
-        <color r='255' g='0' b='0' />
+        <color name='#444' />
         <geometry type='box' width='50' height='1' />
       </object>
       <object bodyType='dynamic'>
-        <position x='0' y='-10' />
-	<physic density="1" friction="0.1" restitution="0.9" />
-        <color r='0' g='0' b='255' />
+        <position x='-10' y='-15' />
+        <physic density="1" friction="1" restitution="0.2" />
+        <color name='#f00' />
         <geometry type='box' width='1' height='1' />
       </object>
       <object bodyType='dynamic'>
         <position x='0' y='-15' />
-	<physic density="1" friction="1" restitution="1.1" />
-        <color r='0' g='255' b='0' />
+        <physic density="1" friction="1" restitution="0.95" />
+        <color name='#00f' />
+        <geometry type='circle' radius='2' />
+      </object>
+      <object bodyType='dynamic'>
+        <position x='10' y='-15' />
+        <physic density="1" friction="1" restitution="0.9" />
+        <color name='#0f0' />
         <geometry type='circle' radius='2' />
       </object>
     </objects>

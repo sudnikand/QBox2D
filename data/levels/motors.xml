@@ -23,18 +23,28 @@
         <color name='#aaa' />
         <geometry type='box' width='40' height='1' />
       </object>
-      <object bodyType='dynamic'>
-        <position x='0' y='-10' />
-	<physic density="1" friction="0.1" restitution="0.9" />
+      <object bodyType='dynamic' name='motor1' >
+        <position x='-10' y='15' />
+        <physic density="1" friction="1" restitution="0.9" />
         <color name='#f00' />
-        <geometry type='box' width='1' height='1' />
+        <geometry type='box' width='0.5' height='4' />
       </object>
-      <object bodyType='dynamic'>
-        <position x='0' y='-15' />
-	<physic density="1" friction="1" restitution="1.1" />
+      <object bodyType='dynamic' name='motor2' >
+        <position x='10' y='15' />
+        <physic density="1" friction="1" restitution="0.1" />
         <color name='#0f0' />
-        <geometry type='circle' radius='2' />
+        <geometry type='box' width='0.5' height='4' />
       </object>
     </objects>
+    <joints>
+      <joint type='revolute'>
+        <motor speed='10' torque='500000' enable='true' />
+        <bodies a='motor1' b='_ground' />
+      </joint>
+      <joint type='revolute'>
+        <motor speed='-10' torque='500000' enable='true' />
+        <bodies a='motor2' b='_ground' />
+      </joint>
+    </joints>
 </world>
 

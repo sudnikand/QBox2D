@@ -42,7 +42,7 @@ public:
             void appendItem(QBox2DItem* item);
             void removeItem(QBox2DItem *item);
             void loadWorld(const QString &filename);
-            QBox2DItem findItem();
+     QBox2DItem* findItem(const QString &itemName);
 
 public slots:
     virtual void step();
