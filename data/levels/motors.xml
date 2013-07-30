@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<world version='1.0'>
+  <name>Test World</name>
+  <gravity direction='0' strength='10' />
+    <objects>
+      <object bodyType='static'>
+        <position x='0' y='20' />
+        <color name='#aaa' />
+        <geometry type='box' width='40' height='1' />
+      </object>
+      <object bodyType='static'>
+        <position x='0' y='-20' />
+        <color name='#aaa' />
+        <geometry type='box' width='40' height='1' />
+      </object>
+      <object bodyType='static'>
+        <position x='-20' y='0' rotation='90' />
+        <color name='#aaa' />
+        <geometry type='box' width='40' height='1' />
+      </object>
+      <object bodyType='static'>
+        <position x='20' y='0' rotation='90' />
+        <color name='#aaa' />
+        <geometry type='box' width='40' height='1' />
+      </object>
+      <object bodyType='dynamic'>
+        <position x='0' y='-10' />
+	<physic density="1" friction="0.1" restitution="0.9" />
+        <color name='#f00' />
+        <geometry type='box' width='1' height='1' />
+      </object>
+      <object bodyType='dynamic'>
+        <position x='0' y='-15' />
+	<physic density="1" friction="1" restitution="1.1" />
+        <color name='#0f0' />
+        <geometry type='circle' radius='2' />
+      </object>
+    </objects>
+</world>
+

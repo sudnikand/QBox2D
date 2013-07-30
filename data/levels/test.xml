@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<world version='1.0'>
+  <name>Test World</name>
+  <gravity direction='0' strength='10' />
+    <objects>
+      <object bodyType='static'>
+        <position x='0' y='0' />
+        <color r='255' g='0' b='0' />
+        <geometry type='box' width='50' height='1' />
+      </object>
+      <object bodyType='static'>
+        <position x='0' y='-50' />
+        <color r='255' g='0' b='0' />
+        <geometry type='box' width='50' height='1' />
+      </object>
+      <object bodyType='static'>
+        <position x='-25' y='-25' rotation='90' />
+        <color r='255' g='0' b='0' />
+        <geometry type='box' width='50' height='1' />
+      </object>
+      <object bodyType='static'>
+        <position x='25' y='-25' rotation='90' />
+        <color r='255' g='0' b='0' />
+        <geometry type='box' width='50' height='1' />
+      </object>
+      <object bodyType='dynamic'>
+        <position x='0' y='-10' />
+	<physic density="1" friction="0.1" restitution="0.9" />
+        <color r='0' g='0' b='255' />
+        <geometry type='box' width='1' height='1' />
+      </object>
+      <object bodyType='dynamic'>
+        <position x='0' y='-15' />
+	<physic density="1" friction="1" restitution="1.1" />
+        <color r='0' g='255' b='0' />
+        <geometry type='circle' radius='2' />
+      </object>
+    </objects>
+</world>
+
