@@ -28,15 +28,22 @@ public:
             graphics()->setBrush(c);
         }
     }
+
+    void setName(const QString &name){
+        _name = name;
+    }
+
     void render();
     void update();
 
     QAbstractGraphicsShapeItem* graphics() const { return _graphics; }
-    const QColor color() const {return _color; }
+    const QColor color() const { return _color; }
+    const QString name() const { return _name; }
 
 private:
     QAbstractGraphicsShapeItem* _graphics;
     QColor _color;
+    QString _name;
 };
 
 

@@ -1,4 +1,4 @@
-QT       += opengl core gui
+QT       += opengl core gui xml
 
 #CONFIG   += qt release warn_off
 CONFIG   += qt debug warn_on
@@ -44,3 +44,7 @@ OBJECTS_DIR = tmp
 INCLUDEPATH += Box2D worlds
 QMAKE_LIBDIR += $$PWD/Box2D/lib
 LIBS += -lBox2D
+
+OTHER_FILES += \
+    data/levels/motors.xml \
+    data/levels/test.xml

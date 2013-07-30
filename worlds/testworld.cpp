@@ -5,35 +5,7 @@ TestWorld::TestWorld() : QBox2DWorld() {
 
 void TestWorld::populate(){
     qDebug()<<"Creating TestWorld";
-    _world->SetGravity(b2Vec2(0, 10));
-
-    QBox2DItem *ground = new QBox2DItem();
-    ground->setPos(b2Vec2(0, 0));
-    ground->createBody(_world);
-    ground->body()->SetUserData(ground);
-
-    b2PolygonShape shape;
-    shape.SetAsBox(20,1);
-    ground->setShape(shape);
-    ground->setColor(Qt::darkGreen);
-    appendItem(ground);
-
-    QBox2DItem *ball = new QBox2DItem();
-    ball->setBodyType(b2_dynamicBody);
-    float32 radius = 1.0f;
-    ball->setPos(b2Vec2(Q2W(0, -200)));
-    ball->setFriction(0.9f);
-    ball->setDensity(1.0f);
-    ball->setRestitution(0.5f);
-    ball->createBody(_world);
-    ball->body()->SetUserData(ball);
-
-    b2CircleShape circle;
-    circle.m_radius = radius;
-    ball->setShape(circle);
-    ball->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
-    appendItem(ball);
-
+    loadWorld("data/levels/test.xml");
 }
 
 void TestWorld::step(){
