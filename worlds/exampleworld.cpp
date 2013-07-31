@@ -4,67 +4,8 @@ ExampleWorld::ExampleWorld() : QBox2DWorld(){
 }
 
 void ExampleWorld::populate(){
-    _world->SetGravity(b2Vec2(0, 10));
-
-    QColor groundColor(64, 64, 64);
-
-    // ground
-    QBox2DItem *ground = new QBox2DItem();
-    ground->setPos(b2Vec2(0, 20));
-    ground->createBody(_world);
+    loadWorld("data/levels/motors.xml");
     b2PolygonShape shape;
-    shape.SetAsBox(20,1);
-    ground->setShape(shape);
-    ground->setColor(groundColor);
-    appendItem(ground);
-
-    // roof
-    QBox2DItem *roof = new QBox2DItem();
-    roof->setPos(b2Vec2(0, -20));
-    roof->createBody(_world);
-    roof->setShape(shape);
-    roof->setColor(groundColor);
-    appendItem(roof);
-
-    //left wall
-    QBox2DItem *leftWall = new QBox2DItem();
-    leftWall->setPos(b2Vec2(-20, 0));
-    leftWall->createBody(_world);
-    shape.SetAsBox(1,20);
-    leftWall->setShape(shape);
-    leftWall->setColor(groundColor);
-    appendItem(leftWall);
-
-
-    //right wall
-    QBox2DItem *rightWall = new QBox2DItem();
-    rightWall->setPos(b2Vec2(20, 0));
-    rightWall->createBody(_world);
-    rightWall->setShape(shape);
-    rightWall->setColor(groundColor);
-    appendItem(rightWall);
-
-    //add motors
-    for (int i = 0; i < 2; ++i) {
-        QBox2DItem *motor = new QBox2DItem();
-        motor->setPos(b2Vec2(pow(-1.0f,i) * 5, 15));
-        motor->setBodyType(b2_dynamicBody);
-        motor->setDensity(2.0f);
-        motor->setFriction(1.0f);
-        motor->setRestitution(0.1f);
-        motor->createBody(_world);
-        shape.SetAsBox(0.5f, 4.0f);
-        motor->setShape(shape);
-        motor->setColor(groundColor);
-        appendItem(motor);
-
-        b2RevoluteJointDef jd1;
-        jd1.Initialize(motor->body(), _ground, motor->body()->GetPosition());
-        jd1.motorSpeed = -(float32)(pow(-1.0f,i) * 2 * b2_pi);
-        jd1.maxMotorTorque = 50000000.0f;
-        jd1.enableMotor = true;
-        _world->CreateJoint(&jd1);
-    }
 
     //add falling boxes
     for (int i = 0; i < 10; ++i) {
