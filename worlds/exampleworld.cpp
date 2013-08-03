@@ -50,7 +50,7 @@ void ExampleWorld::populate(){
     for (int i = 0; i < 1000; ++i) {
         QBox2DItem *ball = new QBox2DItem();
         ball->setBodyType(b2_dynamicBody);
-        ball->setPos(b2Vec2((qrand() % 300)/10.0f - 20.0f, (qrand() % 100)/10.0f - 10.0f));
+        ball->setPos(b2Vec2((qrand() % 300)/10.0f - 15.0f, (qrand() % 100)/10.0f - 10.0f));
         ball->setFriction(0.1f);
         ball->setDensity(1.0f);
         ball->setRestitution(0.5f);
