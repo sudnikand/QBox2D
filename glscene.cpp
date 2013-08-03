@@ -14,7 +14,7 @@ GLScene::~GLScene()
 }
 
 void GLScene::initializeGL(){
-    glClearColor(0,0,0,1.0f);
+    qglClearColor(Qt::black);
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
     glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
