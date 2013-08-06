@@ -47,4 +47,5 @@ LIBS += -lBox2D
 
 OTHER_FILES += \
     data/levels/motors.xml \
-    data/levels/test.xml
+    data/levels/test.xml \
+    data/levels/box.xml
