@@ -1,44 +1,30 @@
 #include "items.h"
 
-
-void QBox2DItem::render(){
+void QBox2DItem::update(){
     if(!body()) return;
-
     const b2Shape *shape = body()->GetFixtureList()->GetShape();
     if (!shape) return;
-    glPushMatrix();
-
-    glTranslatef(W2Q_(position().x), W2Q_(position().y), 0.0f);
-    glRotatef(RAD2ANG(rotation()),0,0,1.0f);
-    glBegin(GL_TRIANGLE_FAN);
-
+    _vertices.clear();
     if( shape->GetType() == b2Shape::e_polygon ) {
-        glColor3f(_color.redF(), _color.greenF(), _color.blueF());
-        for (int32 i=0; i < ((b2PolygonShape*)shape)->GetVertexCount(); ++i){
-            const b2Vec2 vertex = ((b2PolygonShape*)shape)->GetVertex(i);
-            glVertex2f(W2Q(vertex.x, vertex.y));
-        }
-    } else if (shape->GetType() == b2Shape::e_circle ) {
-        glColor3f(_color.redF(), _color.greenF(), _color.blueF());
-        glVertex2f(0,0);
-        int accuracy = 32;
-        float32 radius = W2Q_(shape->m_radius);
-        float32 a = 2 * PI/accuracy;
-        for(int i = 0; i < accuracy; ++i) {
-            glVertex2f( cos(a*i) * radius, sin(a*i) * radius);
-        }
-        glVertex2f(radius, 0);
-    }
+           for (int32 i = 0; i < ((b2PolygonShape*)shape)->GetVertexCount(); ++i){
+               const b2Vec2 vertex = ((b2PolygonShape*)shape)->GetVertex(i);
+               _vertices.append(QVector3D(vertex.x, vertex.y, -2));
+           }
+       } else if (shape->GetType() == b2Shape::e_circle ) {
+           _vertices.append(QVector3D(0, 0, -2));
+           int accuracy = 32;
+           float32 radius = shape->m_radius;
+           float32 a = 2 * PI/accuracy;
+           for(int i = 0; i < accuracy; ++i) {
+               _vertices.append(QVector3D(cos(a*i) * radius, sin(a*i) * radius, -2));
+           }
+           _vertices.append(QVector3D(radius, 0, -2));
+       }
+    _mMatrix.setToIdentity();
+    _mMatrix.translate(position().x,position().y,0);
+    _mMatrix.rotate(RAD2ANG(rotation()), QVector3D(0,0,1));
 
-
-    glEnd();
-
-    glPopMatrix();
-}
-
-void QBox2DItem::update(){
     if(!graphics()) return;
-
     graphics()->setPos(W2Q(position().x,position().y));
     graphics()->setRotation(RAD2ANG(rotation()));
 }

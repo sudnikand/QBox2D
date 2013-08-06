@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<world version='1.0'>
+  <name>Test World</name>
+  <gravity direction='0' strength='10' />
+    <objects>
+      <object bodyType='static'>
+        <position x='0' y='0' />
+        <color name='#f00' />
+        <geometry type='box' width='1' height='1' />
+      </object>
+    </objects>
+</world>

@@ -13,6 +13,7 @@ public:
     QBox2DItem() :
         _graphics(NULL)
     { }
+
     virtual ~QBox2DItem() { if(_graphics) delete _graphics; }
 
     void setGraphics(QAbstractGraphicsShapeItem* gi) {
@@ -33,17 +34,20 @@ public:
         _name = name;
     }
 
-    void render();
     void update();
 
     QAbstractGraphicsShapeItem* graphics() const { return _graphics; }
     const QColor color() const { return _color; }
     const QString name() const { return _name; }
+    QVector<QVector3D> _vertices;
+    QMatrix4x4         _mMatrix;
 
 private:
     QAbstractGraphicsShapeItem* _graphics;
-    QColor _color;
+    QColor  _color;
     QString _name;
+
+
 };
 
 
