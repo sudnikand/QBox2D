@@ -26,6 +26,7 @@ void GLScene::initializeGL(){
 
     shaderProgram.addShaderFromSourceFile(QGLShader::Vertex,"data/shaders/sqare.vsh");
     shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/sqare.fsh");
+
     shaderProgram.link();
 }
 
