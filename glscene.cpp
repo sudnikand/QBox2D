@@ -1,11 +1,13 @@
 #include "glscene.h"
 #include <QtOpenGL>
 
-GLScene::GLScene(QWidget *parent) : QGLWidget(parent),
-    _scale(1)
+GLScene::GLScene(QWidget *parent) : QGLWidget(parent)
 {
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    _alpha = 0;
+    _beta = 0;
+    _distance = 50;
 }
 
 GLScene::~GLScene()
@@ -21,50 +23,56 @@ void GLScene::initializeGL(){
     glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_POINT_SMOOTH);
+
+    shaderProgram.addShaderFromSourceFile(QGLShader::Vertex,"data/shaders/sqare.vsh");
+    shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/sqare.fsh");
+    shaderProgram.link();
 }
 
 void GLScene::resizeGL(int width, int height)
 {
-    if (height==0) {
-        height=1;
+    if (height == 0) {
+        height = 1;
 	}
 
+    pMatrix.setToIdentity();
+    pMatrix.perspective(60.0, (qreal)width/(qreal)height, 0.5f, 100 );
+    //pMatrix.translate(QVector3D(0,-25,0));
+
     glViewport(0, 0, width, height);
+
 }
 
 void GLScene::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    begin2D(width(),height());
+    QMatrix4x4 cameraTransformation;
+    cameraTransformation.rotate(_alpha, 0, 1, 0);
+    cameraTransformation.rotate(_beta, 1, 0, 0);
+    QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, _distance);
+    QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, -1, 0);
 
-    int numItems = _glitems.size();
-    for (int i = 0; i < numItems; ++i){
-        _glitems.at(i)->render();
+    QMatrix4x4 vMatrix;
+    vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
+    vMatrix.rotate(180, QVector3D(0,1,0));
+
+    QListIterator<QBox2DItem*> i(_glitems);
+    while(i.hasNext()){
+        QBox2DItem *item = i.next();
+        shaderProgram.bind();
+        shaderProgram.setUniformValue("mvpMatrix", pMatrix * vMatrix * item->_mMatrix);
+        shaderProgram.setUniformValue("color", item->color());
+        shaderProgram.setAttributeArray("vertex", item->_vertices.constData());
+        shaderProgram.enableAttributeArray("vertex");
+        glDrawArrays(GL_TRIANGLE_FAN, 0, item->_vertices.size());
+        shaderProgram.disableAttributeArray("vertex");
+        shaderProgram.release();
     }
 
-    end2D();
 }
 
 void GLScene::updateGL() {
     QGLWidget::updateGL();
-}
-
-void GLScene::begin2D( int width, int height ){
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho(-width*_scale, width*_scale, height*_scale, -height*_scale, -1, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-}
-
-void GLScene::end2D( void )
-{
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
 }
 
 QPointF GLScene::mapToScene(const QPointF &p){
@@ -105,4 +113,8 @@ void GLScene::keyPressEvent(QKeyEvent *event) {
 
 void GLScene::keyReleaseEvent(QKeyEvent *event) {
     emit keyReleased(event->key());
+}
+
+QSize GLScene::sizeHint() const {
+    return QSize(640,480);
 }
