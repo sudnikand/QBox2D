@@ -25,7 +25,7 @@ public:
 
 
 
-protected:
+private:
             b2Body*      _body;
             b2FixtureDef _fd;
             b2BodyDef    _bd;
