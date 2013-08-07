@@ -10,6 +10,7 @@
 #define WORLD_SCALE_VALUE 50.0f
 
 #define W2Q(x,y)    ( x * WORLD_SCALE_VALUE ),( y * WORLD_SCALE_VALUE )
+#define W2Q3(x,y,z) ( x * WORLD_SCALE_VALUE ),( y * WORLD_SCALE_VALUE ),(z * WORLD_SCALE_VALUE)
 #define W2Q_(x)     ( x * WORLD_SCALE_VALUE )
 
 #define Q2W(x,y)    ( x / WORLD_SCALE_VALUE ),( y / WORLD_SCALE_VALUE )
