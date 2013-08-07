@@ -48,4 +48,8 @@ LIBS += -lBox2D
 OTHER_FILES += \
     data/levels/motors.xml \
     data/levels/test.xml \
-    data/levels/box.xml
+    data/levels/box.xml \
+    data/shaders/texture.vsh \
+    data/shaders/sqare.vsh \
+    data/shaders/sqare.fsh \
+    data/shaders/texture.fsh
