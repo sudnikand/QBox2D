@@ -50,6 +50,7 @@ private:
     qreal              _scale;
 
     QMatrix4x4 pMatrix;
+    QMatrix4x4 vMatrix;
     QGLShaderProgram shaderProgram;
     qreal _alpha, _beta, _distance;
     QVector<GLuint> _textures;

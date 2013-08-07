@@ -43,8 +43,8 @@ void GLScene::resizeGL(int width, int height)
 	}
 
     pMatrix.setToIdentity();
-    pMatrix.perspective(60.0, (qreal)width/(qreal)height, 0.5f, 100 );
-    pMatrix.translate(QVector3D(0,-25,0));
+    pMatrix.perspective(60.0, (qreal)width/(qreal)height, 0.5f, 1000 );
+    //pMatrix.translate(QVector3D(0,-25,0));
 
     glViewport(0, 0, width, height);
 
@@ -59,7 +59,7 @@ void GLScene::paintGL() {
     QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, _distance);
     QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, -1, 0);
 
-    QMatrix4x4 vMatrix;
+    vMatrix.setToIdentity();
     vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
     vMatrix.rotate(180, QVector3D(0,1,0));
 
@@ -91,12 +91,30 @@ void GLScene::updateGL() {
     QGLWidget::updateGL();
 }
 
+
 QPointF GLScene::mapToScene(const QPointF &p){
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT,viewport);
+    qDebug() << p << pMatrix << vMatrix;
+    QMatrix4x4 pvMatrix = pMatrix * vMatrix;
+    QMatrix4x4 transformMatrix = pvMatrix.inverted();
+
+    const float unit_x = (2.0f*((float)(p.x()-viewport[0])/(viewport[2]-viewport[0])))-1.0f;
+    const float unit_y = 1.0f-(2.0f*((float)(p.y()-viewport[1])/(viewport[3]-viewport[1])));
+
+    //const float unit_x = (p.x()-viewport[0])/ viewport[2] * 2 - 1;
+    //const float unit_y = (p.y()-viewport[1])/ viewport[3] * 2 - 1;
+
+    QVector4D invec = QVector4D(unit_x,unit_y, 1, 1);
+    const QVector4D near = transformMatrix * invec;
+
     QPointF point;
-    point.setY((p.y()*2 - height())*_scale);
-    point.setX((p.x()*2 - width())*_scale);
+    point.setX(near.x() / near.w());
+    point.setY(near.y() / near.w());
+    qDebug() << invec << near << point;
     return point;
 }
+
 
 void GLScene::mousePressEvent(QMouseEvent *event) {
     QPointF pos = mapToScene(event->pos());
