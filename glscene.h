@@ -52,6 +52,7 @@ private:
     QMatrix4x4 pMatrix;
     QGLShaderProgram shaderProgram;
     qreal _alpha, _beta, _distance;
+    QVector<GLuint> _textures;
 };
 
 

@@ -8,6 +8,7 @@ GLScene::GLScene(QWidget *parent) : QGLWidget(parent)
     _alpha = 0;
     _beta = 0;
     _distance = 50;
+    _scale = 1.0;
 }
 
 GLScene::~GLScene()
@@ -24,10 +25,15 @@ void GLScene::initializeGL(){
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_POINT_SMOOTH);
 
-    shaderProgram.addShaderFromSourceFile(QGLShader::Vertex,"data/shaders/sqare.vsh");
-    shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/sqare.fsh");
+    glAlphaFunc(GL_GREATER, 0.1f);
+    glEnable(GL_ALPHA_TEST);
+
+    shaderProgram.addShaderFromSourceFile(QGLShader::Vertex,"data/shaders/texture.vsh");
+    shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/texture.fsh");
 
     shaderProgram.link();
+
+    _textures.append(bindTexture(QPixmap("data/textures/3d.png"),GL_TEXTURE_2D, GL_RGBA));
 }
 
 void GLScene::resizeGL(int width, int height)
@@ -38,7 +44,7 @@ void GLScene::resizeGL(int width, int height)
 
     pMatrix.setToIdentity();
     pMatrix.perspective(60.0, (qreal)width/(qreal)height, 0.5f, 100 );
-    //pMatrix.translate(QVector3D(0,-25,0));
+    pMatrix.translate(QVector3D(0,-25,0));
 
     glViewport(0, 0, width, height);
 
@@ -57,14 +63,23 @@ void GLScene::paintGL() {
     vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
     vMatrix.rotate(180, QVector3D(0,1,0));
 
+    QVector<QVector2D> textureCoordinates;
+    textureCoordinates << QVector2D(1, 1) << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) ;
+
     QListIterator<QBox2DItem*> i(_glitems);
     while(i.hasNext()){
         QBox2DItem *item = i.next();
         shaderProgram.bind();
         shaderProgram.setUniformValue("mvpMatrix", pMatrix * vMatrix * item->_mMatrix);
-        shaderProgram.setUniformValue("color", item->color());
+        shaderProgram.setUniformValue("texture", 0);
+        glBindTexture(GL_TEXTURE_2D, _textures.at(0));
+        //shaderProgram.setUniformValue("color", item->color());
         shaderProgram.setAttributeArray("vertex", item->_vertices.constData());
         shaderProgram.enableAttributeArray("vertex");
+
+        shaderProgram.setAttributeArray("textureCoordinate", textureCoordinates.constData());
+        shaderProgram.enableAttributeArray("textureCoordinate");
+
         glDrawArrays(GL_TRIANGLE_FAN, 0, item->_vertices.size());
         shaderProgram.disableAttributeArray("vertex");
         shaderProgram.release();

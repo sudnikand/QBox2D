@@ -11,15 +11,23 @@ void QBox2DItem::update(){
                _vertices.append(QVector3D(vertex.x, vertex.y, -2));
            }
        } else if (shape->GetType() == b2Shape::e_circle ) {
+        float32 radius = shape->m_radius;
+        /*
            _vertices.append(QVector3D(0, 0, -2));
            int accuracy = 32;
-           float32 radius = shape->m_radius;
+
            float32 a = 2 * PI/accuracy;
            for(int i = 0; i < accuracy; ++i) {
                _vertices.append(QVector3D(cos(a*i) * radius, sin(a*i) * radius, -2));
            }
            _vertices.append(QVector3D(radius, 0, -2));
+           */
+        _vertices.append(QVector3D( -radius, -radius, -2 ));
+        _vertices.append(QVector3D( -radius,  radius, -2 ));
+        _vertices.append(QVector3D(  radius,  radius, -2 ));
+        _vertices.append(QVector3D(  radius, -radius, -2 ));
        }
+
     _mMatrix.setToIdentity();
     _mMatrix.translate(position().x,position().y,0);
     _mMatrix.rotate(RAD2ANG(rotation()), QVector3D(0,0,1));
