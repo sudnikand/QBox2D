@@ -24,9 +24,6 @@ public:
     void createGLScene();
     void createQScene();
 
-public slots:
-    void update();
-
 private:
     Ui::MainWindow *ui;
     QScene         *scene;

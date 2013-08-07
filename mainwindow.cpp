@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createWorld();
     createGLScene();
-    createQScene();
+    //createQScene();
 
     world->populate();
 
@@ -68,18 +68,12 @@ void MainWindow::createQScene(){
 
 void MainWindow::createWorld(){
     qDebug()<<"Creating World";
-    //world = new TestWorld();
-    //world = new ExampleWorld();
-    world = new ArcanoidWorld();
+    //world = new TestWorld(this);
+    //world = new ExampleWorld(this);
+    world = new ArcanoidWorld(this);
     world->setSettings(1.0f / 60.0f, 10, 10);
 
     connect(timer,SIGNAL(timeout()),world,SLOT(step()));
-}
-
-void MainWindow::update(){
-    //world->step();
-    //scene->advance();
-    glscene->updateGL();
 }
 
 MainWindow::~MainWindow(){
