@@ -12,7 +12,7 @@ private:
     QBox2DItem*   _ball;
 
 public:
-    ArcanoidWorld();
+    ArcanoidWorld(QObject* parent = 0);
     void populate();
     void createBall(float32 radius);
     void createBall();

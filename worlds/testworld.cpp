@@ -1,6 +1,7 @@
 #include "testworld.h"
 
-TestWorld::TestWorld() : QBox2DWorld() {
+TestWorld::TestWorld(QObject *parent) : QBox2DWorld(parent) {
+
 }
 
 void TestWorld::populate(){

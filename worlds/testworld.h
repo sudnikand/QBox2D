@@ -9,7 +9,7 @@ private:
     QBox2DItem* _box;
 
 public:
-    TestWorld();
+    TestWorld(QObject* parent = 0);
     void populate();
     void handleContact(const ContactPoint &cp);
     void step();

@@ -5,7 +5,7 @@
 
 class ExampleWorld : public QBox2DWorld {
 public:
-    ExampleWorld();
+    ExampleWorld(QObject* parent = 0);
     void populate();
 };
 

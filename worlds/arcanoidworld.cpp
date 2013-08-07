@@ -1,8 +1,6 @@
 #include "arcanoidworld.h"
 
-ArcanoidWorld::ArcanoidWorld() :
-    QBox2DWorld()
-{
+ArcanoidWorld::ArcanoidWorld(QObject *parent) : QBox2DWorld(parent) {
 
 }
 

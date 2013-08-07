@@ -1,6 +1,7 @@
 #include "exampleworld.h"
 
-ExampleWorld::ExampleWorld() : QBox2DWorld(){
+ExampleWorld::ExampleWorld(QObject *parent) : QBox2DWorld(parent) {
+
 }
 
 void ExampleWorld::populate(){
