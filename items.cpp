@@ -33,6 +33,6 @@ void QBox2DItem::update(){
     _mMatrix.rotate(RAD2ANG(rotation()), QVector3D(0,0,1));
 
     if(!graphics()) return;
-    graphics()->setPos(W2Q(position().x,position().y));
+    graphics()->setPos(position().x,position().y);
     graphics()->setRotation(RAD2ANG(rotation()));
 }
