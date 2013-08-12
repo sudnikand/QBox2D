@@ -180,14 +180,15 @@ void QBox2DWorld::step(){
 }
 
 QBox2DItem* QBox2DWorld::createBox(const QPointF& pos) {
+// position is in world coordinates
     QBox2DItem *box = new QBox2DItem();
     box->setBodyType(b2_dynamicBody);
     box->setFriction(0.9f);
     box->setDensity(1.0f);
     box->setRestitution(0.5f);
-    box->setPos(b2Vec2(Q2W(pos.x(), pos.y())));
+    box->setPos(b2Vec2(pos.x(), pos.y()));
     box->createBody(_world);
-    float32 l = 1.0f;
+    float32 l = WSCALE(10.0f);
     b2PolygonShape rect;
     rect.SetAsBox(l/2,l/2);
     box->setShape(rect);
@@ -199,12 +200,12 @@ QBox2DItem* QBox2DWorld::createBox(const QPointF& pos) {
 }
 
 void QBox2DWorld::grabItem(const QPointF &p) {
-
+// grab item in world coordinate p
     if (_mouseJoint != NULL){
         return;
     }
 
-    b2Vec2 pos( Q2W(p.x(), p.y()) );
+    b2Vec2 pos( p.x(), p.y() );
 
     // Make a small box.
     b2AABB aabb;
@@ -237,8 +238,9 @@ void QBox2DWorld::dropItem(){
 }
 
 void QBox2DWorld::moveItem(const QPointF &p){
+// move item to world coordinate
     if(_mouseJoint){
-        _mouseJoint->SetTarget(b2Vec2(Q2W(p.x(),p.y())));
+        _mouseJoint->SetTarget(b2Vec2( p.x(), p.y() ));
     }
 }
 

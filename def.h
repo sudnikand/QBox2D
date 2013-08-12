@@ -7,13 +7,10 @@
 #define ANG2RAD( a ) ( ( (a) * PI ) / 180.0f )
 #define RAD2ANG( a ) ( ( (a) * 180.0f ) / PI )
 
-#define WORLD_SCALE_VALUE 50.0f
+#define WORLD_SCALE_FACTOR 0.1f
 
-#define W2Q(x,y)    ( x * WORLD_SCALE_VALUE ),( y * WORLD_SCALE_VALUE )
-#define W2Q3(x,y,z) ( x * WORLD_SCALE_VALUE ),( y * WORLD_SCALE_VALUE ),(z * WORLD_SCALE_VALUE)
-#define W2Q_(x)     ( x * WORLD_SCALE_VALUE )
-
-#define Q2W(x,y)    ( x / WORLD_SCALE_VALUE ),( y / WORLD_SCALE_VALUE )
-#define Q2W_(x)     ( x / WORLD_SCALE_VALUE )
+#define WSCALE(x)      ( x * WORLD_SCALE_FACTOR )
+#define WSCALE2(x,y)   ( WSCALE(x) ),( WSCALE(y) )
+#define WSCALE3(x,y,z) ( WSCALE(x) ),( WSCALE(y) ),( WSCALE(z) )
 
 #endif // DEF_H

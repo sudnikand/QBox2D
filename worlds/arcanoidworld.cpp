@@ -44,16 +44,16 @@ void ArcanoidWorld::populate() {
     b2PolygonShape shape;
 
     QBox2DItem* groundl = new QBox2DItem();
-    groundl->setPos(b2Vec2(Q2W(-fieldSize, 0)));
+    groundl->setPos(b2Vec2(WSCALE2(-fieldSize, 0)));
     groundl->createBody(_world);
-    shape.SetAsBox(Q2W(5,fieldSize));
+    shape.SetAsBox(WSCALE2(5,fieldSize));
     groundl->setShape(shape);
     groundl->setUserData(groundl);
     groundl->setColor(gray);
     appendItem(groundl);
 
     QBox2DItem* groundr = new QBox2DItem();
-    groundr->setPos(b2Vec2(Q2W(fieldSize, 0)));
+    groundr->setPos(b2Vec2(WSCALE2(fieldSize, 0)));
     groundr->createBody(_world);
     groundr->setShape(shape);
     groundr->setUserData(groundr);
@@ -61,7 +61,7 @@ void ArcanoidWorld::populate() {
     appendItem(groundr);
 
     QBox2DItem* groundup = new QBox2DItem();
-    groundup->setPos(b2Vec2(Q2W(0, -fieldSize)));
+    groundup->setPos(b2Vec2(WSCALE2(0, -fieldSize)));
     groundup->setRotation(90);
     groundup->createBody(_world);
     groundup->setShape(shape);
@@ -72,24 +72,24 @@ void ArcanoidWorld::populate() {
     createBall();
 
     QBox2DItem* horItem = new QBox2DItem();
-    horItem->setPos(b2Vec2(Q2W(0, fieldSize)));
+    horItem->setPos(b2Vec2(WSCALE2(0, fieldSize)));
     horItem->setBodyType(b2_dynamicBody);
     horItem->setDensity(0.0f);
     horItem->createBody(_world);
-    shape.SetAsBox(Q2W(1,1));
+    shape.SetAsBox(WSCALE2(1,1));
     horItem->setShape(shape);
     horItem->setColor(gray);
     appendItem(horItem);
 
 
     _paddle = new QBox2DItem();
-    _paddle->setPos(b2Vec2(Q2W(0, fieldSize)));
+    _paddle->setPos(b2Vec2(WSCALE2(0, fieldSize)));
     _paddle->setBodyType(b2_dynamicBody);
     _paddle->setFriction(1.0f);
     _paddle->setDensity(1.0f);
     _paddle->setRestitution(1.1f);
     _paddle->createBody(_world);
-    shape.SetAsBox(Q2W(50,5));
+    shape.SetAsBox(WSCALE2(50,5));
     _paddle->setShape(shape);
     _paddle->setUserData(_paddle);
     _paddle->body()->SetLinearDamping(10.0f);
@@ -123,13 +123,13 @@ void ArcanoidWorld::populate() {
             QBox2DItem* brick = new QBox2DItem();
             int xPos = i * xStep - fieldSize + brickWidth;
             int yPos = j * yStep - fieldSize + brickWidth;
-            brick->setPos(b2Vec2(Q2W(xPos,yPos)));
+            brick->setPos(b2Vec2(WSCALE2(xPos,yPos)));
             brick->setRestitution(1.0f);
             brick->setDensity(1.0f);
             brick->setBodyType(b2_dynamicBody);
             brick->createBody(_world);
             b2PolygonShape brickShape;
-            brickShape.SetAsBox(Q2W(5,brickWidth/2));
+            brickShape.SetAsBox(WSCALE2(5,brickWidth/2));
             brick->setShape(brickShape);
             brick->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
             brick->body()->SetUserData(brick);
@@ -144,10 +144,10 @@ void ArcanoidWorld::populate() {
         }
     }
     _bound = new QBox2DItem();
-    _bound->setPos(b2Vec2(Q2W(0, (fieldSize+20))));
+    _bound->setPos(b2Vec2(WSCALE2(0, (fieldSize+20))));
     _bound->setBodyType(b2_staticBody);
     _bound->createBody(_world);
-    shape.SetAsBox(Q2W(fieldSize,5));
+    shape.SetAsBox(WSCALE2(fieldSize,5));
     _bound->setShape(shape);
     _bound->body()->SetUserData(_bound);
     //appendItem(_bound);
@@ -182,7 +182,7 @@ void ArcanoidWorld::handleKeyPressed(const int &key)
 void ArcanoidWorld::createBall(float32 radius){
     QBox2DItem *ball = new QBox2DItem();
     ball->setBodyType(b2_dynamicBody);
-    ball->setPos(b2Vec2(Q2W(0, 100)));
+    ball->setPos(b2Vec2(WSCALE2(0, 100)));
     ball->setFriction(1.0f);
     ball->setDensity(1.0f);
     ball->setRestitution(1.0f);
@@ -199,5 +199,5 @@ void ArcanoidWorld::createBall(float32 radius){
 }
 
 void ArcanoidWorld::createBall() {
-    createBall(Q2W_(5));
+    createBall(WSCALE(5));
 }
