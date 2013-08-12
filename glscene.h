@@ -15,6 +15,7 @@ public:
     virtual ~GLScene();
     void clear() { _glitems.clear(); }
     QPointF mapToScene(const QPointF &p);
+    QVector4D unproject(const QVector3D &screen);
     QSize sizeHint() const;
 
 public slots:
@@ -22,8 +23,8 @@ public slots:
     void addItem(QBox2DItem *item)    { _glitems << item; }
     void removeItem(QBox2DItem *item) { _glitems.removeOne(item); }
     void scale(qreal s)               { _scale *= s; }
-    void zoomIn()                     { _distance *= 0.9; }
-    void zoomOut()                    { _distance *= 1.1; }
+    void zoomIn()                     { _scale *= 1.1; }
+    void zoomOut()                    { _scale *= 0.9; }
 
 protected:
     void initializeGL();

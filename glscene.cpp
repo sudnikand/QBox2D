@@ -43,7 +43,8 @@ void GLScene::resizeGL(int width, int height)
 	}
 
     pMatrix.setToIdentity();
-    pMatrix.perspective(60.0, (qreal)width/(qreal)height, 0.5f, 1000 );
+    //pMatrix.perspective(60.0, (qreal)width/(qreal)height, 0.5f, 1000 );
+    pMatrix.ortho(-width, width, -height, height, 0.1, 1000 );
     //pMatrix.translate(QVector3D(0,-25,0));
 
     glViewport(0, 0, width, height);
@@ -62,6 +63,8 @@ void GLScene::paintGL() {
     vMatrix.setToIdentity();
     vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
     vMatrix.rotate(180, QVector3D(0,1,0));
+
+    vMatrix.scale(_scale);
 
     QVector<QVector2D> textureCoordinates;
     textureCoordinates << QVector2D(1, 1) << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) ;
@@ -92,29 +95,33 @@ void GLScene::updateGL() {
 }
 
 
-QPointF GLScene::mapToScene(const QPointF &p){
+QVector4D GLScene::unproject(const QVector3D & screen){
     GLint viewport[4];
-    glGetIntegerv(GL_VIEWPORT,viewport);
-    qDebug() << p << pMatrix << vMatrix;
-    QMatrix4x4 pvMatrix = pMatrix * vMatrix;
-    QMatrix4x4 transformMatrix = pvMatrix.inverted();
+    glGetIntegerv(GL_VIEWPORT, viewport);
 
-    const float unit_x = (2.0f*((float)(p.x()-viewport[0])/(viewport[2]-viewport[0])))-1.0f;
-    const float unit_y = 1.0f-(2.0f*((float)(p.y()-viewport[1])/(viewport[3]-viewport[1])));
+    const qreal xNorm = (2.0f * ((screen.x() - viewport[0]) / (viewport[2] - viewport[0]))) - 1.0f;
+    const qreal yNorm = 1.0f - (2.0f * ((screen.y() - viewport[1]) / (viewport[3] - viewport[1])));
 
-    //const float unit_x = (p.x()-viewport[0])/ viewport[2] * 2 - 1;
-    //const float unit_y = (p.y()-viewport[1])/ viewport[3] * 2 - 1;
+    QMatrix4x4 pvMatrixInv = (pMatrix * vMatrix).inverted();
+    QVector4D worldPoint = pvMatrixInv * QVector4D(xNorm, yNorm, screen.z(), 1);
 
-    QVector4D invec = QVector4D(unit_x,unit_y, 1, 1);
-    const QVector4D near = transformMatrix * invec;
+    if (worldPoint.w() == 0){
+        return QVector4D(0,0,0,0);
+    }
 
-    QPointF point;
-    point.setX(near.x() / near.w());
-    point.setY(near.y() / near.w());
-    qDebug() << invec << near << point;
-    return point;
+    worldPoint.setW(1 / worldPoint.w());
+    worldPoint.setX(worldPoint.x() * worldPoint.w());
+    worldPoint.setY(worldPoint.y() * worldPoint.w());
+
+    return worldPoint;
 }
 
+QPointF GLScene::mapToScene(const QPointF &p){
+// #TODO: create ray from near plane to far plane,
+//        passing Z [-1, 1] coordinate to unproject(),
+//        code below will work OK while projection is ortogonal
+    return unproject(QVector3D(p)).toPointF();
+}
 
 void GLScene::mousePressEvent(QMouseEvent *event) {
     QPointF pos = mapToScene(event->pos());
