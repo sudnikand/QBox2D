@@ -25,7 +25,7 @@ void QScene::addItem(QBox2DItem *item){
 
         for (int32 i = 0; i< shape->GetVertexCount(); ++i){
             b2Vec2 v = shape->GetVertex(i);
-            polygon.append(QPointF(W2Q(v.x,v.y)));
+            polygon.append(QPointF(v.x,v.y));
         }
 
         graphics = new QGraphicsPolygonItem(polygon);
@@ -34,12 +34,12 @@ void QScene::addItem(QBox2DItem *item){
 
         const b2CircleShape* shape = static_cast<const b2CircleShape*>(s);
         float32 radius = shape->m_radius;
-        QRectF rect(-W2Q_(radius),-W2Q_(radius),W2Q_(radius*2), W2Q_(radius*2));
+        QRectF rect(-radius, -radius, radius*2, radius*2);
 
         graphics = new QGraphicsEllipseItem(rect);
     }
 
-    graphics->setPos(W2Q(item->position().x,item->position().y));
+    graphics->setPos( item->position().x, item->position().y);
     graphics->setRotation(RAD2ANG(item->rotation()));
     graphics->setBrush(item->color());
     item->setGraphics(graphics);
