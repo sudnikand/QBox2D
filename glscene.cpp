@@ -7,8 +7,8 @@ GLScene::GLScene(QWidget *parent) : QGLWidget(parent)
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     _alpha = 0;
     _beta = 0;
-    _distance = 50;
-    _scale = 1.0;
+    _distance = 1000;
+    _scale = 1.0 / WORLD_SCALE_FACTOR;
 }
 
 GLScene::~GLScene()
@@ -33,18 +33,19 @@ void GLScene::initializeGL(){
 
     shaderProgram.link();
 
-    _textures.append(bindTexture(QPixmap("data/textures/3d.png"),GL_TEXTURE_2D, GL_RGBA));
+    _textures.append(bindTexture(QPixmap("data/textures/restart.png"),GL_TEXTURE_2D, GL_RGBA));
 }
 
 void GLScene::resizeGL(int width, int height)
 {
     if (height == 0) {
         height = 1;
-	}
+}
 
     pMatrix.setToIdentity();
-    //pMatrix.perspective(60.0, (qreal)width/(qreal)height, 0.5f, 1000 );
+    //pMatrix.perspective(90.0, (qreal)width/(qreal)height, 0.5f, 1000 );
     pMatrix.ortho(-width, width, -height, height, 0.1, 1000 );
+    //pMatrix.rotate(90, QVector3D(0,0,1));
     //pMatrix.translate(QVector3D(0,-25,0));
 
     glViewport(0, 0, width, height);
