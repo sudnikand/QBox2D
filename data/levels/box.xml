@@ -2,11 +2,14 @@
 <world version='1.0'>
   <name>Test World</name>
   <gravity direction='0' strength='10' />
-    <objects>
+  <objects>
       <object bodyType='static'>
         <position x='0' y='0' />
         <color name='#f00' />
         <geometry type='box' width='1' height='1' />
       </object>
-    </objects>
+  </objects>
+  <textures>
+      <texture name="arrow" src="data/textures/restart.png" />
+  </textures>
 </world>
