@@ -40,7 +40,7 @@ public:
     virtual void populate() = 0;
     virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
             void destroyItem(QBox2DItem *item);
-            void appendItem(QBox2DItem* item);
+            void appendItem(QBox2DItem *item);
             void removeItem(QBox2DItem *item);
             void loadWorld(const QString &filename);
      QBox2DItem* findItem(const QString &itemName);
