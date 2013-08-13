@@ -20,7 +20,15 @@ public:
 
 public slots:
     void updateGL();
-    void addItem(QBox2DItem *item)    { _glitems << item; }
+    void addItem(QBox2DItem *item)    {
+        _glitems << item;
+        if (!item->_textureName.isNull()) {
+            if (!_textures.contains(item->_textureName)) {
+                qDebug() << "Loading texture: " << item->_textureName;
+                _textures.insert(item->_textureName, bindTexture(QPixmap("data/textures/" + item->_textureName), GL_TEXTURE_2D));
+            }
+        }
+    }
     void removeItem(QBox2DItem *item) { _glitems.removeOne(item); }
     void scale(qreal s)               { _scale *= s; }
     void zoomIn()                     { _scale *= 1.1; }
@@ -54,7 +62,7 @@ private:
     QMatrix4x4 vMatrix;
     QGLShaderProgram shaderProgram;
     qreal _alpha, _beta, _distance;
-    QVector<GLuint> _textures;
+    QHash<QString,GLuint> _textures;
 };
 
 

@@ -32,8 +32,6 @@ void GLScene::initializeGL(){
     shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/texture.fsh");
 
     shaderProgram.link();
-
-    _textures.append(bindTexture(QPixmap("data/textures/restart.png"),GL_TEXTURE_2D, GL_RGBA));
 }
 
 void GLScene::resizeGL(int width, int height)
@@ -76,7 +74,7 @@ void GLScene::paintGL() {
         shaderProgram.bind();
         shaderProgram.setUniformValue("mvpMatrix", pMatrix * vMatrix * item->_mMatrix);
         shaderProgram.setUniformValue("texture", 0);
-        glBindTexture(GL_TEXTURE_2D, _textures.at(0));
+        glBindTexture(GL_TEXTURE_2D, _textures.value(item->_textureName));
         //shaderProgram.setUniformValue("color", item->color());
         shaderProgram.setAttributeArray("vertex", item->_vertices.constData());
         shaderProgram.enableAttributeArray("vertex");

@@ -41,13 +41,12 @@ public:
     const QString name() const { return _name; }
     QVector<QVector3D> _vertices;
     QMatrix4x4         _mMatrix;
+    QString            _textureName;
 
 private:
     QAbstractGraphicsShapeItem* _graphics;
     QColor  _color;
     QString _name;
-
-
 };
 
 
