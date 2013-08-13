@@ -1,5 +1,5 @@
 #include "world.h"
-#include <QDomDocument>
+
 
 QBox2DWorld::QBox2DWorld(QObject* parent): QObject(parent),
     _mouseJoint(NULL) {
@@ -12,6 +12,120 @@ QBox2DWorld::QBox2DWorld(QObject* parent): QObject(parent),
 QBox2DWorld::~QBox2DWorld() {
     delete _world;
     _world = NULL;
+}
+
+void QBox2DWorld::parseXML(const QDomElement &root){
+
+    {
+        QDomElement gravity = root.firstChildElement("gravity");
+        _world->SetGravity(b2Vec2(gravity.attribute("direction").toFloat(),
+                                  gravity.attribute("strength").toFloat()));
+    }
+
+    { //Parsing objects
+        QDomElement objects = root.firstChildElement("objects");
+        if ( objects.isNull() ) {
+            return;
+        }
+
+        QDomElement object = objects.firstChildElement( "object" );
+        while (!object.isNull()) {
+            QBox2DItem *item = new QBox2DItem();
+
+            if(object.attribute("bodyType") == "dynamic" ){
+                item->setBodyType(b2_dynamicBody);
+            }
+
+            if(object.hasAttribute("name")){
+                item->setName(object.attribute("name"));
+            }
+
+            {
+                QDomElement position = object.firstChildElement("position");
+                if (!position.isNull()){
+                    item->setPos(b2Vec2(position.attribute("x").toFloat(),
+                                        position.attribute("y").toFloat()
+                                        ));
+                    if (position.hasAttribute("rotation"))
+                        item->setRotation(position.attribute("rotation").toFloat());
+                }
+            }
+
+            {
+                QDomElement physic = object.firstChildElement("physic");
+                if (!physic.isNull()){
+                    item->setDensity(physic.attribute("density").toFloat());
+                    item->setFriction(physic.attribute("friction").toFloat());
+                    item->setRestitution(physic.attribute("restitution").toFloat());
+                }
+            }
+
+            item->createBody(_world);
+            item->body()->SetUserData(item);
+
+            {
+                QDomElement geometry = object.firstChildElement("geometry");
+                if (geometry.attribute("type") == "box"){
+                    b2PolygonShape shape;
+                    shape.SetAsBox(geometry.attribute("width").toFloat()/2,
+                                   geometry.attribute("height").toFloat()/2);
+                    item->setShape(shape);
+                } else if (geometry.attribute("type") == "circle"){
+                    b2CircleShape circle;
+                    circle.m_radius = geometry.attribute("radius").toFloat();
+                    item->setShape(circle);
+                }
+            }
+
+            {
+                QDomElement color = object.firstChildElement("color");
+                if (!color.isNull()){
+                    item->setColor(QColor(color.attribute("name")));
+                }
+            }
+            appendItem(item);
+
+            //qDebug() << qPrintable(object.tagName());
+            object = object.nextSiblingElement( "object" );
+        }
+    }
+
+    { //Parsing joints
+        QDomElement joints = root.firstChildElement("joints");
+        if ( joints.isNull() ) {
+            return;
+        }
+
+        QDomElement jointNode = joints.firstChildElement( "joint" );
+        while (!jointNode.isNull()) {
+            if(jointNode.attribute("type") == "revolute" ){
+                b2RevoluteJointDef jointDef;
+                QDomElement bodiesNode = jointNode.firstChildElement("bodies");
+                if(!bodiesNode.isNull()){
+                    b2Body* bodyA = findItem( bodiesNode.attribute("a"))->body();
+                    b2Body* bodyB = NULL;
+                    if (bodiesNode.attribute("b") == "_ground" ){
+                        bodyB = _ground;
+                    } else {
+                        bodyB = findItem( bodiesNode.attribute("b"))->body();
+                    }
+                    if( bodyA && bodyB ) {
+                        jointDef.Initialize(bodyA, bodyB, bodyA->GetPosition());
+                    }
+                }
+
+                QDomElement motorNode = jointNode.firstChildElement("motor");
+                if(!motorNode.isNull()){
+                    jointDef.motorSpeed = motorNode.attribute("speed").toFloat();
+                    jointDef.maxMotorTorque = motorNode.attribute("torque").toFloat();
+                    jointDef.enableMotor = motorNode.attribute("enable") == "true";
+                }
+                _world->CreateJoint(&jointDef);
+                qDebug() << qPrintable(jointNode.tagName());
+            }
+            jointNode = jointNode.nextSiblingElement( "joint" );
+        }
+    }
 }
 
 void QBox2DWorld::loadWorld(const QString &filename){
@@ -31,116 +145,12 @@ void QBox2DWorld::loadWorld(const QString &filename){
     qDebug() << "Reading XML file";
 
     QDomElement root = domDoc.documentElement();
-       if (root.tagName() != "world") {
-           qDebug() << "Not a world file";
-           return;
-       }
-
-    QDomElement objects = root.firstChildElement("objects");
-    if ( objects.isNull() ) {
+    if (root.tagName() != "world") {
+        qDebug() << "Not a world file";
         return;
     }
 
-    QDomElement object = objects.firstChildElement( "object" );
-    while (!object.isNull()) {
-      QBox2DItem *item = new QBox2DItem();
-
-      if(object.attribute("bodyType") == "dynamic" ){
-        item->setBodyType(b2_dynamicBody);
-      }
-
-      if(object.hasAttribute("name")){
-          item->setName(object.attribute("name"));
-      }
-
-      {
-          QDomElement position = object.firstChildElement("position");
-          if (!position.isNull()){
-            item->setPos(b2Vec2(position.attribute("x").toFloat(),
-                                position.attribute("y").toFloat()
-                         ));
-            if (position.hasAttribute("rotation"))
-                item->setRotation(position.attribute("rotation").toFloat());
-          }
-      }
-      {
-          QDomElement physic = object.firstChildElement("physic");
-          if (!physic.isNull()){
-              item->setDensity(physic.attribute("density").toFloat());
-              item->setFriction(physic.attribute("friction").toFloat());
-              item->setRestitution(physic.attribute("restitution").toFloat());
-          }
-      }
-
-      item->createBody(_world);
-      item->body()->SetUserData(item);
-
-    {
-      QDomElement geometry = object.firstChildElement("geometry");
-      if (geometry.attribute("type") == "box"){
-          b2PolygonShape shape;
-          shape.SetAsBox(geometry.attribute("width").toFloat()/2,
-                         geometry.attribute("height").toFloat()/2);
-          item->setShape(shape);
-      } else if (geometry.attribute("type") == "circle"){
-          b2CircleShape circle;
-          circle.m_radius = geometry.attribute("radius").toFloat();
-          item->setShape(circle);
-      }
-      }
-
-      {
-      QDomElement color = object.firstChildElement("color");
-      if (!color.isNull()){
-          item->setColor(QColor(color.attribute("name")));
-      }
-      }
-      appendItem(item);
-
-      qDebug() << qPrintable(object.tagName());
-      object = object.nextSiblingElement( "object" );
-    }
-
-    {
-        QDomElement gravity = root.firstChildElement("gravity");
-        _world->SetGravity(b2Vec2(gravity.attribute("direction").toFloat(),
-                                  gravity.attribute("strength").toFloat()));
-    }
-
-    QDomElement joints = root.firstChildElement("joints");
-    if ( joints.isNull() ) {
-        return;
-    }
-
-    QDomElement jointNode = joints.firstChildElement( "joint" );
-    while (!jointNode.isNull()) {
-        if(jointNode.attribute("type") == "revolute" ){
-          b2RevoluteJointDef jointDef;
-          QDomElement bodiesNode = jointNode.firstChildElement("bodies");
-          if(!bodiesNode.isNull()){
-              b2Body* bodyA = findItem( bodiesNode.attribute("a"))->body();
-              b2Body* bodyB = NULL;
-              if (bodiesNode.attribute("b") == "_ground" ){
-                  bodyB = _ground;
-              } else {
-                  bodyB = findItem( bodiesNode.attribute("b"))->body();
-              }
-              if( bodyA && bodyB ) {
-                  jointDef.Initialize(bodyA, bodyB, bodyA->GetPosition());
-              }
-          }
-
-          QDomElement motorNode = jointNode.firstChildElement("motor");
-          if(!motorNode.isNull()){
-              jointDef.motorSpeed = motorNode.attribute("speed").toFloat();
-              jointDef.maxMotorTorque = motorNode.attribute("torque").toFloat();
-              jointDef.enableMotor = motorNode.attribute("enable") == "true";
-          }
-          _world->CreateJoint(&jointDef);
-          qDebug() << qPrintable(jointNode.tagName());
-        }
-        jointNode = jointNode.nextSiblingElement( "joint" );
-    }
+    parseXML(root);
 
 }
 

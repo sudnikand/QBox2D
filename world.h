@@ -1,10 +1,11 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include "items.h"
 #include <Box2D.h>
 #include <QObject>
 #include <QSet>
+#include <QDomDocument>
+#include "items.h"
 
 struct ContactPoint {
     QBox2DItem* itemA;
@@ -58,6 +59,9 @@ signals:
             void contact(const ContactPoint &cp);
             void itemCreated(QBox2DItem *item);
             void itemDestroyed(QBox2DItem *item);
+
+private:
+            void parseXML(const QDomElement &root);
 };
 
 
