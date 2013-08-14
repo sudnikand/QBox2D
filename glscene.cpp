@@ -30,8 +30,11 @@ void GLScene::initializeGL(){
 
     shaderProgram.addShaderFromSourceFile(QGLShader::Vertex,"data/shaders/texture.vsh");
     shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/texture.fsh");
-
     shaderProgram.link();
+
+    qDebug() << "Initializing textures";
+    _textures.insert("restart.png", bindTexture(QPixmap("data/textures/restart.png"), GL_TEXTURE_2D));
+    emit initialized();
 }
 
 void GLScene::resizeGL(int width, int height)

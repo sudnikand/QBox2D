@@ -13,8 +13,6 @@ MainWindow::MainWindow(QWidget *parent) :
     createGLScene();
     //createQScene();
 
-    world->populate();
-
     timer->start(1000/60);
 }
 
@@ -37,6 +35,7 @@ void MainWindow::createGLScene(){
 
     connect(world,SIGNAL(itemCreated(QBox2DItem*)),  glscene,SLOT(addItem(QBox2DItem*)));
     connect(world,SIGNAL(itemDestroyed(QBox2DItem*)),glscene,SLOT(removeItem(QBox2DItem*)));
+    connect(glscene,SIGNAL(initialized()),world,SLOT(populate()));
 }
 
 void MainWindow::createQScene(){

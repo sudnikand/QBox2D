@@ -53,6 +53,7 @@ signals:
     void mouseMoved(const QPointF&);
     void keyPressed(const int&);
     void keyReleased(const int&);
+    void initialized();
 
 private:
     QList<QBox2DItem*> _glitems;
