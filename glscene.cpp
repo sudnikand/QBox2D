@@ -69,11 +69,13 @@ void GLScene::paintGL() {
     QVector<QVector2D> textureCoordinates;
     textureCoordinates << QVector2D(1, 1) << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) ;
 
+    shaderProgram.bind();
     QListIterator<QBox2DItem*> i(_glitems);
     while(i.hasNext()){
         QBox2DItem *item = i.next();
-        shaderProgram.bind();
-        shaderProgram.setUniformValue("mvpMatrix", pMatrix * vMatrix * item->_mMatrix);
+        shaderProgram.setUniformValue("modelMatrix", item->_mMatrix);
+        shaderProgram.setUniformValue("viewMatrix", vMatrix);
+        shaderProgram.setUniformValue("projMatrix", pMatrix);
         shaderProgram.setUniformValue("texture", 0);
         glBindTexture(GL_TEXTURE_2D, _textures.value(item->_textureName));
         //shaderProgram.setUniformValue("color", item->color());
@@ -85,8 +87,8 @@ void GLScene::paintGL() {
 
         glDrawArrays(GL_TRIANGLE_FAN, 0, item->_vertices.size());
         shaderProgram.disableAttributeArray("vertex");
-        shaderProgram.release();
     }
+    shaderProgram.release();
 
 }
 
