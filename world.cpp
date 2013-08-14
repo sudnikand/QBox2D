@@ -92,8 +92,6 @@ void QBox2DWorld::parseXML(const QDomElement &root){
             }
 
             appendItem(item);
-
-            //qDebug() << qPrintable(object.tagName());
             object = object.nextSiblingElement( "object" );
         }
     }
@@ -129,7 +127,6 @@ void QBox2DWorld::parseXML(const QDomElement &root){
                     jointDef.enableMotor = motorNode.attribute("enable") == "true";
                 }
                 _world->CreateJoint(&jointDef);
-                qDebug() << qPrintable(jointNode.tagName());
             }
             jointNode = jointNode.nextSiblingElement( "joint" );
         }
