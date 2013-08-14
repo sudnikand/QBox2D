@@ -70,21 +70,27 @@ void QBox2DWorld::parseXML(const QDomElement &root){
                     shape.SetAsBox(geometry.attribute("width").toFloat()/2,
                                    geometry.attribute("height").toFloat()/2);
                     item->setShape(shape);
-                    item->_textureName = "kde.png";
                 } else if (geometry.attribute("type") == "circle"){
                     b2CircleShape circle;
                     circle.m_radius = geometry.attribute("radius").toFloat();
                     item->setShape(circle);
-                    item->_textureName = "restart.png";
                 }
             }
 
             {
                 QDomElement color = object.firstChildElement("color");
                 if (!color.isNull()){
-                    item->setColor(QColor(color.attribute("name")));
+                    item->setColor(QColor(color.text()));
                 }
             }
+
+            {
+                QDomElement texture = object.firstChildElement("texture");
+                if (!texture.isNull()){
+                    item->_textureName = texture.text();
+                }
+            }
+
             appendItem(item);
 
             //qDebug() << qPrintable(object.tagName());

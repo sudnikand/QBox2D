@@ -5,42 +5,45 @@
     <objects>
       <object bodyType='static'>
         <position x='0' y='0' />
-        <color name='#444' />
         <geometry type='box' width='50' height='1' />
+        <texture>grass.png</texture>
       </object>
       <object bodyType='static'>
         <position x='0' y='-50' />
-        <color name='#444' />
         <geometry type='box' width='50' height='1' />
+        <texture>grass.png</texture>
       </object>
       <object bodyType='static'>
         <position x='-25' y='-25' rotation='90' />
-        <color name='#444' />
         <geometry type='box' width='50' height='1' />
+        <texture>grass.png</texture>
       </object>
       <object bodyType='static'>
         <position x='25' y='-25' rotation='90' />
-        <color name='#444' />
         <geometry type='box' width='50' height='1' />
+        <texture>grass.png</texture>
       </object>
-      <object bodyType='dynamic'>
+      <object bodyType='dynamic' name='box_1'>
         <position x='-10' y='-15' />
         <physic density="1" friction="1" restitution="0.2" />
-        <color name='#f00' />
-        <geometry type='box' width='1' height='1' />
+        <geometry type='box' width='3' height='2' />
+        <texture>kde.png</texture>
       </object>
-      <object bodyType='dynamic'>
+      <object bodyType='dynamic' name='ball_1'>
         <position x='0' y='-15' />
         <physic density="1" friction="1" restitution="0.95" />
-        <color name='#00f' />
-        <geometry type='circle' radius='2' />
+        <geometry type='circle' radius='3' />
+        <texture>face-wink.png</texture>
       </object>
-      <object bodyType='dynamic'>
+      <object bodyType='dynamic' name='ball_2'>
         <position x='10' y='-15' />
         <physic density="1" friction="1" restitution="0.9" />
-        <color name='#0f0' />
         <geometry type='circle' radius='2' />
+        <texture>restart.png</texture>
       </object>
     </objects>
+    <textures>
+        <texture name="restart" src="data/textures/restart.png" />
+    </textures>
 </world>
 

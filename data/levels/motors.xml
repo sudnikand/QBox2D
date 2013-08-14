@@ -5,35 +5,35 @@
     <objects>
       <object bodyType='static'>
         <position x='0' y='20' />
-        <color name='#aaa' />
         <geometry type='box' width='40' height='1' />
+        <texture>grass.png</texture>
       </object>
       <object bodyType='static'>
         <position x='0' y='-20' />
-        <color name='#aaa' />
         <geometry type='box' width='40' height='1' />
+        <texture>grass.png</texture>
       </object>
       <object bodyType='static'>
         <position x='-20' y='0' rotation='90' />
-        <color name='#aaa' />
         <geometry type='box' width='40' height='1' />
+        <texture>grass.png</texture>
       </object>
       <object bodyType='static'>
         <position x='20' y='0' rotation='90' />
-        <color name='#aaa' />
         <geometry type='box' width='40' height='1' />
+        <texture>grass.png</texture>
       </object>
       <object bodyType='dynamic' name='motor1' >
         <position x='-10' y='12' />
         <physic density="1" friction="1" restitution="0.9" />
-        <color name='#f00' />
         <geometry type='box' width='0.5' height='10' />
+        <texture>kde.png</texture>
       </object>
       <object bodyType='dynamic' name='motor2' >
         <position x='10' y='12' />
         <physic density="1" friction="1" restitution="0.1" />
-        <color name='#0f0' />
         <geometry type='box' width='0.5' height='10' />
+        <texture>kde.png</texture>
       </object>
     </objects>
     <joints>
