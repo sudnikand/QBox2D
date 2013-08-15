@@ -11,14 +11,14 @@ void ExampleWorld::populate(){
     //add falling boxes
     for (int i = 0; i < 10; ++i) {
         QBox2DItem *box = new QBox2DItem();
-        box->setPos(b2Vec2((qrand() % 20)-10.0f, -15.0f));
+        box->setPos(b2Vec2(WSCALE2((qrand() % 20)-10.0f, -15.0f)));
         box->setBodyType(b2_dynamicBody);
         box->setFriction(0.9f);
         box->setDensity(1.0f);
         box->setRestitution(0.5f);
         box->setRotation(qrand() % 360);
         box->createBody(_world);
-        float32 size = ((qrand() % 40)+10.0f)/50;
+        float32 size = WSCALE(((qrand() % 40)+10.0f)/50);
         b2PolygonShape rect;
         rect.SetAsBox(size,size);
         box->setShape(rect);
@@ -29,10 +29,10 @@ void ExampleWorld::populate(){
 
     // add triangles
     for (int i = 0; i < 10; ++i) {
-        float32 size = ((qrand() % 40) + 10.0f)/40;
+        float32 size = WSCALE(((qrand() % 40) + 10.0f)/40);
         QBox2DItem *testItem = new QBox2DItem();
 
-        testItem->setPos(b2Vec2(qrand() % 20 - 10.0f, -15.0f));
+        testItem->setPos(b2Vec2(WSCALE2(qrand() % 20 - 10.0f, -15.0f)));
         testItem->setRotation(qrand() % 360);
         testItem->setFriction(1.0f);
         testItem->setDensity(5.0f);
@@ -53,13 +53,13 @@ void ExampleWorld::populate(){
     for (int i = 0; i < 50; ++i) {
         QBox2DItem *ball = new QBox2DItem();
         ball->setBodyType(b2_dynamicBody);
-        ball->setPos(b2Vec2((qrand() % 300)/10.0f - 15.0f, (qrand() % 100)/10.0f - 10.0f));
+        ball->setPos(b2Vec2(WSCALE2((qrand() % 30)/10.0f - 1.5f, (qrand() % 10)/10.0f - 1.5f)));
         ball->setFriction(0.1f);
         ball->setDensity(1.0f);
         ball->setRestitution(0.5f);
         ball->createBody(_world);
 
-        float32 radius = 1.1f;
+        float32 radius = WSCALE(1.1f);
         b2CircleShape circle;
         circle.m_radius = radius;
         ball->setShape(circle);
