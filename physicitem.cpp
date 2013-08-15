@@ -16,6 +16,8 @@ void PhysicItem::createBody(b2World *const world){
         _bd.type = bodyType();
         world->DestroyBody(_body);
     }
+    _bd.allowSleep = true;
+    _bd.awake = true;
     _body = world->CreateBody(&_bd);
 }
 
