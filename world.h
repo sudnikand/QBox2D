@@ -22,7 +22,6 @@ public:
     b2World*                _world;
 
 protected:
-    QList<QBox2DItem*>      _items;
     QList<ContactPoint>     _contacts;
     b2Body*                 _ground;
 

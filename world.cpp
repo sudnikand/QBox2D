@@ -185,10 +185,12 @@ void handleContact(const ContactPoint &cp)
 void QBox2DWorld::step(){
     _contacts.clear();
 
-    QListIterator<QBox2DItem*> i(_items);
-    while(i.hasNext()){
-        QBox2DItem *item = i.next();
-        item->update();
+
+    for(b2Body *body = _world->GetBodyList(); body; body = body->GetNext()) {
+        if (body->GetUserData() != NULL) {
+            QBox2DItem *item = static_cast<QBox2DItem*>(body->GetUserData());
+            item->update();
+        }
     }
 
     _world->Step(_timeStep,_velocityIterations,_positionIterations);
@@ -303,21 +305,20 @@ void QBox2DWorld::destroyItem(QBox2DItem *item)
 }
 
 void QBox2DWorld::appendItem(QBox2DItem *item){
-    _items.append(item);
     emit itemCreated(item);
 }
 
 void QBox2DWorld::removeItem(QBox2DItem *item){
-    _items.removeOne(item);
     emit itemDestroyed(item);
 }
 
 QBox2DItem* QBox2DWorld::findItem(const QString &itemName){
-    QListIterator<QBox2DItem*> i(_items);
-    while(i.hasNext()){
-        QBox2DItem *item = i.next();
-        if (item->name() == itemName){
-            return item;
+    for(b2Body *body = _world->GetBodyList(); body; body = body->GetNext()) {
+        if (body->GetUserData() != NULL) {
+            QBox2DItem *item = static_cast<QBox2DItem*>(body->GetUserData());
+            if (item->name() == itemName){
+                return item;
+            }
         }
     }
     return NULL;
