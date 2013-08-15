@@ -18,8 +18,10 @@ void QBox2DWorld::parseXML(const QDomElement &root){
 
     {
         QDomElement gravity = root.firstChildElement("gravity");
-        _world->SetGravity(b2Vec2(gravity.attribute("direction").toFloat(),
-                                  gravity.attribute("strength").toFloat()));
+        if(!gravity.isNull() && gravity.hasAttribute("strength")){
+            _world->SetGravity(b2Vec2(gravity.attribute("direction").toFloat(),
+                                      gravity.attribute("strength").toFloat()));
+        }
     }
 
     { //Parsing objects
@@ -43,8 +45,8 @@ void QBox2DWorld::parseXML(const QDomElement &root){
             {
                 QDomElement position = object.firstChildElement("position");
                 if (!position.isNull()){
-                    item->setPos(b2Vec2(position.attribute("x").toFloat(),
-                                        position.attribute("y").toFloat()
+                    item->setPos(b2Vec2(WSCALE2(position.attribute("x").toFloat(),
+                                        position.attribute("y").toFloat())
                                         ));
                     if (position.hasAttribute("rotation"))
                         item->setRotation(position.attribute("rotation").toFloat());
@@ -67,8 +69,8 @@ void QBox2DWorld::parseXML(const QDomElement &root){
                 QDomElement geometry = object.firstChildElement("geometry");
                 if (geometry.attribute("type") == "box"){
                     b2PolygonShape shape;
-                    shape.SetAsBox(geometry.attribute("width").toFloat()/2,
-                                   geometry.attribute("height").toFloat()/2);
+                    shape.SetAsBox(WSCALE2(geometry.attribute("width").toFloat()/2,
+                                   geometry.attribute("height").toFloat()/2));
                     item->setShape(shape);
                 } else if (geometry.attribute("type") == "circle"){
                     b2CircleShape circle;
