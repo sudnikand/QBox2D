@@ -291,6 +291,11 @@ void QBox2DWorld::PreSolve(b2Contact* contact, const b2Manifold* oldManifold){
 
 void QBox2DWorld::destroyItem(QBox2DItem *item)
 {
+    for (b2JointEdge* edge = item->body()->GetJointList(); edge; edge = edge->next) {
+        if (edge->joint == _mouseJoint)
+            _mouseJoint = NULL;
+    }
+
     _world->DestroyBody(item->body());
     removeItem(item);
     delete item;
