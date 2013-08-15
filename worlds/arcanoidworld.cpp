@@ -58,6 +58,10 @@ void ArcanoidWorld::step(){
         destroyItem(item);
     }
 
+    if (!findItem("brick")) {
+        emit gameFinished();
+    }
+
 }
 
 void ArcanoidWorld::populate() {
@@ -135,6 +139,7 @@ void ArcanoidWorld::populate() {
             brick->setShape(brickShape);
             brick->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
             brick->body()->SetUserData(brick);
+            brick->setName("brick");
             brick->_textureName = "exit.png";
             appendItem(brick);
 

@@ -48,6 +48,7 @@ public slots:
 signals:
             void itemCreated(QBox2DItem *item);
             void itemDestroyed(QBox2DItem *item);
+            void gameFinished();
 
 private:
             void parseXML(const QDomElement &root);
