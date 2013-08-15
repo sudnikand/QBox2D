@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<world version='1.0'>
+  <name>Test World</name>
+  <gravity direction='0' strength='10' />
+    <objects>
+      <object bodyType='static'>
+        <position x='0' y='20' />
+        <geometry type='box' width='40' height='1' />
+        <texture>grass.png</texture>
+      </object>
+      <object bodyType='static'>
+        <position x='0' y='-20' />
+        <geometry type='box' width='40' height='1' />
+        <texture>grass.png</texture>
+      </object>
+      <object bodyType='static'>
+        <position x='-20' y='0' rotation='90' />
+        <geometry type='box' width='40' height='1' />
+        <texture>grass.png</texture>
+      </object>
+      <object bodyType='static'>
+        <position x='20' y='0' rotation='90' />
+        <geometry type='box' width='40' height='1' />
+        <texture>grass.png</texture>
+      </object>
+    </objects>
+</world>
+

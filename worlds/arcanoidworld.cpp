@@ -38,36 +38,12 @@ void ArcanoidWorld::step(){
 
 void ArcanoidWorld::populate() {
     qDebug()<< "Starting Arcanoid World";
-    _world->SetGravity(b2Vec2(0, 10));
+
+    loadWorld("data/levels/room.xml");
+
     float32 fieldSize = 200;
     QColor gray = QColor(128, 128, 128);
     b2PolygonShape shape;
-
-    QBox2DItem* groundl = new QBox2DItem();
-    groundl->setPos(b2Vec2(WSCALE2(-fieldSize, 0)));
-    groundl->createBody(_world);
-    shape.SetAsBox(WSCALE2(5,fieldSize));
-    groundl->setShape(shape);
-    groundl->setUserData(groundl);
-    groundl->setColor(gray);
-    appendItem(groundl);
-
-    QBox2DItem* groundr = new QBox2DItem();
-    groundr->setPos(b2Vec2(WSCALE2(fieldSize, 0)));
-    groundr->createBody(_world);
-    groundr->setShape(shape);
-    groundr->setUserData(groundr);
-    groundr->setColor(gray);
-    appendItem(groundr);
-
-    QBox2DItem* groundup = new QBox2DItem();
-    groundup->setPos(b2Vec2(WSCALE2(0, -fieldSize)));
-    groundup->setRotation(90);
-    groundup->createBody(_world);
-    groundup->setShape(shape);
-    groundup->setUserData(groundup);
-    groundup->setColor(gray);
-    appendItem(groundup);
 
     createBall();
 
@@ -94,6 +70,7 @@ void ArcanoidWorld::populate() {
     _paddle->setUserData(_paddle);
     _paddle->body()->SetLinearDamping(10.0f);
     _paddle->setColor(gray);
+    _paddle->_textureName = "kde.png";
     appendItem(_paddle);
 
     b2PrismaticJointDef horJointDef;
@@ -133,6 +110,7 @@ void ArcanoidWorld::populate() {
             brick->setShape(brickShape);
             brick->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
             brick->body()->SetUserData(brick);
+            brick->_textureName = "exit.png";
             appendItem(brick);
 
             b2RevoluteJointDef jointDef;
@@ -194,6 +172,7 @@ void ArcanoidWorld::createBall(float32 radius){
     ball->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
     ball->body()->SetUserData(ball);
     ball->body()->SetBullet(true);
+    ball->_textureName = "ball.png";
     appendItem(ball);
     _ball = ball;
 }
