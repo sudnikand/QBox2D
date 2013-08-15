@@ -20,13 +20,17 @@ void GLScene::initializeGL(){
     qglClearColor(Qt::black);
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+
+    glShadeModel(GL_SMOOTH);
     glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
     glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_POINT_SMOOTH);
-
-    glAlphaFunc(GL_GREATER, 0.1f);
-    glEnable(GL_ALPHA_TEST);
+    glEnable(GL_POLYGON_SMOOTH);
 
     shaderProgram.addShaderFromSourceFile(QGLShader::Vertex,"data/shaders/texture.vsh");
     shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/texture.fsh");
@@ -67,7 +71,7 @@ void GLScene::paintGL() {
     vMatrix.scale(_scale);
 
     QVector<QVector2D> textureCoordinates;
-    textureCoordinates << QVector2D(1, 1) << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) ;
+    textureCoordinates << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) << QVector2D(1, 1) ;
 
     shaderProgram.bind();
     QListIterator<QBox2DItem*> i(_glitems);
