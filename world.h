@@ -6,23 +6,16 @@
 #include <QSet>
 #include <QDomDocument>
 #include "items.h"
+#include "contactlistener.h"
 
-struct ContactPoint {
-    QBox2DItem* itemA;
-    QBox2DItem* itemB;
-    b2Vec2 normal;
-    b2Vec2 position;
-    b2PointState state;
-};
-
-class QBox2DWorld : public QObject, public b2ContactListener {
+class QBox2DWorld : public QObject {
 Q_OBJECT
 
 public:
     b2World*                _world;
+    QBox2DContactListener*  _contactListener;
 
 protected:
-    QList<ContactPoint>     _contacts;
     b2Body*                 _ground;
 
 private:
@@ -36,7 +29,6 @@ public:
     virtual ~QBox2DWorld();
 
             void setSettings(float32 timeStep, int32 velIters, int32 posIters);
-    virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
             void destroyItem(QBox2DItem *item);
             void appendItem(QBox2DItem *item);
             void removeItem(QBox2DItem *item);
@@ -45,7 +37,6 @@ public:
 
 public slots:
     virtual void step();
-    virtual void handleContact(const ContactPoint &cp);
     virtual void handleKeyPressed(const int &key);
     virtual void handleKeyReleased(const int &key);
     virtual void populate() = 0;
@@ -55,7 +46,6 @@ public slots:
             QBox2DItem* createBox(const QPointF &pos);
 
 signals:
-            void contact(const ContactPoint &cp);
             void itemCreated(QBox2DItem *item);
             void itemDestroyed(QBox2DItem *item);
 
@@ -91,7 +81,5 @@ public:
     b2Vec2     _point;
     b2Fixture* _fixture;
 };
-
-
 
 #endif // WORLD_H

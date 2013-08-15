@@ -20,7 +20,8 @@ SOURCES += main.cpp\
            qscene.cpp \
            glscene.cpp \
            physicitem.cpp \
-           texture.cpp
+           texture.cpp \
+    contactlistener.cpp
 
 HEADERS += mainwindow.h \
            items.h \
@@ -34,7 +35,8 @@ HEADERS += mainwindow.h \
            qscene.h \
            glscene.h \
            physicitem.h \
-           texture.h
+           texture.h \
+    contactlistener.h
 
 FORMS   += mainwindow.ui
 

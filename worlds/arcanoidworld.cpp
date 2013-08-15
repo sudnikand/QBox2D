@@ -1,15 +1,18 @@
 #include "arcanoidworld.h"
 
 ArcanoidWorld::ArcanoidWorld(QObject *parent) : QBox2DWorld(parent) {
+    _contactListener = new QBox2DContactListener();
+    _world->SetContactListener(_contactListener);
+}
 
+ArcanoidWorld::~ArcanoidWorld() {
+    delete _contactListener;
+    _contactListener = NULL;
+    qDebug() << "Deleting arcanoid world";
 }
 
 void ArcanoidWorld::step(){
     QBox2DWorld::step();
-
-    if (_contacts.size() == 0) {
-        return;
-    }
 
     b2Vec2 velocity = _ball->body()->GetLinearVelocity();
     float32 speed = velocity.Length();
@@ -26,6 +29,11 @@ void ArcanoidWorld::step(){
          }
      }
 
+    QList<ContactPoint> &_contacts = _contactListener->_contacts;
+
+    if (_contacts.size() == 0) {
+        return;
+    }
     QSet<QBox2DItem*> destroyItems;
     for(int i = 0; i < _contacts.size() ; ++i){
         ContactPoint cp = _contacts.at(i);
@@ -49,6 +57,7 @@ void ArcanoidWorld::step(){
         QBox2DItem *item = i.next();
         destroyItem(item);
     }
+
 }
 
 void ArcanoidWorld::populate() {

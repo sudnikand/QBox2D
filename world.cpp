@@ -4,7 +4,7 @@
 QBox2DWorld::QBox2DWorld(QObject* parent): QObject(parent),
     _mouseJoint(NULL) {
     _world = new b2World(b2Vec2(0,0));
-    _world->SetContactListener(this);
+
     b2BodyDef bd;
     _ground = _world->CreateBody(&bd);
 }
@@ -12,6 +12,7 @@ QBox2DWorld::QBox2DWorld(QObject* parent): QObject(parent),
 QBox2DWorld::~QBox2DWorld() {
     delete _world;
     _world = NULL;
+    qDebug() << "Deleting base world";
 }
 
 void QBox2DWorld::parseXML(const QDomElement &root){
@@ -74,7 +75,7 @@ void QBox2DWorld::parseXML(const QDomElement &root){
                     item->setShape(shape);
                 } else if (geometry.attribute("type") == "circle"){
                     b2CircleShape circle;
-                    circle.m_radius = geometry.attribute("radius").toFloat();
+                    circle.m_radius = WSCALE(geometry.attribute("radius").toFloat());
                     item->setShape(circle);
                 }
             }
@@ -179,15 +180,7 @@ void QBox2DWorld::handleKeyReleased(const int &key)
     Q_UNUSED(key);
 }
 
-void handleContact(const ContactPoint &cp)
-{
-    Q_UNUSED(cp);
-}
-
 void QBox2DWorld::step(){
-    _contacts.clear();
-
-
     for(b2Body *body = _world->GetBodyList(); body; body = body->GetNext()) {
         if (body->GetUserData() != NULL) {
             QBox2DItem *item = static_cast<QBox2DItem*>(body->GetUserData());
@@ -262,34 +255,6 @@ void QBox2DWorld::moveItem(const QPointF &p){
 // move item to world coordinate
     if(_mouseJoint){
         _mouseJoint->SetTarget(b2Vec2( p.x(), p.y() ));
-    }
-}
-
-void QBox2DWorld::handleContact(const ContactPoint &cp){
-    Q_UNUSED(cp);
-}
-
-void QBox2DWorld::PreSolve(b2Contact* contact, const b2Manifold* oldManifold){
-    const b2Manifold* manifold = contact->GetManifold();
-
-    if (manifold->pointCount == 0){
-        return;
-    }
-
-    b2PointState state1[b2_maxManifoldPoints], state2[b2_maxManifoldPoints];
-    b2GetPointStates(state1, state2, oldManifold, manifold);
-
-    b2WorldManifold worldManifold;
-    contact->GetWorldManifold(&worldManifold);
-
-    for (int i = 0; i < manifold->pointCount && _contacts.size() < 1000; ++i){
-        ContactPoint cp;
-        cp.itemA = static_cast<QBox2DItem*>(contact->GetFixtureA()->GetBody()->GetUserData());
-        cp.itemB = static_cast<QBox2DItem*>(contact->GetFixtureB()->GetBody()->GetUserData());
-        cp.position = worldManifold.points[i];
-        cp.normal = worldManifold.normal;
-        cp.state = state2[i];
-        _contacts.append(cp);
     }
 }
 

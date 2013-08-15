@@ -11,7 +11,6 @@ private:
 public:
     TestWorld(QObject* parent = 0);
     void populate();
-    void handleContact(const ContactPoint &cp);
     void step();
 };
 #endif // TESTWORLD_H

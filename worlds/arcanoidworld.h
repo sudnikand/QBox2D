@@ -13,6 +13,7 @@ private:
 
 public:
     ArcanoidWorld(QObject* parent = 0);
+    virtual ~ArcanoidWorld();
     void populate();
     void createBall(float32 radius);
     void createBall();
