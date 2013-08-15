@@ -11,6 +11,21 @@ void ArcanoidWorld::step(){
         return;
     }
 
+    b2Vec2 velocity = _ball->body()->GetLinearVelocity();
+    float32 speed = velocity.Length();
+    float32 maxSpeed = 50;
+
+     if (speed > maxSpeed) {
+         qDebug() << "Damping speed: " << speed;
+         _ball->body()->SetLinearDamping(0.5);
+     } else if (speed <= maxSpeed) {
+         _ball->body()->SetLinearDamping(0.0);
+         if (speed < 10){
+             qDebug() << "Speed up: " << speed;
+             _ball->body()->ApplyLinearImpulse(b2Vec2(10,-30), _ball->body()->GetWorldCenter(),true);
+         }
+     }
+
     QSet<QBox2DItem*> destroyItems;
     for(int i = 0; i < _contacts.size() ; ++i){
         ContactPoint cp = _contacts.at(i);
@@ -40,6 +55,7 @@ void ArcanoidWorld::populate() {
     qDebug()<< "Starting Arcanoid World";
 
     loadWorld("data/levels/room.xml");
+    _world->SetGravity(b2Vec2(0,0));
 
     float32 fieldSize = 200;
     QColor gray = QColor(128, 128, 128);
@@ -61,9 +77,9 @@ void ArcanoidWorld::populate() {
     _paddle = new QBox2DItem();
     _paddle->setPos(b2Vec2(WSCALE2(0, fieldSize)));
     _paddle->setBodyType(b2_dynamicBody);
-    _paddle->setFriction(1.0f);
-    _paddle->setDensity(1.0f);
-    _paddle->setRestitution(1.1f);
+    _paddle->setFriction(0.4f);
+    _paddle->setDensity(10.0f);
+    _paddle->setRestitution(0.1f);
     _paddle->createBody(_world);
     shape.SetAsBox(WSCALE2(50,5));
     _paddle->setShape(shape);
@@ -77,8 +93,8 @@ void ArcanoidWorld::populate() {
     b2Vec2 axis(1.0f, 0.0f);
 
     horJointDef.Initialize(horItem->body(), _ground, b2Vec2(0,0), axis);
-    horJointDef.lowerTranslation = -2.96f;
-    horJointDef.upperTranslation = 2.96f;
+    horJointDef.lowerTranslation = WSCALE(-fieldSize);
+    horJointDef.upperTranslation = WSCALE(fieldSize);
     horJointDef.enableLimit = true;
     _world->CreateJoint(&horJointDef);
 
@@ -87,7 +103,7 @@ void ArcanoidWorld::populate() {
 
     vertJointDef.Initialize(_paddle->body(), horItem->body(), b2Vec2(0,0), axis);
     vertJointDef.lowerTranslation = 0.0f;
-    vertJointDef.upperTranslation = 0.5f;
+    vertJointDef.upperTranslation = WSCALE(20.0f);
     vertJointDef.enableLimit = true;
     _world->CreateJoint(&vertJointDef);
 
@@ -101,8 +117,8 @@ void ArcanoidWorld::populate() {
             int xPos = i * xStep - fieldSize + brickWidth;
             int yPos = j * yStep - fieldSize + brickWidth;
             brick->setPos(b2Vec2(WSCALE2(xPos,yPos)));
-            brick->setRestitution(1.0f);
-            brick->setDensity(1.0f);
+            brick->setRestitution(0.1f);
+            brick->setDensity(10.0f);
             brick->setBodyType(b2_dynamicBody);
             brick->createBody(_world);
             b2PolygonShape brickShape;
@@ -161,9 +177,9 @@ void ArcanoidWorld::createBall(float32 radius){
     QBox2DItem *ball = new QBox2DItem();
     ball->setBodyType(b2_dynamicBody);
     ball->setPos(b2Vec2(WSCALE2(0, 100)));
-    ball->setFriction(1.0f);
+    ball->setFriction(0.f);
     ball->setDensity(1.0f);
-    ball->setRestitution(1.0f);
+    ball->setRestitution(1.1f);
     ball->createBody(_world);
 
     b2CircleShape circle;
@@ -173,10 +189,12 @@ void ArcanoidWorld::createBall(float32 radius){
     ball->body()->SetUserData(ball);
     ball->body()->SetBullet(true);
     ball->_textureName = "ball.png";
+    ball->setName("ball");
     appendItem(ball);
     _ball = ball;
+    _ball->body()->ApplyLinearImpulse(b2Vec2(10,30), _ball->body()->GetWorldCenter(),true);
 }
 
 void ArcanoidWorld::createBall() {
-    createBall(WSCALE(5));
+    createBall(WSCALE(7));
 }
