@@ -4,30 +4,36 @@
   <gravity direction='0' strength='10' />
     <objects>
       <object bodyType='static'>
-        <position x='0' y='0' />
+        <position x='0' y='50' />
+        <geometry type='box' width='50' height='50' />
+        <texture>grass.png</texture>
+      </object>
+      <object bodyType='static'>
+        <position x='0' y='-25' />
         <geometry type='box' width='50' height='1' />
         <texture>grass.png</texture>
       </object>
       <object bodyType='static'>
-        <position x='0' y='-50' />
+        <position x='-25' y='0' rotation='90' />
         <geometry type='box' width='50' height='1' />
         <texture>grass.png</texture>
       </object>
       <object bodyType='static'>
-        <position x='-25' y='-25' rotation='90' />
-        <geometry type='box' width='50' height='1' />
-        <texture>grass.png</texture>
-      </object>
-      <object bodyType='static'>
-        <position x='25' y='-25' rotation='90' />
+        <position x='25' y='0' rotation='90' />
         <geometry type='box' width='50' height='1' />
         <texture>grass.png</texture>
       </object>
       <object bodyType='dynamic' name='box_1'>
         <position x='-10' y='-15' />
         <physic density="1" friction="1" restitution="0.2" />
-        <geometry type='box' width='3' height='2' />
-        <texture>kde.png</texture>
+        <geometry type='box' width='4' height='4' />
+        <texture>exit.png</texture>
+      </object>
+      <object bodyType='dynamic' name='box_2'>
+        <position x='-5' y='-15' />
+        <physic density="1" friction="1" restitution="0.2" />
+        <geometry type='box' width='4' height='4' />
+        <texture>exit.png</texture>
       </object>
       <object bodyType='dynamic' name='ball_1'>
         <position x='0' y='-15' />
