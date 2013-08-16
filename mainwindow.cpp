@@ -73,11 +73,9 @@ void MainWindow::createWorld(){
 
     connect(timer,SIGNAL(timeout()),world,SLOT(step()));
     qDebug()<<"Connect timer with World";
-    timer->start();
 }
 
 void MainWindow::deleteWorld(){
-    timer->stop();
     glscene->clear();
     world->disconnect();
     delete world;
@@ -93,9 +91,12 @@ void MainWindow::deleteGLScene(){
 void MainWindow::startGame(){
     createWorld();
     createGLScene();
+    timer->start();
 }
 
 void MainWindow::restartGame(){
+    timer->disconnect();
+    timer->stop();
     deleteWorld();
     deleteGLScene();
     startGame();
