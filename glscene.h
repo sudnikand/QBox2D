@@ -13,26 +13,14 @@ class GLScene : public QGLWidget
 public:
     GLScene(QWidget *parent=0);
     virtual ~GLScene();
-    void clear() { _glitems.clear(); }
-    QPointF mapToScene(const QPointF &p);
-    QVector4D unproject(const QVector3D &screen);
-    QSize sizeHint() const;
 
 public slots:
     void updateGL();
-    void addItem(QBox2DItem *item)    {
-        _glitems << item;
-        if (!item->_textureName.isNull()) {
-            if (!_textures.contains(item->_textureName)) {
-                qDebug() << "Loading texture: " << item->_textureName;
-                _textures.insert(item->_textureName, bindTexture(QPixmap("data/textures/" + item->_textureName), GL_TEXTURE_2D));
-            }
-        }
-    }
-    void removeItem(QBox2DItem *item) { _glitems.removeOne(item); }
-    void scale(qreal s)               { _scale *= s; }
-    void zoomIn()                     { _scale *= 1.1; }
-    void zoomOut()                    { _scale *= 0.9; }
+    void addItem(QBox2DItem *item);
+    void removeItem(QBox2DItem *item);
+    void zoomIn();
+    void zoomOut();
+    void clear();
 
 protected:
     void initializeGL();
@@ -44,6 +32,9 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
+    QPointF mapToScene(const QPointF &p);
+    QVector4D unproject(const QVector3D &screen);
+    QSize sizeHint() const;
 
 signals:
     void mouseRightButtonPressed(const QPointF&);

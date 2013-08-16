@@ -165,3 +165,17 @@ void GLScene::keyReleaseEvent(QKeyEvent *event) {
 QSize GLScene::sizeHint() const {
     return QSize(640,480);
 }
+
+void GLScene::addItem(QBox2DItem *item)    {
+    _glitems << item;
+    if (!item->_textureName.isNull()) {
+        if (!_textures.contains(item->_textureName)) {
+            qDebug() << "Loading texture: " << item->_textureName;
+            _textures.insert(item->_textureName, bindTexture(QPixmap("data/textures/" + item->_textureName), GL_TEXTURE_2D));
+        }
+    }
+}
+void GLScene::removeItem(QBox2DItem *item) { _glitems.removeOne(item); }
+void GLScene::zoomIn()                     { _scale *= 1.1; }
+void GLScene::zoomOut()                    { _scale *= 0.9; }
+void GLScene::clear()                      { _glitems.clear(); }
