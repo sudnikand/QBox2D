@@ -7,6 +7,7 @@ QBox2DWorld::QBox2DWorld(QObject* parent): QObject(parent),
 
     b2BodyDef bd;
     _ground = _world->CreateBody(&bd);
+    qDebug() << "Base world created";
 }
 
 QBox2DWorld::~QBox2DWorld() {

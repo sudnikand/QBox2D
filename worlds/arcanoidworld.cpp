@@ -3,6 +3,7 @@
 ArcanoidWorld::ArcanoidWorld(QObject *parent) : QBox2DWorld(parent) {
     _contactListener = new QBox2DContactListener();
     _world->SetContactListener(_contactListener);
+    qDebug()<< "Arcanoid world created";
 }
 
 ArcanoidWorld::~ArcanoidWorld() {
