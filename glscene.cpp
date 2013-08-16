@@ -8,7 +8,7 @@ GLScene::GLScene(QWidget *parent) : QGLWidget(parent)
     _alpha = 0;
     _beta = 0;
     _distance = 1000;
-    _scale = 1.0 / WORLD_SCALE_FACTOR;
+    _scale = 20.0 / WORLD_SCALE_FACTOR;
 }
 
 GLScene::~GLScene()

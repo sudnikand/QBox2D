@@ -201,7 +201,7 @@ QBox2DItem* QBox2DWorld::createBox(const QPointF& pos) {
     box->setPos(b2Vec2(pos.x(), pos.y()));
     box->createBody(_world);
 
-    float32 l = WSCALE(10.0f);
+    float32 l = WSCALE(5.0f);
     b2PolygonShape rect;
     rect.SetAsBox(l/2,l/2);
     box->setShape(rect);
