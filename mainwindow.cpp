@@ -8,12 +8,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     timer = new QTimer(this);
+    timer->setInterval(1000/60);
 
-    createWorld();
-    createGLScene();
-    //createQScene();
+    startGame();
 
-    timer->start(1000/60);
 }
 
 void MainWindow::createGLScene(){
@@ -35,6 +33,7 @@ void MainWindow::createGLScene(){
 
     connect(world,SIGNAL(itemCreated(QBox2DItem*)),  glscene,SLOT(addItem(QBox2DItem*)));
     connect(world,SIGNAL(itemDestroyed(QBox2DItem*)),glscene,SLOT(removeItem(QBox2DItem*)));
+    connect(world,SIGNAL(gameFinished()), this, SLOT(restartGame()));
     connect(glscene,SIGNAL(initialized()),world,SLOT(populate()));
 }
 
@@ -68,11 +67,38 @@ void MainWindow::createQScene(){
 void MainWindow::createWorld(){
     qDebug()<<"Creating World";
     //world = new TestWorld(this);
-    world = new ExampleWorld(this);
-    //world = new ArcanoidWorld(this);
+    //world = new ExampleWorld(this);
+    world = new ArcanoidWorld(this);
     world->setSettings(1.0f / 60.0f, 10, 10);
 
     connect(timer,SIGNAL(timeout()),world,SLOT(step()));
+    qDebug()<<"Connect timer with World";
+    timer->start();
+}
+
+void MainWindow::deleteWorld(){
+    timer->stop();
+    glscene->clear();
+    world->disconnect();
+    delete world;
+    world = NULL;
+}
+
+void MainWindow::deleteGLScene(){
+    glscene->disconnect();
+    delete glscene;
+    glscene = NULL;
+}
+
+void MainWindow::startGame(){
+    createWorld();
+    createGLScene();
+}
+
+void MainWindow::restartGame(){
+    deleteWorld();
+    deleteGLScene();
+    startGame();
 }
 
 MainWindow::~MainWindow(){

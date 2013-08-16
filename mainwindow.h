@@ -20,9 +20,14 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
     void createWorld();
+    void deleteWorld();
     void createGLScene();
+    void deleteGLScene();
     void createQScene();
+    void startGame();
+    void restartGame();
 
 private:
     Ui::MainWindow *ui;
