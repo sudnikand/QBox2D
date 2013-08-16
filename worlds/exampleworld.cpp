@@ -11,25 +11,26 @@ void ExampleWorld::populate(){
     //add falling boxes
     for (int i = 0; i < 10; ++i) {
         QBox2DItem *box = new QBox2DItem();
-        box->setPos(b2Vec2(WSCALE2((qrand() % 20)-10.0f, -15.0f)));
+        box->setPos(b2Vec2(WSCALE2((qrand() % 10 - 5), -15.0f)));
         box->setBodyType(b2_dynamicBody);
         box->setFriction(0.9f);
         box->setDensity(1.0f);
         box->setRestitution(0.5f);
         box->setRotation(qrand() % 360);
         box->createBody(_world);
-        float32 size = WSCALE(((qrand() % 40)+10.0f)/50);
+        float32 size = WSCALE(((qrand() % 30)+30.0f)/40);
         b2PolygonShape rect;
         rect.SetAsBox(size,size);
         box->setShape(rect);
         box->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
         box->_textureName = "exit.png";
+        box->body()->SetUserData(box);
         appendItem(box);
     }
 
     // add triangles
     for (int i = 0; i < 10; ++i) {
-        float32 size = WSCALE(((qrand() % 40) + 10.0f)/40);
+        float32 size = WSCALE(((qrand() % 30) + 10.0f)/20);
         QBox2DItem *testItem = new QBox2DItem();
 
         testItem->setPos(b2Vec2(WSCALE2(qrand() % 20 - 10.0f, -15.0f)));
@@ -45,6 +46,7 @@ void ExampleWorld::populate(){
         testItem->setShape(shape);
         testItem->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
         testItem->_textureName = "kde.png";
+        testItem->body()->SetUserData(testItem);
         appendItem(testItem);
     }
 
