@@ -11,7 +11,7 @@ class GLScene : public QGLWidget
    Q_OBJECT
 
 public:
-    GLScene(QWidget *parent=0);
+    explicit GLScene(QWidget *parent=0);
     virtual ~GLScene();
 
 public slots:

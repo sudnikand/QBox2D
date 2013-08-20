@@ -37,7 +37,6 @@ void GLScene::initializeGL(){
     shaderProgram.link();
 
     emit initialized();
-    qDebug() << "GL Scene initialized";
 }
 
 void GLScene::resizeGL(int width, int height)
@@ -168,7 +167,6 @@ QSize GLScene::sizeHint() const {
 }
 
 void GLScene::addItem(QBox2DItem *item)    {
-    qDebug() << "Add item: " << item->name();
     _glitems << item;
     if (!item->_textureName.isNull()) {
         if (!_textures.contains(item->_textureName)) {
@@ -177,10 +175,7 @@ void GLScene::addItem(QBox2DItem *item)    {
         }
     }
 }
-void GLScene::removeItem(QBox2DItem *item) {
-    qDebug() << "Remove item: " << item->name();
-    _glitems.removeOne(item);
-}
+void GLScene::removeItem(QBox2DItem *item) { _glitems.removeOne(item); }
 void GLScene::zoomIn()                     { _scale *= 1.1; }
 void GLScene::zoomOut()                    { _scale *= 0.9; }
 void GLScene::clear()                      { _glitems.clear(); }

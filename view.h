@@ -7,7 +7,7 @@ class QBox2DView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    QBox2DView(QWidget *parent = 0);
+    explicit QBox2DView(QWidget *parent = 0);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
