@@ -36,3 +36,33 @@ void QBox2DItem::update(){
     graphics()->setPos(position().x,position().y);
     graphics()->setRotation(RAD2ANG(rotation()));
 }
+
+QAbstractGraphicsShapeItem* QBox2DItem::graphics() const { return _graphics; }
+QVector<QVector3D>          QBox2DItem::vertices() const { return _vertices; }
+const QColor QBox2DItem::color() const { return _color; }
+const QString QBox2DItem::name() const { return _name; }
+const QString QBox2DItem::textureName() const { return _textureName; }
+const QMatrix4x4 QBox2DItem::modelMatrix() const { return _mMatrix; }
+
+
+void QBox2DItem::setGraphics(QAbstractGraphicsShapeItem* gi) {
+    if(_graphics) {
+        delete _graphics;
+    }
+    _graphics = gi;
+}
+
+void QBox2DItem::setColor(const QColor &c) {
+    _color = c;
+    if (graphics()) {
+        graphics()->setBrush(c);
+    }
+}
+
+void QBox2DItem::setName(const QString &name){
+    _name = name;
+}
+
+void QBox2DItem::setTextureName(const QString &textureName){
+    _textureName = textureName;
+}

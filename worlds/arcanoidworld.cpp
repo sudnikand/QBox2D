@@ -3,6 +3,7 @@
 ArcanoidWorld::ArcanoidWorld(QObject *parent) : QBox2DWorld(parent) {
     _contactListener = new QBox2DContactListener();
     _world->SetContactListener(_contactListener);
+    qDebug()<< "Arcanoid world created";
 }
 
 ArcanoidWorld::~ArcanoidWorld() {
@@ -25,7 +26,7 @@ void ArcanoidWorld::step(){
          _ball->body()->SetLinearDamping(0.0);
          if (speed < 10){
              qDebug() << "Speed up: " << speed;
-             _ball->body()->ApplyLinearImpulse(b2Vec2(10,-30), _ball->body()->GetWorldCenter(),true);
+             _ball->body()->ApplyLinearImpulse(b2Vec2(0,-30), _ball->body()->GetWorldCenter(),true);
          }
      }
 
@@ -99,7 +100,7 @@ void ArcanoidWorld::populate() {
     _paddle->setUserData(_paddle);
     _paddle->body()->SetLinearDamping(10.0f);
     _paddle->setColor(gray);
-    _paddle->_textureName = "kde.png";
+    _paddle->setTextureName("kde.png");
     appendItem(_paddle);
 
     b2PrismaticJointDef horJointDef;
@@ -140,7 +141,7 @@ void ArcanoidWorld::populate() {
             brick->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
             brick->body()->SetUserData(brick);
             brick->setName("brick");
-            brick->_textureName = "exit.png";
+            brick->setTextureName("exit.png");
             appendItem(brick);
 
             b2RevoluteJointDef jointDef;
@@ -202,11 +203,11 @@ void ArcanoidWorld::createBall(float32 radius){
     ball->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
     ball->body()->SetUserData(ball);
     ball->body()->SetBullet(true);
-    ball->_textureName = "ball.png";
+    ball->setTextureName("ball.png");
     ball->setName("ball");
     appendItem(ball);
     _ball = ball;
-    _ball->body()->ApplyLinearImpulse(b2Vec2(10,30), _ball->body()->GetWorldCenter(),true);
+    _ball->body()->ApplyLinearImpulse(b2Vec2(0,30), _ball->body()->GetWorldCenter(),true);
 }
 
 void ArcanoidWorld::createBall() {

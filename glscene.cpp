@@ -37,6 +37,7 @@ void GLScene::initializeGL(){
     shaderProgram.link();
 
     emit initialized();
+    qDebug() << "GL Scene initialized";
 }
 
 void GLScene::resizeGL(int width, int height)
@@ -77,19 +78,19 @@ void GLScene::paintGL() {
     QListIterator<QBox2DItem*> i(_glitems);
     while(i.hasNext()){
         QBox2DItem *item = i.next();
-        shaderProgram.setUniformValue("modelMatrix", item->_mMatrix);
+        shaderProgram.setUniformValue("modelMatrix", item->modelMatrix());
         shaderProgram.setUniformValue("viewMatrix", vMatrix);
         shaderProgram.setUniformValue("projMatrix", pMatrix);
         shaderProgram.setUniformValue("texture", 0);
-        glBindTexture(GL_TEXTURE_2D, _textures.value(item->_textureName));
+        glBindTexture(GL_TEXTURE_2D, _textures.value(item->textureName()));
         //shaderProgram.setUniformValue("color", item->color());
-        shaderProgram.setAttributeArray("vertex", item->_vertices.constData());
+        shaderProgram.setAttributeArray("vertex", item->vertices().constData());
         shaderProgram.enableAttributeArray("vertex");
 
         shaderProgram.setAttributeArray("textureCoordinate", textureCoordinates.constData());
         shaderProgram.enableAttributeArray("textureCoordinate");
 
-        glDrawArrays(GL_TRIANGLE_FAN, 0, item->_vertices.size());
+        glDrawArrays(GL_TRIANGLE_FAN, 0, item->vertices().size());
         shaderProgram.disableAttributeArray("vertex");
     }
     shaderProgram.release();
@@ -167,15 +168,19 @@ QSize GLScene::sizeHint() const {
 }
 
 void GLScene::addItem(QBox2DItem *item)    {
+    qDebug() << "Add item: " << item->name();
     _glitems << item;
-    if (!item->_textureName.isNull()) {
-        if (!_textures.contains(item->_textureName)) {
-            qDebug() << "Loading texture: " << item->_textureName;
-            _textures.insert(item->_textureName, bindTexture(QPixmap("data/textures/" + item->_textureName), GL_TEXTURE_2D));
+    if (!item->textureName().isNull()) {
+        if (!_textures.contains(item->textureName())) {
+            qDebug() << "Loading texture: " << item->textureName();
+            _textures.insert(item->textureName(), bindTexture(QPixmap("data/textures/" + item->textureName()), GL_TEXTURE_2D));
         }
     }
 }
-void GLScene::removeItem(QBox2DItem *item) { _glitems.removeOne(item); }
+void GLScene::removeItem(QBox2DItem *item) {
+    qDebug() << "Remove item: " << item->name();
+    _glitems.removeOne(item);
+}
 void GLScene::zoomIn()                     { _scale *= 1.1; }
 void GLScene::zoomOut()                    { _scale *= 0.9; }
 void GLScene::clear()                      { _glitems.clear(); }

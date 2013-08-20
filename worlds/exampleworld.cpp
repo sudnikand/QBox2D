@@ -23,7 +23,7 @@ void ExampleWorld::populate(){
         rect.SetAsBox(size,size);
         box->setShape(rect);
         box->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
-        box->_textureName = "exit.png";
+        box->setTextureName("exit.png");
         box->body()->SetUserData(box);
         appendItem(box);
     }
@@ -45,7 +45,7 @@ void ExampleWorld::populate(){
         shape.Set(&vertex.toStdVector().at(0),vertex.size());
         testItem->setShape(shape);
         testItem->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
-        testItem->_textureName = "kde.png";
+        testItem->setTextureName("kde.png");
         testItem->body()->SetUserData(testItem);
         appendItem(testItem);
     }
@@ -68,9 +68,9 @@ void ExampleWorld::populate(){
         ball->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
         ball->body()->SetUserData(ball);
         if (qrand() % 2) {
-            ball->_textureName = "face-smile.png";
+            ball->setTextureName("face-smile.png");
         } else {
-            ball->_textureName = "face-surprise.png";
+            ball->setTextureName("face-surprise.png");
         }
         appendItem(ball);
     }

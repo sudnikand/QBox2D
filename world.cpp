@@ -7,6 +7,7 @@ QBox2DWorld::QBox2DWorld(QObject* parent): QObject(parent),
 
     b2BodyDef bd;
     _ground = _world->CreateBody(&bd);
+    qDebug() << "Base world created";
 }
 
 QBox2DWorld::~QBox2DWorld() {
@@ -90,7 +91,7 @@ void QBox2DWorld::parseXML(const QDomElement &root){
             {
                 QDomElement texture = object.firstChildElement("texture");
                 if (!texture.isNull()){
-                    item->_textureName = texture.text();
+                    item->setTextureName(texture.text());
                 }
             }
 
@@ -206,7 +207,7 @@ QBox2DItem* QBox2DWorld::createBox(const QPointF& pos) {
     rect.SetAsBox(l/2,l/2);
     box->setShape(rect);
     box->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
-    box->_textureName = "kde.png";
+    box->setTextureName("kde.png");
     box->body()->SetUserData(box);
     appendItem(box);
     qDebug() << "Box created";
