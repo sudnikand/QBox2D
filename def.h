@@ -7,7 +7,7 @@
 #define ANG2RAD( a ) ( ( (a) * PI ) / 180.0f )
 #define RAD2ANG( a ) ( ( (a) * 180.0f ) / PI )
 
-#define WORLD_SCALE_FACTOR 0.1f
+#define WORLD_SCALE_FACTOR 1
 
 static qreal WSCALE( const qreal &x ) {
     return x * WORLD_SCALE_FACTOR;
