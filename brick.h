@@ -7,10 +7,12 @@ class Brick : public QBox2DItem
 {
 public:
     Brick();
+    int handleContact();
+    void setDurability(const int&);
        
 private:
-    int _maxDamage;
-    int _currentDamage;
+    int _durability;
+    QVector<QString> _textures;
 };
 
 #endif // BRICK_H
