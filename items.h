@@ -16,6 +16,8 @@ public:
 
     virtual ~QBox2DItem() { if(_graphics) delete _graphics; }
 
+    virtual int handleContact();
+
     void setGraphics(QAbstractGraphicsShapeItem* gi);
     void setColor(const QColor &c);
     void setName(const QString &name);

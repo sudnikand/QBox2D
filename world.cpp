@@ -267,17 +267,13 @@ void QBox2DWorld::destroyItem(QBox2DItem *item)
     }
 
     _world->DestroyBody(item->body());
-    removeItem(item);
+    emit itemDestroyed(item);
     delete item;
     item = NULL;
 }
 
 void QBox2DWorld::appendItem(QBox2DItem *item){
     emit itemCreated(item);
-}
-
-void QBox2DWorld::removeItem(QBox2DItem *item){
-    emit itemDestroyed(item);
 }
 
 QBox2DItem* QBox2DWorld::findItem(const QString &itemName){

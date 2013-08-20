@@ -66,3 +66,8 @@ void QBox2DItem::setName(const QString &name){
 void QBox2DItem::setTextureName(const QString &textureName){
     _textureName = textureName;
 }
+
+int QBox2DItem::handleContact() {
+    int durability = bodyType() == b2_dynamicBody ? -1 : 0;
+    return durability;
+}

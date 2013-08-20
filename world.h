@@ -31,7 +31,6 @@ public:
             void setSettings(float32 timeStep, int32 velIters, int32 posIters);
             void destroyItem(QBox2DItem *item);
             void appendItem(QBox2DItem *item);
-            void removeItem(QBox2DItem *item);
             void loadWorld(const QString &filename);
      QBox2DItem* findItem(const QString &itemName);
 
