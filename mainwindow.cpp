@@ -1,6 +1,9 @@
+#include <phonon/MediaObject>
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include "qscene.h"
+#include "view.h"
+#include "worlds.h"
+#include "glscene.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,9 +20,9 @@ MainWindow::MainWindow(QWidget *parent) :
                                   Phonon::MediaSource("data/sounds/hit.wav"));
 
     connect(_sound,SIGNAL(finished()),this,SLOT(setSoundSource()));
+    connect(_music,SIGNAL(aboutToFinish()),this,SLOT(replayMusic()));
+
     startGame();
-
-
 }
 
 void MainWindow::createGLScene(){
@@ -51,7 +54,7 @@ void MainWindow::createQScene(){
     //scene->setBackgroundBrush(Qt::white);
     //scene->setStickyFocus(false);
 
-    view = new QBox2DView(ui->frameR);
+    QBox2DView *view = new QBox2DView(ui->frameR);
     view->setScene(scene);
     //view->fitInView(QRectF(0,0,100,100),Qt::KeepAspectRatioByExpanding);
     ui->frameR->layout()->addWidget(view);
@@ -122,6 +125,10 @@ MainWindow::~MainWindow(){
 
 void MainWindow::setSoundSource(){
     _sound->setCurrentSource(Phonon::MediaSource("data/sounds/hit.wav"));
+}
+
+void MainWindow::replayMusic(){
+    _music->enqueue(Phonon::MediaSource("data/sounds/lullaby.ogg"));
 }
 
 void MainWindow::playSound(){
