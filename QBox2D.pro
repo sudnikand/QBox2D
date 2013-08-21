@@ -53,6 +53,7 @@ OTHER_FILES += \
     data/levels/motors.xml \
     data/levels/test.xml \
     data/levels/box.xml \
+    data/levels/arcanoid_01.xml \
     data/shaders/texture.vsh \
     data/shaders/sqare.vsh \
     data/shaders/sqare.fsh \
