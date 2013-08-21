@@ -73,6 +73,7 @@ void ArcanoidWorld::populate() {
 
     _bound = findItem("bound");
     _ball = findItem("ball");
+    _ball->body()->SetBullet(true);
     _paddle = findItem("paddle");
 
     QBox2DItem* horItem = new QBox2DItem();
@@ -99,7 +100,7 @@ void ArcanoidWorld::populate() {
 
     vertJointDef.Initialize(_paddle->body(), horItem->body(), b2Vec2(0,0), axis);
     vertJointDef.lowerTranslation = 0.0f;
-    vertJointDef.upperTranslation = WSCALE(fieldSize/10);
+    vertJointDef.upperTranslation = WSCALE(fieldSize/20);
     vertJointDef.enableLimit = true;
     _world->CreateJoint(&vertJointDef);
 
@@ -191,7 +192,7 @@ void ArcanoidWorld::adjustBallSpeed() {
     float32 maxSpeed = WSCALE(20);
 
      if (speed > maxSpeed) {
-         qDebug() << "Damping speed: " << speed;
+         //qDebug() << "Damping speed: " << speed;
          _ball->body()->SetLinearDamping(0.4);
      } else if (speed <= maxSpeed) {
          _ball->body()->SetLinearDamping(0.0);
