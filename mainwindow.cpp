@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QGLWidget>
+#include "qscene.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,7 +10,15 @@ MainWindow::MainWindow(QWidget *parent) :
     timer = new QTimer(this);
     timer->setInterval(1000/60);
 
+    _music = Phonon::createPlayer(Phonon::MusicCategory,
+                                  Phonon::MediaSource("data/sounds/lullaby.ogg"));
+
+    _sound = Phonon::createPlayer(Phonon::MusicCategory,
+                                  Phonon::MediaSource("data/sounds/hit.wav"));
+
+    connect(_sound,SIGNAL(finished()),this,SLOT(setSoundSource()));
     startGame();
+
 
 }
 
@@ -38,7 +46,7 @@ void MainWindow::createGLScene(){
 }
 
 void MainWindow::createQScene(){
-    scene = new QScene(this);
+    QScene *scene = new QScene(this);
     //scene->setItemIndexMethod(QGraphicsScene::NoIndex);
     //scene->setBackgroundBrush(Qt::white);
     //scene->setStickyFocus(false);
@@ -71,8 +79,11 @@ void MainWindow::createWorld(){
     world = new ArcanoidWorld(this);
     world->setSettings(1.0f / 60.0f, 10, 10);
 
+    qDebug()<<"Connecting timer with World";
     connect(timer,SIGNAL(timeout()),world,SLOT(step()));
-    qDebug()<<"Connect timer with World";
+
+    qDebug()<<"Connecting world with sound";
+    connect(world,SIGNAL(hit()),this,SLOT(playSound()));
 }
 
 void MainWindow::deleteWorld(){
@@ -92,6 +103,7 @@ void MainWindow::startGame(){
     createWorld();
     createGLScene();
     timer->start();
+    _music->play();
 }
 
 void MainWindow::restartGame(){
@@ -106,4 +118,13 @@ MainWindow::~MainWindow(){
     delete timer;
     delete world;
     delete ui;
+}
+
+void MainWindow::setSoundSource(){
+    _sound->setCurrentSource(Phonon::MediaSource("data/sounds/hit.wav"));
+}
+
+void MainWindow::playSound(){
+    _sound->stop();
+    _sound->play();
 }
