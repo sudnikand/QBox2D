@@ -24,14 +24,6 @@ void GLScene::initializeGL(){
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-    glShadeModel(GL_SMOOTH);
-    glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
-    glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
-    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-    glEnable(GL_LINE_SMOOTH);
-    glEnable(GL_POINT_SMOOTH);
-    glEnable(GL_POLYGON_SMOOTH);
-
     shaderProgram.addShaderFromSourceFile(QGLShader::Vertex,"data/shaders/texture.vsh");
     shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/texture.fsh");
     shaderProgram.link();
@@ -168,7 +160,7 @@ QSize GLScene::sizeHint() const {
 }
 
 void GLScene::addItem(QBox2DItem *item)    {
-    qDebug() << "Add item: " << item->name();
+    //qDebug() << "Add item: " << item->name();
     _glitems << item;
     if (!item->textureName().isNull()) {
         if (!_textures.contains(item->textureName())) {
