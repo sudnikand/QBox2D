@@ -5,6 +5,7 @@
 
 class ArcanoidWorld : public QBox2DWorld
 {
+Q_OBJECT
 
 private:
     QBox2DItem*   _paddle;

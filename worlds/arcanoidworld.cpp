@@ -33,6 +33,8 @@ void ArcanoidWorld::step(){
 
         if (!item) continue;
 
+        emit hit();
+
         if (item == _paddle) continue;
         if (item == _bound) {
             float32 r = _ball->body()->GetFixtureList()->GetShape()->m_radius;
@@ -97,7 +99,7 @@ void ArcanoidWorld::populate() {
 
     vertJointDef.Initialize(_paddle->body(), horItem->body(), b2Vec2(0,0), axis);
     vertJointDef.lowerTranslation = 0.0f;
-    vertJointDef.upperTranslation = WSCALE(20.0f);
+    vertJointDef.upperTranslation = WSCALE(fieldSize/10);
     vertJointDef.enableLimit = true;
     _world->CreateJoint(&vertJointDef);
 
