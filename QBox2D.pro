@@ -1,4 +1,4 @@
-QT       += opengl core gui xml phonon
+QT       += opengl xml
 
 #CONFIG   += qt release warn_off
 CONFIG   += qt debug warn_on

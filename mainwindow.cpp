@@ -1,4 +1,3 @@
-#include <phonon/MediaObject>
 #include "mainwindow.h"
 #include "qscene.h"
 #include "view.h"
@@ -12,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     timer = new QTimer(this);
     timer->setInterval(1000/60);
-
+/*
     _music = Phonon::createPlayer(Phonon::MusicCategory,
                                   Phonon::MediaSource("data/sounds/lullaby.ogg"));
 
@@ -21,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(_sound,SIGNAL(finished()),this,SLOT(setSoundSource()));
     connect(_music,SIGNAL(aboutToFinish()),this,SLOT(replayMusic()));
-
+*/
     startGame();
 }
 
@@ -106,7 +105,7 @@ void MainWindow::startGame(){
     createWorld();
     createGLScene();
     timer->start();
-    _music->play();
+    //_music->play();
 }
 
 void MainWindow::restartGame(){
@@ -124,14 +123,14 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::setSoundSource(){
-    _sound->setCurrentSource(Phonon::MediaSource("data/sounds/hit.wav"));
+    //_sound->setCurrentSource(Phonon::MediaSource("data/sounds/hit.wav"));
 }
 
 void MainWindow::replayMusic(){
-    _music->enqueue(Phonon::MediaSource("data/sounds/lullaby.ogg"));
+    //_music->enqueue(Phonon::MediaSource("data/sounds/lullaby.ogg"));
 }
 
 void MainWindow::playSound(){
-    _sound->stop();
-    _sound->play();
+    //_sound->stop();
+    //_sound->play();
 }

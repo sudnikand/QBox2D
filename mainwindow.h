@@ -34,8 +34,8 @@ private:
     GLScene        *glscene;
     QTimer         *timer;
     QBox2DWorld    *world;
-    Phonon::MediaObject *_music;
-    Phonon::MediaObject *_sound;
+    //Phonon::MediaObject *_music;
+    //Phonon::MediaObject *_sound;
 };
 
 #endif // MAINWINDOW_H
