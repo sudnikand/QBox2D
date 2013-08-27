@@ -16,6 +16,8 @@ ArcanoidWorld::~ArcanoidWorld() {
 void ArcanoidWorld::step(){
     QBox2DWorld::step();
 
+    if (!_ball || !_paddle || !_bound) return;
+
     adjustBallSpeed();
 
     QList<ContactPoint> &_contacts = _contactListener->_contacts;
@@ -71,8 +73,9 @@ void ArcanoidWorld::populate() {
     QColor gray = QColor(128, 128, 128);
     b2PolygonShape shape;
 
-    _bound = findItem("bound");
-    _ball = findItem("ball");
+    _bound = findItem("bound"); if (!_bound) return;
+
+    _ball = findItem("ball"); if (!_ball) return;
     _ball->body()->SetBullet(true);
     _paddle = findItem("paddle");
 
