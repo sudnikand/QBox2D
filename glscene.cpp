@@ -7,8 +7,13 @@ GLScene::GLScene(QWidget *parent) : QGLWidget(parent)
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     _alpha = 0;
     _beta = 0;
-    _distance = 1000;
+    _distance = -50;
     _scale = 20.0 / WORLD_SCALE_FACTOR;
+
+    camera.setUpDirection(QVector3D(0, -1, 0));
+    camera.setPosition(QVector3D(0, 0, _distance));
+    //cameraTransformation.rotate(_alpha, 0, 1, 0);
+    //cameraTransformation.rotate(_beta, 1, 0, 0);
 }
 
 GLScene::~GLScene()
@@ -38,9 +43,9 @@ void GLScene::resizeGL(int width, int height)
         height = 1;
 }
 
-    pMatrix.setToIdentity();
+    camera.projMatrix_.setToIdentity();
+    camera.projMatrix_.ortho(-width, width, -height, height, 0.1, 100 );
     //pMatrix.perspective(90.0, (qreal)width/(qreal)height, 0.5f, 1000 );
-    pMatrix.ortho(-width, width, -height, height, 0.1, 1000 );
     //pMatrix.rotate(90, QVector3D(0,0,1));
     //pMatrix.translate(QVector3D(0,-25,0));
 
@@ -51,28 +56,20 @@ void GLScene::resizeGL(int width, int height)
 void GLScene::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    QMatrix4x4 cameraTransformation;
-    cameraTransformation.rotate(_alpha, 0, 1, 0);
-    cameraTransformation.rotate(_beta, 1, 0, 0);
-    QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, _distance);
-    QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, -1, 0);
-
-    vMatrix.setToIdentity();
-    vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
-    vMatrix.rotate(180, QVector3D(0,1,0));
-
-    vMatrix.scale(_scale);
+    camera.viewMatrix_.setToIdentity();
+    camera.lookAt(QVector3D(0, 0, 0));
+    camera.viewMatrix_.scale(_scale);
 
     QVector<QVector2D> textureCoordinates;
-    textureCoordinates << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) << QVector2D(1, 1) ;
+    textureCoordinates << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) << QVector2D(1, 1);
 
     shaderProgram.bind();
     QListIterator<QBox2DItem*> i(_glitems);
     while(i.hasNext()){
         QBox2DItem *item = i.next();
         shaderProgram.setUniformValue("modelMatrix", item->modelMatrix());
-        shaderProgram.setUniformValue("viewMatrix", vMatrix);
-        shaderProgram.setUniformValue("projMatrix", pMatrix);
+        shaderProgram.setUniformValue("viewMatrix", camera.viewMatrix_);
+        shaderProgram.setUniformValue("projMatrix", camera.projMatrix_);
         shaderProgram.setUniformValue("texture", 0);
         glBindTexture(GL_TEXTURE_2D, _textures.value(item->textureName()));
         //shaderProgram.setUniformValue("color", item->color());
@@ -101,7 +98,7 @@ QVector4D GLScene::unproject(const QVector3D & screen){
     const qreal xNorm = (2.0f * ((screen.x() - viewport[0]) / (viewport[2] - viewport[0]))) - 1.0f;
     const qreal yNorm = 1.0f - (2.0f * ((screen.y() - viewport[1]) / (viewport[3] - viewport[1])));
 
-    QMatrix4x4 pvMatrixInv = (pMatrix * vMatrix).inverted();
+    QMatrix4x4 pvMatrixInv = (camera.projMatrix_ * camera.viewMatrix_).inverted();
     QVector4D worldPoint = pvMatrixInv * QVector4D(xNorm, yNorm, screen.z(), 1);
 
     if (worldPoint.w() == 0){

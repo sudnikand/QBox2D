@@ -6,6 +6,29 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QKeyEvent>
 
+
+class GLCamera
+{
+public:
+    void setPosition(const QVector3D &position){
+        position_ = transformMatrix_ * position;
+    }
+
+    void setUpDirection(const QVector3D &upDirection){
+        upDirection_ = transformMatrix_ * upDirection;
+    }
+
+    void lookAt(const QVector3D &center){
+        viewMatrix_.lookAt(position_, center, upDirection_);
+    }
+
+    QMatrix4x4 projMatrix_;
+    QMatrix4x4 viewMatrix_;
+    QMatrix4x4 transformMatrix_;
+    QVector3D  position_;
+    QVector3D  upDirection_;
+};
+
 class GLScene : public QGLWidget
 {
    Q_OBJECT
@@ -50,12 +73,10 @@ private:
     QList<QBox2DItem*> _glitems;
     qreal              _scale;
 
-    QMatrix4x4 pMatrix;
-    QMatrix4x4 vMatrix;
     QGLShaderProgram shaderProgram;
     qreal _alpha, _beta, _distance;
     QHash<QString,GLuint> _textures;
+    GLCamera camera;
 };
 
-
-#endif // GLCANVAS_H
+#endif // GLSCENE_H
