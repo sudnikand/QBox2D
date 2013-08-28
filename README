@@ -2,7 +2,7 @@ Simple game engine for physics simulation.
 Used Box2D physics engine http://box2d.org/
 Modern OpenGL is using for grafics render.
 Qt for interface and other useful stuff.
-Phonon for playing music and sounds. 
+ 
 
 Steps for building Box2D:
 1. cd Box2D
