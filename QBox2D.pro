@@ -1,4 +1,4 @@
-QT       += opengl xml
+QT       += multimedia opengl xml
 
 #CONFIG   += qt release warn_off
 CONFIG   += qt debug warn_on

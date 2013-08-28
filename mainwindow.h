@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include "ui_mainwindow.h"
+#include <QSound>
+#include <QMediaPlayer>
 
 class QBox2DWorld;
 class GLScene;
@@ -25,17 +27,14 @@ public slots:
     void createQScene();
     void startGame();
     void restartGame();
-    void setSoundSource();
-    void replayMusic();
-    void playSound();
 
 private:
     Ui::MainWindow *ui;
     GLScene        *glscene;
     QTimer         *timer;
     QBox2DWorld    *world;
-    //Phonon::MediaObject *_music;
-    //Phonon::MediaObject *_sound;
+    QSound         *sound;
+    QMediaPlayer   *player;
 };
 
 #endif // MAINWINDOW_H

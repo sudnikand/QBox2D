@@ -11,16 +11,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     timer = new QTimer(this);
     timer->setInterval(1000/60);
-/*
-    _music = Phonon::createPlayer(Phonon::MusicCategory,
-                                  Phonon::MediaSource("data/sounds/lullaby.ogg"));
+    sound = new QSound("data/sounds/balloon.wav",this);
+    sound->play();
 
-    _sound = Phonon::createPlayer(Phonon::MusicCategory,
-                                  Phonon::MediaSource("data/sounds/hit.wav"));
+    player = new QMediaPlayer(this);
+    player->setMedia(QUrl::fromLocalFile("data/sounds/lullaby.ogg"));
+    player->setVolume(90);
+    player->play();
 
-    connect(_sound,SIGNAL(finished()),this,SLOT(setSoundSource()));
-    connect(_music,SIGNAL(aboutToFinish()),this,SLOT(replayMusic()));
-*/
     startGame();
 }
 
@@ -85,7 +83,7 @@ void MainWindow::createWorld(){
     connect(timer,SIGNAL(timeout()),world,SLOT(step()));
 
     qDebug()<<"Connecting world with sound";
-    connect(world,SIGNAL(hit()),this,SLOT(playSound()));
+    connect(world,SIGNAL(hit()),sound,SLOT(play()));
 }
 
 void MainWindow::deleteWorld(){
@@ -120,17 +118,5 @@ MainWindow::~MainWindow(){
     delete timer;
     delete world;
     delete ui;
-}
-
-void MainWindow::setSoundSource(){
-    //_sound->setCurrentSource(Phonon::MediaSource("data/sounds/hit.wav"));
-}
-
-void MainWindow::replayMusic(){
-    //_music->enqueue(Phonon::MediaSource("data/sounds/lullaby.ogg"));
-}
-
-void MainWindow::playSound(){
-    //_sound->stop();
-    //_sound->play();
+    delete sound;
 }
