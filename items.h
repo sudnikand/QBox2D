@@ -23,12 +23,13 @@ public:
     void setName(const QString &name);
     void setTextureName(const QString &textureName);
     void update();
+    void setVertices(const QVector<QVector3D> &vertices);
 
     QAbstractGraphicsShapeItem* graphics()    const;
     QVector<QVector3D>          vertices()    const;
+    QMatrix4x4&                 modelMatrix();
     const QColor                color()       const;
     const QString               name()        const;
-    const QMatrix4x4            modelMatrix() const;
     const QString               textureName() const;
 
 private:
