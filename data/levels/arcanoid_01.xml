@@ -6,33 +6,39 @@
         <position x='0' y='-20' />
         <geometry type='box' width='40' height='1' />
         <texture>grass.png</texture>
+        <color>#fff</color>
       </object>
       <object bodyType='static'>
         <position x='-20' y='0' rotation='90' />
         <geometry type='box' width='40' height='1' />
         <texture>grass.png</texture>
+        <color>#fff</color>
       </object>
       <object bodyType='static'>
         <position x='20' y='0' rotation='90' />
         <geometry type='box' width='40' height='1' />
         <texture>grass.png</texture>
+        <color>#fff</color>
       </object>
       <object bodyType='static' name="bound">
         <position x='0' y='23' />
         <geometry type='box' width='40' height='5' />
         <texture>grass.png</texture>
+        <color>#fff</color>
       </object>
       <object bodyType='dynamic' name='paddle' >
         <position x='0' y='18' />
         <physic density="10" friction="0.5" restitution="0.1" />
         <geometry type='box' width='5' height='1' />
         <texture>coral.png</texture>
+        <color>#fff</color>
       </object>
        <object bodyType='dynamic' name='ball'>
         <position x='0' y='0' />
         <physic density="1" friction="0.5" restitution="1.0" />
         <geometry type='circle' radius='0.5' />
         <texture>face-wink.png</texture>
+        <color>#fff</color>
       </object>
     </objects>
 </world>

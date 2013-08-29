@@ -85,7 +85,8 @@ void QBox2DWorld::parseXML(const QDomElement &root){
                 QDomElement color = object.firstChildElement("color");
                 if (!color.isNull()){
                     item->setColor(QColor(color.text()));
-                }
+                } else
+                    item->setColor(Qt::white);
             }
 
             {

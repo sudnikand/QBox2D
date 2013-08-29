@@ -125,7 +125,8 @@ void ArcanoidWorld::populate() {
             b2PolygonShape brickShape;
             brickShape.SetAsBox(WSCALE2(brickWidth,brickWidth/2));
             brick->setShape(brickShape);
-            brick->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+            //brick->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+            brick->setColor(Qt::white);
             brick->body()->SetUserData(brick);
             brick->setName("brick");
             brick->setDurability(qrand() % 3);
@@ -179,7 +180,8 @@ void ArcanoidWorld::createBall(float32 radius){
     b2CircleShape circle;
     circle.m_radius = radius;
     ball->setShape(circle);
-    ball->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+    //ball->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+    ball->setColor(Qt::white);
     ball->body()->SetUserData(ball);
     ball->body()->SetBullet(true);
     ball->setTextureName("ball.png");
