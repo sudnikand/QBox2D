@@ -33,6 +33,20 @@ void GLScene::initializeGL(){
     shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/texture.fsh");
     shaderProgram.link();
 
+
+    QBox2DItem *sky = new QBox2DItem;
+    sky->setName("sky");
+    QVector<QVector3D> vertices;
+    vertices << QVector3D(-10,-10,0) << QVector3D(10,-10,0) << QVector3D(10,10,0) << QVector3D(-10,10,0);
+    sky->setVertices(vertices);
+    sky->setTextureName("orion.png");
+    sky->setColor(Qt::gray);
+    //sky->modelMatrix().setToIdentity();
+    sky->modelMatrix().scale(4.0f);
+
+
+    addItem(sky);
+
     emit initialized();
     qDebug() << "GL Scene initialized";
 }
@@ -67,12 +81,14 @@ void GLScene::paintGL() {
     QListIterator<QBox2DItem*> i(_glitems);
     while(i.hasNext()){
         QBox2DItem *item = i.next();
+        if (item->name() == "sky" )
+            item->modelMatrix().rotate(0.3,QVector3D(0,0,1));
         shaderProgram.setUniformValue("modelMatrix", item->modelMatrix());
         shaderProgram.setUniformValue("viewMatrix", camera.viewMatrix_);
         shaderProgram.setUniformValue("projMatrix", camera.projMatrix_);
         shaderProgram.setUniformValue("texture", 0);
         glBindTexture(GL_TEXTURE_2D, _textures.value(item->textureName()));
-        //shaderProgram.setUniformValue("color", item->color());
+        shaderProgram.setUniformValue("color", item->color());
         shaderProgram.setAttributeArray("vertex", item->vertices().constData());
         shaderProgram.enableAttributeArray("vertex");
 
