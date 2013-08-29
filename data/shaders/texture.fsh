@@ -4,5 +4,5 @@ varying vec2 varyingTextureCoordinate;
 
 void main(void)
 {
-    gl_FragColor = texture2D(texture, varyingTextureCoordinate);
+    gl_FragColor = texture2D(texture, varyingTextureCoordinate) * color;
 }
