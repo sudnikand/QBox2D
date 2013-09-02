@@ -1,33 +1,11 @@
 #ifndef GLSCENE_H
 #define GLSCENE_H
 
-#include "items.h"
 #include <QGLWidget>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QKeyEvent>
-
-
-class GLCamera
-{
-public:
-    void setPosition(const QVector3D &position){
-        position_ = transformMatrix_ * position;
-    }
-
-    void setUpDirection(const QVector3D &upDirection){
-        upDirection_ = transformMatrix_ * upDirection;
-    }
-
-    void lookAt(const QVector3D &center){
-        viewMatrix_.lookAt(position_, center, upDirection_);
-    }
-
-    QMatrix4x4 projMatrix_;
-    QMatrix4x4 viewMatrix_;
-    QMatrix4x4 transformMatrix_;
-    QVector3D  position_;
-    QVector3D  upDirection_;
-};
+#include "items.h"
+#include "glcamera.h"
 
 class GLScene : public QGLWidget
 {
@@ -37,6 +15,11 @@ public:
     explicit GLScene(QWidget *parent=0);
     virtual ~GLScene();
 
+    GLCamera& camera();
+    QHash<QString,GLuint>& textures();
+    QGLShaderProgram* shader();
+
+
 public slots:
     void updateGL();
     void addItem(QBox2DItem *item);
@@ -45,7 +28,7 @@ public slots:
     void zoomOut();
     void clear();
 
-protected:
+private:
     void initializeGL();
     void resizeGL(int, int);
     void paintGL();
@@ -70,13 +53,11 @@ signals:
     void initialized();
 
 private:
-    QList<QBox2DItem*> _glitems;
-    qreal              _scale;
-
-    QGLShaderProgram shaderProgram;
-    qreal _alpha, _beta, _distance;
+    qreal _alpha, _beta, _distance, _scale;
+    GLCamera              _camera;
+    QGLShaderProgram      _shader;
     QHash<QString,GLuint> _textures;
-    GLCamera camera;
+    QList<QBox2DItem*>    _glitems;
 };
 
 #endif // GLSCENE_H

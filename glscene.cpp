@@ -1,5 +1,5 @@
-#include "glscene.h"
 #include <QtOpenGL>
+#include "glscene.h"
 
 GLScene::GLScene(QWidget *parent) : QGLWidget(parent)
 {
@@ -7,11 +7,11 @@ GLScene::GLScene(QWidget *parent) : QGLWidget(parent)
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     _alpha = 0;
     _beta = 0;
-    _distance = -50;
-    _scale = 20.0 / WORLD_SCALE_FACTOR;
+    _distance = -20;
+    _scale = 1.0 / WORLD_SCALE_FACTOR;
 
-    camera.setUpDirection(QVector3D(0, -1, 0));
-    camera.setPosition(QVector3D(0, 0, _distance));
+    camera().setUpDirection(QVector3D(0, -1, 0));
+    camera().setPosition(QVector3D(0, 0, _distance));
     //cameraTransformation.rotate(_alpha, 0, 1, 0);
     //cameraTransformation.rotate(_beta, 1, 0, 0);
 }
@@ -21,28 +21,51 @@ GLScene::~GLScene()
 
 }
 
+void GLScene::resizeGL(int width, int height)
+{
+    if (height == 0) {
+        height = 1;
+}
+
+    camera().projMatrix_.setToIdentity();
+    //camera.projMatrix_.ortho(-width, width, -height, height, 0.1, 10000 );
+    camera().projMatrix_.perspective(60.0, (qreal)width/(qreal)height, 0.5f, 1000 );
+    //pMatrix.rotate(90, QVector3D(0,0,1));
+    //pMatrix.translate(QVector3D(0,-25,0));
+
+    glViewport(0, 0, width, height);
+
+}
+
 void GLScene::initializeGL(){
     qglClearColor(Qt::black);
     glEnable(GL_TEXTURE_2D);
-    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-    shaderProgram.addShaderFromSourceFile(QGLShader::Vertex,"data/shaders/texture.vsh");
-    shaderProgram.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/texture.fsh");
-    shaderProgram.link();
+    _shader.addShaderFromSourceFile(QGLShader::Vertex,"data/shaders/texture.vsh");
+    _shader.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/texture.fsh");
+    _shader.link();
 
 
     QBox2DItem *sky = new QBox2DItem;
     sky->setName("sky");
     QVector<QVector3D> vertices;
-    vertices << QVector3D(-10,-10,0) << QVector3D(10,-10,0) << QVector3D(10,10,0) << QVector3D(-10,10,0);
+    vertices
+            << QVector3D( 1.0, -1.0, -1.0) << QVector3D(-1.0, -1.0, -1.0) << QVector3D(-1.0,  1.0, -1.0) << QVector3D( 1.0,  1.0, -1.0)
+            << QVector3D( 1.0,  1.0, -1.0) << QVector3D(-1.0,  1.0, -1.0) << QVector3D(-1.0,  1.0,  1.0) << QVector3D( 1.0,  1.0,  1.0)
+            << QVector3D( 1.0, -1.0,  1.0) << QVector3D( 1.0, -1.0, -1.0) << QVector3D( 1.0,  1.0, -1.0) << QVector3D( 1.0,  1.0,  1.0)
+            << QVector3D(-1.0, -1.0, -1.0) << QVector3D(-1.0, -1.0,  1.0) << QVector3D(-1.0,  1.0,  1.0) << QVector3D(-1.0,  1.0, -1.0)
+            << QVector3D( 1.0, -1.0,  1.0) << QVector3D(-1.0, -1.0,  1.0) << QVector3D(-1.0, -1.0, -1.0) << QVector3D( 1.0, -1.0, -1.0)
+            << QVector3D(-1.0, -1.0,  1.0) << QVector3D( 1.0, -1.0,  1.0) << QVector3D( 1.0,  1.0,  1.0) << QVector3D(-1.0,  1.0,  1.0);
+
     sky->setVertices(vertices);
     sky->setTextureName("orion.png");
-    sky->setColor(Qt::gray);
-    //sky->modelMatrix().setToIdentity();
-    sky->modelMatrix().scale(4.0f);
+    sky->setColor(Qt::darkGray);
+    sky->setGLmode(GL_TRIANGLE_FAN);
+    sky->modelMatrix().scale(80.0f);
 
 
     addItem(sky);
@@ -51,55 +74,22 @@ void GLScene::initializeGL(){
     qDebug() << "GL Scene initialized";
 }
 
-void GLScene::resizeGL(int width, int height)
-{
-    if (height == 0) {
-        height = 1;
-}
-
-    camera.projMatrix_.setToIdentity();
-    camera.projMatrix_.ortho(-width, width, -height, height, 0.1, 100 );
-    //pMatrix.perspective(90.0, (qreal)width/(qreal)height, 0.5f, 1000 );
-    //pMatrix.rotate(90, QVector3D(0,0,1));
-    //pMatrix.translate(QVector3D(0,-25,0));
-
-    glViewport(0, 0, width, height);
-
-}
-
 void GLScene::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    camera.viewMatrix_.setToIdentity();
-    camera.lookAt(QVector3D(0, 0, 0));
-    camera.viewMatrix_.scale(_scale);
+    camera().viewMatrix_.setToIdentity();
+    camera().lookAt(QVector3D(0, 0, 0));
+    camera().viewMatrix_.scale(_scale);
 
     QVector<QVector2D> textureCoordinates;
     textureCoordinates << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) << QVector2D(1, 1);
 
-    shaderProgram.bind();
+
     QListIterator<QBox2DItem*> i(_glitems);
     while(i.hasNext()){
         QBox2DItem *item = i.next();
-        if (item->name() == "sky" )
-            item->modelMatrix().rotate(0.3,QVector3D(0,0,1));
-        shaderProgram.setUniformValue("modelMatrix", item->modelMatrix());
-        shaderProgram.setUniformValue("viewMatrix", camera.viewMatrix_);
-        shaderProgram.setUniformValue("projMatrix", camera.projMatrix_);
-        shaderProgram.setUniformValue("texture", 0);
-        glBindTexture(GL_TEXTURE_2D, _textures.value(item->textureName()));
-        shaderProgram.setUniformValue("color", item->color());
-        shaderProgram.setAttributeArray("vertex", item->vertices().constData());
-        shaderProgram.enableAttributeArray("vertex");
-
-        shaderProgram.setAttributeArray("textureCoordinate", textureCoordinates.constData());
-        shaderProgram.enableAttributeArray("textureCoordinate");
-
-        glDrawArrays(GL_TRIANGLE_FAN, 0, item->vertices().size());
-        shaderProgram.disableAttributeArray("vertex");
+        item->draw();
     }
-    shaderProgram.release();
-
 }
 
 void GLScene::updateGL() {
@@ -114,7 +104,7 @@ QVector4D GLScene::unproject(const QVector3D & screen){
     const qreal xNorm = (2.0f * ((screen.x() - viewport[0]) / (viewport[2] - viewport[0]))) - 1.0f;
     const qreal yNorm = 1.0f - (2.0f * ((screen.y() - viewport[1]) / (viewport[3] - viewport[1])));
 
-    QMatrix4x4 pvMatrixInv = (camera.projMatrix_ * camera.viewMatrix_).inverted();
+    QMatrix4x4 pvMatrixInv = (camera().projMatrix_ * camera().viewMatrix_).inverted();
     QVector4D worldPoint = pvMatrixInv * QVector4D(xNorm, yNorm, screen.z(), 1);
 
     if (worldPoint.w() == 0){
@@ -175,17 +165,33 @@ QSize GLScene::sizeHint() const {
 void GLScene::addItem(QBox2DItem *item)    {
     //qDebug() << "Add item: " << item->name();
     _glitems << item;
+    item->_glscene = this;
     if (!item->textureName().isNull()) {
         if (!_textures.contains(item->textureName())) {
             qDebug() << "Loading texture: " << item->textureName();
-            _textures.insert(item->textureName(), bindTexture(QPixmap("data/textures/" + item->textureName()), GL_TEXTURE_2D));
+            GLuint textureID = bindTexture(QPixmap("data/textures/" + item->textureName()), GL_TEXTURE_2D);
+            _textures.insert(item->textureName(), textureID);
         }
     }
 }
+
 void GLScene::removeItem(QBox2DItem *item) {
     qDebug() << "Remove item: " << item->name();
     _glitems.removeOne(item);
 }
-void GLScene::zoomIn()                     { _scale *= 1.1; }
-void GLScene::zoomOut()                    { _scale *= 0.9; }
-void GLScene::clear()                      { _glitems.clear(); }
+void GLScene::zoomIn()   { _scale *= 1.1; }
+void GLScene::zoomOut()  { _scale *= 0.9; }
+void GLScene::clear()    { _glitems.clear(); }
+
+GLCamera& GLScene::camera() {
+    return _camera;
+}
+
+QHash<QString,GLuint>& GLScene::textures(){
+    return _textures;
+}
+
+QGLShaderProgram* GLScene::shader(){
+    return &_shader;
+}
+
