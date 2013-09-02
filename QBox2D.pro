@@ -22,7 +22,8 @@ SOURCES += main.cpp\
            physicitem.cpp \
            texture.cpp \
     contactlistener.cpp \
-    brick.cpp
+    brick.cpp \
+    glcamera.cpp
 
 HEADERS += mainwindow.h \
            items.h \
@@ -38,7 +39,8 @@ HEADERS += mainwindow.h \
            physicitem.h \
            texture.h \
     contactlistener.h \
-    brick.h
+    brick.h \
+    glcamera.h
 
 FORMS   += mainwindow.ui
 
