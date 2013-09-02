@@ -23,7 +23,11 @@ void QBox2DContactListener::EndContact(b2Contact* contact) {
 }
 
 void QBox2DContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {
+    Q_UNUSED(contact);
+    Q_UNUSED(oldManifold);
 }
 
 void QBox2DContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {
+    Q_UNUSED(contact);
+    Q_UNUSED(impulse);
 }
