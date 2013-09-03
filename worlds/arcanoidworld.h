@@ -11,6 +11,7 @@ private:
     QBox2DItem*   _paddle;
     QBox2DItem*   _bound;
     QBox2DItem*   _ball;
+    QBox2DItem*   _sky;
 
 public:
     ArcanoidWorld(QObject* parent = 0);

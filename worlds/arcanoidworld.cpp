@@ -15,6 +15,8 @@ ArcanoidWorld::~ArcanoidWorld() {
 
 void ArcanoidWorld::step(){
     QBox2DWorld::step();
+    _sky->modelMatrix().rotate(0.05,QVector3D(0,1,0));
+    //_sky->modelMatrix().rotate(0.3,QVector3D(1,0,0));
 
     if (!_ball || !_paddle || !_bound) return;
 
@@ -65,6 +67,35 @@ void ArcanoidWorld::step(){
 
 void ArcanoidWorld::populate() {
     qDebug()<< "Starting Arcanoid World";
+
+    {
+        QBox2DItem *sky = new QBox2DItem;
+        sky->setName("sky");
+        QVector<QVector3D> vertices;
+        vertices
+                << QVector3D( 1.0, -1.0, -1.0) << QVector3D(-1.0, -1.0, -1.0) << QVector3D(-1.0,  1.0, -1.0) << QVector3D( 1.0,  1.0, -1.0)
+                << QVector3D( 1.0,  1.0, -1.0) << QVector3D(-1.0,  1.0, -1.0) << QVector3D(-1.0,  1.0,  1.0) << QVector3D( 1.0,  1.0,  1.0)
+                << QVector3D( 1.0, -1.0,  1.0) << QVector3D( 1.0, -1.0, -1.0) << QVector3D( 1.0,  1.0, -1.0) << QVector3D( 1.0,  1.0,  1.0)
+                << QVector3D(-1.0, -1.0, -1.0) << QVector3D(-1.0, -1.0,  1.0) << QVector3D(-1.0,  1.0,  1.0) << QVector3D(-1.0,  1.0, -1.0)
+                << QVector3D( 1.0, -1.0,  1.0) << QVector3D(-1.0, -1.0,  1.0) << QVector3D(-1.0, -1.0, -1.0) << QVector3D( 1.0, -1.0, -1.0)
+                << QVector3D(-1.0, -1.0,  1.0) << QVector3D( 1.0, -1.0,  1.0) << QVector3D( 1.0,  1.0,  1.0) << QVector3D(-1.0,  1.0,  1.0);
+
+        sky->setVertices(vertices);
+        sky->setTextureName("orion.png");
+        sky->setColor(Qt::darkGray);
+        sky->setGLmode(GL_TRIANGLE_FAN);
+        sky->modelMatrix().scale(20.0f);
+
+        _sky->_textureCoordinates.clear();
+        for (int i = 0; i < 6; ++i) {
+              for (int j = 0; j < 4; ++j) {
+                  _sky->_textureCoordinates.append(QVector2D(j == 0 || j == 3, j == 0 || j == 1));
+              }
+        }
+
+        appendItem(sky);
+        _sky = sky;
+    }
 
     loadWorld("data/levels/arcanoid_01.xml");
     _world->SetGravity(b2Vec2(0,0));
