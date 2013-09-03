@@ -15,7 +15,9 @@ public:
     QBox2DItem() :
         _graphics(NULL),
         _glmode(GL_TRIANGLE_FAN)
-    { }
+    {
+        _textureCoordinates << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) << QVector2D(1, 1);
+    }
 
     virtual ~QBox2DItem() { if(_graphics) delete _graphics; }
 
@@ -41,6 +43,7 @@ public:
           GLenum                GLmode()      const;
 
     GLScene*           _glscene;
+    QVector<QVector2D> _textureCoordinates;
 
 private:
     QAbstractGraphicsShapeItem* _graphics;

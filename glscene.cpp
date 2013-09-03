@@ -8,7 +8,7 @@ GLScene::GLScene(QWidget *parent) : QGLWidget(parent)
     _alpha = 0;
     _beta = 0;
     _distance = -20;
-    _scale = 1.0 / WORLD_SCALE_FACTOR;
+    _scale = 20.0 / WORLD_SCALE_FACTOR;
 
     camera().setUpDirection(QVector3D(0, -1, 0));
     camera().setPosition(QVector3D(0, 0, _distance));
@@ -27,9 +27,9 @@ void GLScene::resizeGL(int width, int height)
         height = 1;
 }
 
-    camera().projMatrix_.setToIdentity();
-    //camera.projMatrix_.ortho(-width, width, -height, height, 0.1, 10000 );
-    camera().projMatrix_.perspective(60.0, (qreal)width/(qreal)height, 0.5f, 1000 );
+    camera().projMatrix().setToIdentity();
+    camera().projMatrix().ortho(-width, width, -height, height, 0.1, 10000 );
+    //camera().projMatrix().perspective(60.0, (qreal)width/(qreal)height, 0.5f, 1000 );
     //pMatrix.rotate(90, QVector3D(0,0,1));
     //pMatrix.translate(QVector3D(0,-25,0));
 
@@ -49,27 +49,6 @@ void GLScene::initializeGL(){
     _shader.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/texture.fsh");
     _shader.link();
 
-
-    QBox2DItem *sky = new QBox2DItem;
-    sky->setName("sky");
-    QVector<QVector3D> vertices;
-    vertices
-            << QVector3D( 1.0, -1.0, -1.0) << QVector3D(-1.0, -1.0, -1.0) << QVector3D(-1.0,  1.0, -1.0) << QVector3D( 1.0,  1.0, -1.0)
-            << QVector3D( 1.0,  1.0, -1.0) << QVector3D(-1.0,  1.0, -1.0) << QVector3D(-1.0,  1.0,  1.0) << QVector3D( 1.0,  1.0,  1.0)
-            << QVector3D( 1.0, -1.0,  1.0) << QVector3D( 1.0, -1.0, -1.0) << QVector3D( 1.0,  1.0, -1.0) << QVector3D( 1.0,  1.0,  1.0)
-            << QVector3D(-1.0, -1.0, -1.0) << QVector3D(-1.0, -1.0,  1.0) << QVector3D(-1.0,  1.0,  1.0) << QVector3D(-1.0,  1.0, -1.0)
-            << QVector3D( 1.0, -1.0,  1.0) << QVector3D(-1.0, -1.0,  1.0) << QVector3D(-1.0, -1.0, -1.0) << QVector3D( 1.0, -1.0, -1.0)
-            << QVector3D(-1.0, -1.0,  1.0) << QVector3D( 1.0, -1.0,  1.0) << QVector3D( 1.0,  1.0,  1.0) << QVector3D(-1.0,  1.0,  1.0);
-
-    sky->setVertices(vertices);
-    sky->setTextureName("orion.png");
-    sky->setColor(Qt::darkGray);
-    sky->setGLmode(GL_TRIANGLE_FAN);
-    sky->modelMatrix().scale(80.0f);
-
-
-    addItem(sky);
-
     emit initialized();
     qDebug() << "GL Scene initialized";
 }
@@ -77,13 +56,9 @@ void GLScene::initializeGL(){
 void GLScene::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    camera().viewMatrix_.setToIdentity();
+    camera().viewMatrix().setToIdentity();
     camera().lookAt(QVector3D(0, 0, 0));
-    camera().viewMatrix_.scale(_scale);
-
-    QVector<QVector2D> textureCoordinates;
-    textureCoordinates << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) << QVector2D(1, 1);
-
+    camera().viewMatrix().scale(_scale);
 
     QListIterator<QBox2DItem*> i(_glitems);
     while(i.hasNext()){
@@ -104,7 +79,7 @@ QVector4D GLScene::unproject(const QVector3D & screen){
     const qreal xNorm = (2.0f * ((screen.x() - viewport[0]) / (viewport[2] - viewport[0]))) - 1.0f;
     const qreal yNorm = 1.0f - (2.0f * ((screen.y() - viewport[1]) / (viewport[3] - viewport[1])));
 
-    QMatrix4x4 pvMatrixInv = (camera().projMatrix_ * camera().viewMatrix_).inverted();
+    QMatrix4x4 pvMatrixInv = camera().projViewProduct().inverted();
     QVector4D worldPoint = pvMatrixInv * QVector4D(xNorm, yNorm, screen.z(), 1);
 
     if (worldPoint.w() == 0){
@@ -119,10 +94,20 @@ QVector4D GLScene::unproject(const QVector3D & screen){
 }
 
 QPointF GLScene::mapToScene(const QPointF &p){
-// #TODO: create ray from near plane to far plane,
-//        passing Z [-1, 1] coordinate to unproject(),
-//        code below will work OK while projection is ortogonal
-    return unproject(QVector3D(p)).toPointF();
+//  Code below will work OK while projection is ortogonal
+//  For some reason in perspective projection everything is flipped and not accurate
+    QVector4D rNear = unproject(QVector3D(p.x(), p.y(), -1));
+    QVector4D rFar =  unproject(QVector3D(p.x(), p.y(),  1));
+
+    QVector<QVector3D> triangle;
+    triangle << QVector3D(0, 0, 0) << QVector3D(0, 1, 0) << QVector3D(1, 0, 0);
+    QVector3D normal = QVector3D::normal(triangle.at(0), triangle.at(1), triangle.at(2));
+
+    qreal d1 = QVector3D::dotProduct(rNear.toVector3D() - triangle.at(0), normal);
+    qreal d2 = QVector3D::dotProduct(rFar.toVector3D() - triangle.at(0), normal);
+
+    QVector3D point = rNear.toVector3D() + (rFar.toVector3D() - rNear.toVector3D()) * (-d2 / (d2 - d1));
+    return point.toPointF();
 }
 
 void GLScene::mousePressEvent(QMouseEvent *event) {

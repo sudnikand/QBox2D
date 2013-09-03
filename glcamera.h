@@ -9,12 +9,16 @@ public:
     void setPosition(const QVector3D &position);
     void setUpDirection(const QVector3D &upDirection);
     void lookAt(const QVector3D &center);
+    QMatrix4x4& projMatrix();
+    QMatrix4x4& viewMatrix();
+    QMatrix4x4  projViewProduct() const;
 
-    QMatrix4x4 projMatrix_;
-    QMatrix4x4 viewMatrix_;
-    QMatrix4x4 transformMatrix_;
-    QVector3D  position_;
-    QVector3D  upDirection_;
+private:
+    QMatrix4x4 _projMatrix;
+    QMatrix4x4 _viewMatrix;
+    QMatrix4x4 _transformMatrix;
+    QVector3D  _position;
+    QVector3D  _upDirection;
 };
 
 #endif // GLCAMERA_H

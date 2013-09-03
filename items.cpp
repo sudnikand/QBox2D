@@ -42,24 +42,8 @@ void QBox2DItem::draw(){
     glDisable(GL_DEPTH_TEST);
     QGLShaderProgram* shader = _glscene->shader();
     shader->bind();
-    shader->setUniformValue("viewMatrix", _glscene->camera().viewMatrix_);
-    shader->setUniformValue("projMatrix", _glscene->camera().projMatrix_);
-
-    QVector<QVector2D> textureCoordinates;
-    textureCoordinates << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) << QVector2D(1, 1);
-
-    if ( name() == "sky" ) {
-           glEnable(GL_DEPTH_TEST);
-        //modelMatrix().rotate(0.3,QVector3D(0,0,1));
-        modelMatrix().rotate(0.05,QVector3D(0,1,0));
-        modelMatrix().rotate(0.3,QVector3D(1,0,0));
-        textureCoordinates.clear();
-        for (int i = 0; i < 6; ++i) {
-              for (int j = 0; j < 4; ++j) {
-                  textureCoordinates.append (QVector2D(j == 0 || j == 3, j == 0 || j == 1));
-              }
-        }
-    }
+    shader->setUniformValue("viewMatrix", _glscene->camera().viewMatrix());
+    shader->setUniformValue("projMatrix", _glscene->camera().projMatrix());
 
     shader->setUniformValue("modelMatrix", modelMatrix());
     shader->setUniformValue("color", color());
@@ -67,7 +51,7 @@ void QBox2DItem::draw(){
     shader->setAttributeArray("vertex", vertices().constData());
     shader->enableAttributeArray("vertex");
 
-    shader->setAttributeArray("textureCoordinate", textureCoordinates.constData());
+    shader->setAttributeArray("textureCoordinate", _textureCoordinates.constData());
     shader->enableAttributeArray("textureCoordinate");
 
     GLuint texID = _glscene->textures().value(textureName());
@@ -76,6 +60,7 @@ void QBox2DItem::draw(){
 
     if(name() == "sky" ){
         for (int i = 0; i < 6; ++i) {
+            glEnable(GL_DEPTH_TEST);
             glDrawArrays(GL_TRIANGLE_FAN, i * 4, 4);
         }
     } else
