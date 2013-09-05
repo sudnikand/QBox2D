@@ -194,26 +194,31 @@ void QBox2DWorld::step(){
 }
 
 QBox2DItem* QBox2DWorld::createBox(const QPointF& pos) {
-// position is in world coordinates
-    QBox2DItem *box = new QBox2DItem();
-    box->setBodyType(b2_dynamicBody);
-    box->setFriction(0.9f);
-    box->setDensity(1.0f);
-    box->setRestitution(0.5f);
-    box->setPos(b2Vec2(pos.x(), pos.y()));
-    box->createBody(_world);
-
-    float32 l = WSCALE(5.0f);
-    b2PolygonShape rect;
-    rect.SetAsBox(l/2,l/2);
-    box->setShape(rect);
-    box->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
-    box->setTextureName("kde.png");
-    box->body()->SetUserData(box);
-    appendItem(box);
-    qDebug() << "Box created";
-    return box;
+    return createBox(pos,4.0f);
 }
+
+QBox2DItem* QBox2DWorld::createBox(const QPointF &pos, const float32 &size){
+    // position is in world coordinates
+        QBox2DItem *box = new QBox2DItem();
+        box->setBodyType(b2_dynamicBody);
+        box->setFriction(0.9f);
+        box->setDensity(1.0f);
+        box->setRestitution(0.5f);
+        box->setPos(b2Vec2(pos.x(), pos.y()));
+        box->createBody(_world);
+
+        float32 l = WSCALE(size);
+        b2PolygonShape rect;
+        rect.SetAsBox(l/2,l/2);
+        box->setShape(rect);
+        box->setColor(QColor(128 + qrand() % 128, 128 + qrand() % 128, 128 + qrand() % 128));
+        box->setTextureName("kde.png");
+        box->body()->SetUserData(box);
+        appendItem(box);
+        qDebug() << "Box created";
+        return box;
+}
+
 
 void QBox2DWorld::grabItem(const QPointF &p) {
 // grab item in world coordinate p

@@ -43,6 +43,8 @@ public slots:
             void dropItem();
             void moveItem(const QPointF &p);
             QBox2DItem* createBox(const QPointF &pos);
+            QBox2DItem* createBox(const QPointF &pos, const float32 &size);
+
 
 signals:
             void itemCreated(QBox2DItem *item);
