@@ -43,7 +43,7 @@ void ArcanoidWorld::step(){
         if (item == _bound) {
             float32 r = _ball->body()->GetFixtureList()->GetShape()->m_radius;
             destroyItem(_ball);
-            createBall(r);
+            createBall(5.0f);
             _paddle->body()->SetTransform((b2Vec2(WSCALE2(0, 15))),0);
                        // Add game over here
         }
@@ -84,12 +84,12 @@ void ArcanoidWorld::populate() {
         sky->setTextureName("orion.png");
         sky->setColor(Qt::darkGray);
         sky->setGLmode(GL_TRIANGLE_FAN);
-        sky->modelMatrix().scale(20.0f);
+        sky->modelMatrix().scale(40.0f);
 
-        _sky->_textureCoordinates.clear();
+        sky->_textureCoordinates.clear();
         for (int i = 0; i < 6; ++i) {
               for (int j = 0; j < 4; ++j) {
-                  _sky->_textureCoordinates.append(QVector2D(j == 0 || j == 3, j == 0 || j == 1));
+                  sky->_textureCoordinates.append(QVector2D(j == 0 || j == 3, j == 0 || j == 1));
               }
         }
 
@@ -138,8 +138,8 @@ void ArcanoidWorld::populate() {
     vertJointDef.enableLimit = true;
     _world->CreateJoint(&vertJointDef);
 
-    int n = 10;
-    float32 brickWidth = 1;
+    int n = 5;
+    float32 brickWidth = 2;
     int xStep = fieldSize/n;
     int yStep = fieldSize/n;
     for (int j = 0; j < n-1; ++j){
