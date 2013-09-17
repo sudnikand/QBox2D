@@ -1,6 +1,13 @@
 #include "items.h"
 #include "glscene.h"
 
+QBox2DItem::QBox2DItem():
+    _graphics(NULL),
+    _glmode(GL_QUADS)
+{
+    _textureCoordinates << QVector2D(0, 1) << QVector2D(0, 0) << QVector2D(1, 0) << QVector2D(1, 1);
+}
+
 void QBox2DItem::update(){
     if(!body()) return;
     const b2Shape *shape = body()->GetFixtureList()->GetShape();
@@ -39,7 +46,7 @@ void QBox2DItem::update(){
 }
 
 void QBox2DItem::draw(){
-    glDisable(GL_DEPTH_TEST);
+    //glDisable(GL_DEPTH_TEST);
     QGLShaderProgram* shader = _glscene->shader();
     shader->bind();
     shader->setUniformValue("viewMatrix", _glscene->camera().viewMatrix());
@@ -58,13 +65,7 @@ void QBox2DItem::draw(){
     shader->setUniformValue("texture", 0);
     glBindTexture(GL_TEXTURE_2D, texID);
 
-    if(name() == "sky" ){
-        for (int i = 0; i < 6; ++i) {
-            glEnable(GL_DEPTH_TEST);
-            glDrawArrays(GL_TRIANGLE_FAN, i * 4, 4);
-        }
-    } else
-        glDrawArrays(_glmode, 0, vertices().size());
+    glDrawArrays(_glmode, 0, vertices().size());
     shader->disableAttributeArray("vertex");
     shader->disableAttributeArray("textureCoordinate");
     shader->release();

@@ -36,7 +36,7 @@
        <object bodyType='dynamic' name='ball'>
         <position x='0' y='0' />
         <physic density="1" friction="0.5" restitution="1.0" />
-        <geometry type='circle' radius='0.5' />
+        <geometry type='circle' radius='1' />
         <texture>face-wink.png</texture>
         <color>#fff</color>
       </object>

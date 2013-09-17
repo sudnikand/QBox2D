@@ -43,7 +43,7 @@ void ArcanoidWorld::step(){
         if (item == _bound) {
             float32 r = _ball->body()->GetFixtureList()->GetShape()->m_radius;
             destroyItem(_ball);
-            createBall(5.0f);
+            createBall(r);
             _paddle->body()->SetTransform((b2Vec2(WSCALE2(0, 15))),0);
                        // Add game over here
         }
@@ -83,7 +83,6 @@ void ArcanoidWorld::populate() {
         sky->setVertices(vertices);
         sky->setTextureName("orion.png");
         sky->setColor(Qt::darkGray);
-        sky->setGLmode(GL_TRIANGLE_FAN);
         sky->modelMatrix().scale(40.0f);
 
         sky->_textureCoordinates.clear();
