@@ -9,9 +9,7 @@
 
 #define WORLD_SCALE_FACTOR 1
 
-static qreal WSCALE( const qreal &x ) {
-    return x * WORLD_SCALE_FACTOR;
-}
+#define WSCALE(x) (x) * WORLD_SCALE_FACTOR
 
 #define WSCALE2(x,y)   ( WSCALE(x) ),( WSCALE(y) )
 #define WSCALE3(x,y,z) ( WSCALE(x) ),( WSCALE(y) ),( WSCALE(z) )
