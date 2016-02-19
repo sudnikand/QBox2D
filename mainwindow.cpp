@@ -11,11 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     timer = new QTimer(this);
     timer->setInterval(1000/60);
-    sound = new QSound("data/sounds/balloon.wav",this);
+    QString sounds_dir = SOUNDS_DIR;
+    sound = new QSound(sounds_dir + "pop.wav",this);
     sound->play();
 
     player = new QMediaPlayer(this);
-    player->setMedia(QUrl::fromLocalFile("data/sounds/lullaby.ogg"));
+    player->setMedia(QUrl::fromLocalFile(sounds_dir + "lullaby.ogg"));
     player->setVolume(90);
     player->play();
 

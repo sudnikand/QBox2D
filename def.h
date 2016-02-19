@@ -7,7 +7,9 @@
 #define SHADER_DIR   ( DATA_DIR "shaders/"  )
 #define TEXTURE_DIR  ( DATA_DIR "textures/" )
 #define LEVELS_DIR   ( DATA_DIR "levels/"   )
+#define SOUNDS_DIR   ( DATA_DIR "sounds/"   )
 #define RESOURCE_DIR ( DATA_DIR "res/"      )
+
 
 #define PI 3.141592653589793238463
 #define ANG2RAD( a ) ( ( (a) * PI ) / 180.0f )
