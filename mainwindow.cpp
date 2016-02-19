@@ -25,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::createGLScene(){
     qDebug()<<"Creating GL Scene";
     glscene = new GLScene(this);
+    glscene->_shader_dir = SHADER_DIR;
+    glscene->_texture_dir = TEXTURE_DIR;
     ui->frameL->layout()->addWidget(glscene);
 
     connect(timer,SIGNAL(timeout()),glscene,SLOT(updateGL()));
@@ -78,6 +80,7 @@ void MainWindow::createWorld(){
     //world = new ExampleWorld(this);
     world = new ArcanoidWorld(this);
     world->setSettings(1.0f / 60.0f, 10, 10);
+    world->_levels_dir = LEVELS_DIR;
 
     qDebug()<<"Connecting timer with World";
     connect(timer,SIGNAL(timeout()),world,SLOT(step()));

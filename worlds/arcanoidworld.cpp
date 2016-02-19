@@ -96,7 +96,7 @@ void ArcanoidWorld::populate() {
         _sky = sky;
     }
 
-    loadWorld("data/levels/arcanoid_01.xml");
+    loadWorld(_levels_dir + "arcanoid_01.xml");
     _world->SetGravity(b2Vec2(0,0));
 
     float32 fieldSize = 40;

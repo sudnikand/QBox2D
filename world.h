@@ -14,6 +14,7 @@ Q_OBJECT
 public:
     b2World*                _world;
     QBox2DContactListener*  _contactListener;
+    QString                 _levels_dir;
 
 protected:
     b2Body*                 _ground;

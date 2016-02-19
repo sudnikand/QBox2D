@@ -45,8 +45,8 @@ void GLScene::initializeGL(){
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-    _shader.addShaderFromSourceFile(QGLShader::Vertex,"data/shaders/texture.vsh");
-    _shader.addShaderFromSourceFile(QGLShader::Fragment,"data/shaders/texture.fsh");
+    _shader.addShaderFromSourceFile(QGLShader::Vertex, _shader_dir + "texture.vsh" );
+    _shader.addShaderFromSourceFile(QGLShader::Fragment, _shader_dir + "texture.fsh" );
     _shader.link();
 
     emit initialized();
@@ -154,7 +154,9 @@ void GLScene::addItem(QBox2DItem *item)    {
     if (!item->textureName().isNull()) {
         if (!_textures.contains(item->textureName())) {
             qDebug() << "Loading texture: " << item->textureName();
-            GLuint textureID = bindTexture(QPixmap("data/textures/" + item->textureName()), GL_TEXTURE_2D);
+            GLuint textureID =
+                    bindTexture(QPixmap( _texture_dir + item->textureName()),
+                                GL_TEXTURE_2D);
             _textures.insert(item->textureName(), textureID);
         }
     }

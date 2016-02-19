@@ -18,6 +18,8 @@ public:
     GLCamera& camera();
     QHash<QString,GLuint>& textures();
     QGLShaderProgram* shader();
+    QString               _shader_dir;
+    QString               _texture_dir;
 
 
 public slots:
